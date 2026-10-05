@@ -1,0 +1,10 @@
+{
+  "name": "أثَر | Athar - رفيق المسلم",
+  "description": "تطبيق إسلامي عربي مصمم للموبايل أولاً: مواقيت الصلاة الدقيقة، عد تنازلي، آية اليوم من المصحف الشريف، وتجربة PWA متوافقة دون إعلانات وببيانات محلية.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

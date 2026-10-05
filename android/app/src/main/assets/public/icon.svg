@@ -1,0 +1,465 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCFAF4" />
+      <stop offset="50%" stop-color="#F8F4EA" />
+      <stop offset="100%" stop-color="#EFE8D8" />
+    </linearGradient>
+
+    <!-- Metallic Gold Gradient -->
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FCEAB2" />
+      <stop offset="25%" stop-color="#DFB76C" />
+      <stop offset="55%" stop-color="#BE8E3C" />
+      <stop offset="85%" stop-color="#E9C985" />
+      <stop offset="100%" stop-color="#A5762A" />
+    </linearGradient>
+
+    <!-- Light Gold Bevel Gradient -->
+    <linearGradient id="goldLight" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#CF9F47" />
+      <stop offset="40%" stop-color="#F6E2A8" />
+      <stop offset="70%" stop-color="#FFF5D6" />
+      <stop offset="100%" stop-color="#DDB365" />
+    </linearGradient>
+
+    <!-- Rich Emerald Gradient -->
+    <linearGradient id="emeraldGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0E4636" />
+      <stop offset="50%" stop-color="#083326" />
+      <stop offset="100%" stop-color="#042017" />
+    </linearGradient>
+
+    <!-- Lighter Emerald for 3D Top Surfaces -->
+    <linearGradient id="emeraldSurface" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#145A46" />
+      <stop offset="60%" stop-color="#0B3C2D" />
+      <stop offset="100%" stop-color="#06261C" />
+    </linearGradient>
+
+    <!-- Central Aura Glow -->
+    <radialGradient id="auraGlow" cx="50%" cy="45%" r="45%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1" />
+      <stop offset="45%" stop-color="#FFFDF7" stop-opacity="0.95" />
+      <stop offset="75%" stop-color="#F6EDE0" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#EDE2CF" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Open Quran Spine Radiance -->
+    <radialGradient id="spineRadiance" cx="50%" cy="85%" r="40%">
+      <stop offset="0%" stop-color="#FFF9E0" stop-opacity="0.9" />
+      <stop offset="35%" stop-color="#F7E0A3" stop-opacity="0.5" />
+      <stop offset="80%" stop-color="#DFB76C" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#DFB76C" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Drop Shadow Filter for Badge -->
+    <filter id="shadowFilter" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#59442B" flood-opacity="0.18" />
+    </filter>
+
+    <!-- Bevel / Glow for Calligraphy -->
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#805B1B" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- 1. SQUIRCLE APP ICON CONTAINER -->
+  <rect x="16" y="16" width="480" height="480" rx="108" fill="url(#bgGrad)" filter="url(#shadowFilter)" />
+  <rect x="16" y="16" width="480" height="480" rx="108" fill="none" stroke="#E6DDC8" stroke-width="2" />
+  <rect x="20" y="20" width="472" height="472" rx="104" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.8" />
+
+  <!-- Subtle Arabesque Watermark on left and right -->
+  <g opacity="0.16" stroke="#C2B294" stroke-width="1.5" fill="none">
+    <!-- Left arabesque flourish -->
+    <path d="M 52 140 C 38 180 32 230 52 280 C 65 312 40 350 48 375" />
+    <path d="M 44 200 C 68 215 72 255 48 275" />
+    <path d="M 60 160 C 82 175 84 210 65 230" />
+    <!-- Right arabesque flourish -->
+    <path d="M 460 140 C 474 180 480 230 460 280 C 447 312 472 350 464 375" />
+    <path d="M 468 200 C 444 215 440 255 464 275" />
+    <path d="M 452 160 C 430 175 428 210 447 230" />
+  </g>
+
+  <!-- 2. THE GRAND ISLAMIC MIHRAB ARCH FRAME -->
+  <!-- Outer Golden Architectural Rim -->
+  <path
+    d="M 256 46
+       C 264 56 278 72 296 84
+       C 314 96 336 102 344 112
+       C 356 128 350 146 364 162
+       C 378 178 402 188 408 208
+       C 413 226 412 254 412 286
+       C 412 300 405 308 395 312
+       L 395 284
+       C 395 250 398 226 392 210
+       C 385 194 366 184 354 170
+       C 340 154 344 136 332 122
+       C 322 110 302 104 286 92
+       C 272 80 262 66 256 56
+       C 250 66 240 80 226 92
+       C 210 104 190 110 180 122
+       C 168 136 172 154 158 170
+       C 146 184 127 194 120 210
+       C 114 226 117 250 117 284
+       L 117 312
+       C 107 308 100 300 100 286
+       C 100 254 99 226 104 208
+       C 110 188 134 178 148 162
+       C 162 146 156 128 168 112
+       C 176 102 198 96 216 84
+       C 234 72 248 56 256 46 Z"
+    fill="url(#goldGrad)"
+  />
+
+  <!-- Main Ornate Emerald Arch Band with 3D Depth -->
+  <path
+    d="M 256 54
+       C 263 64 276 78 292 90
+       C 309 101 330 107 337 116
+       C 348 131 342 147 355 162
+       C 368 177 390 186 396 204
+       C 401 221 400 248 400 278
+       L 396 288
+       C 388 288 388 250 388 226
+       C 388 200 368 188 355 174
+       C 342 160 344 142 334 130
+       C 324 118 306 112 290 102
+       C 276 92 264 76 256 66
+       C 248 76 236 92 222 102
+       C 206 112 188 118 178 130
+       C 168 142 170 160 157 174
+       C 144 188 124 200 124 226
+       C 124 250 124 288 116 288
+       L 112 278
+       C 112 248 111 221 116 204
+       C 122 186 144 177 157 162
+       C 170 147 164 131 175 116
+       C 182 107 203 101 220 90
+       C 236 78 249 64 256 54 Z"
+    fill="url(#emeraldGrad)"
+  />
+
+  <!-- Inner Gold Bevel Filament of the Arch -->
+  <path
+    d="M 256 68
+       C 262 76 274 88 288 98
+       C 303 108 322 113 328 122
+       C 338 135 332 150 344 163
+       C 355 176 374 185 380 200
+       C 384 215 384 240 384 270"
+    fill="none"
+    stroke="url(#goldLight)"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  />
+  <path
+    d="M 256 68
+       C 250 76 238 88 224 98
+       C 209 108 190 113 184 122
+       C 174 135 180 150 168 163
+       C 157 176 138 185 132 200
+       C 128 215 128 240 128 270"
+    fill="none"
+    stroke="url(#goldLight)"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  />
+
+  <!-- 3. INNER AURA & SILHOUETTE OF THE MOSQUE -->
+  <!-- Radiant Morning Aura Backdrop -->
+  <ellipse cx="256" cy="180" rx="136" ry="120" fill="url(#auraGlow)" />
+
+  <!-- Golden Crescent Moon Floating at the Top Peak -->
+  <g transform="translate(256, 116)">
+    <!-- Crescent Moon with Golden Glow -->
+    <path
+      d="M 0 -24
+         A 24 24 0 1 0 18 16
+         A 20.5 20.5 0 1 1 0 -24 Z"
+      fill="url(#goldLight)"
+      filter="url(#goldGlow)"
+    />
+  </g>
+
+  <!-- Mosque Silhouette: Central Dome & Minarets in Rich Teal/Emerald -->
+  <g fill="#0E4535" opacity="0.94">
+    <!-- Left Minaret (Slim majestic tower) -->
+    <rect x="192" y="172" width="10" height="54" rx="1.5" />
+    <rect x="189" y="184" width="16" height="3" rx="0.5" fill="#DFB76C" />
+    <rect x="190" y="168" width="14" height="4" rx="1" fill="#DFB76C" />
+    <!-- Minaret Spire -->
+    <path d="M 191 168 L 197 150 L 203 168 Z" />
+    <circle cx="197" cy="148" r="1.5" fill="#DFB76C" />
+
+    <!-- Right Minaret -->
+    <rect x="306" y="172" width="10" height="54" rx="1.5" />
+    <rect x="303" y="184" width="16" height="3" rx="0.5" fill="#DFB76C" />
+    <rect x="304" y="168" width="14" height="4" rx="1" fill="#DFB76C" />
+    <!-- Minaret Spire -->
+    <path d="M 305 168 L 311 150 L 317 168 Z" />
+    <circle cx="311" cy="148" r="1.5" fill="#DFB76C" />
+
+    <!-- Central Grand Dome -->
+    <!-- Bulbous pointed dome -->
+    <path
+      d="M 218 226
+         C 218 190 236 156 256 150
+         C 276 156 294 190 294 226 Z"
+    />
+    <!-- Dome Finial / Spire -->
+    <line x1="256" y1="150" x2="256" y2="136" stroke="#DFB76C" stroke-width="2" stroke-linecap="round" />
+    <circle cx="256" cy="135" r="2" fill="#DFB76C" />
+
+    <!-- Dome Rib highlight in Gold -->
+    <path d="M 256 152 Q 256 190 256 226" stroke="#DFB76C" stroke-width="1" opacity="0.6" />
+  </g>
+
+  <!-- Cream Horizon Curved Dome Hill (creates the white foreground silhouette for the text) -->
+  <path
+    d="M 148 244
+       C 178 208 220 196 256 196
+       C 292 196 334 208 364 244
+       L 364 260
+       L 148 260 Z"
+    fill="#FCFAF5"
+  />
+
+  <!-- 4. MASTERPIECE 3D ARABIC CALLIGRAPHY: "أَثَـر" -->
+  <g filter="url(#goldGlow)">
+    <!-- THE ALIF (أ) on the right -->
+    <!-- Hamza above Alif -->
+    <g transform="translate(348, 185) scale(1)">
+      <!-- Hamza body -->
+      <path
+        d="M 6 -11
+           C 6 -14 3 -16 -1 -16
+           C -6 -16 -9 -13 -9 -8
+           C -9 -4 -5 -2 0 -2
+           L -7 5
+           L -2 5
+           L 4 0
+           C 7 0 8 -2 8 -5
+           C 8 -7 6 -9 4 -9
+           C 1 -9 0 -8 0 -6 Z"
+        fill="url(#emeraldSurface)"
+        stroke="url(#goldGrad)"
+        stroke-width="1.2"
+      />
+    </g>
+
+    <!-- Main Alif Stem -->
+    <path
+      d="M 333 216
+         L 359 216
+         L 359 308
+         L 333 308 Z"
+      fill="url(#emeraldGrad)"
+      stroke="url(#goldGrad)"
+      stroke-width="2"
+      stroke-linejoin="round"
+    />
+    <!-- Golden specular highlight on top of Alif -->
+    <rect x="334" y="217" width="23" height="3" fill="url(#goldLight)" />
+
+    <!-- THE SWEEPING "ثـر" (Tha & Ra) CALLIGRAPHIC CREST & FLOURISH -->
+    <!-- Rich 3D Emerald Body -->
+    <path
+      d="M 324 286
+         L 324 256
+         C 324 242 308 214 278 214
+         C 250 214 238 238 226 254
+         C 214 270 200 282 178 288
+         C 152 295 132 294 116 322
+         C 134 316 158 312 186 304
+         C 216 295 236 280 252 260
+         C 264 244 270 236 280 236
+         C 292 236 298 248 298 262
+         L 298 286 Z"
+      fill="url(#emeraldGrad)"
+      stroke="url(#goldGrad)"
+      stroke-width="2.5"
+      stroke-linejoin="round"
+    />
+
+    <!-- Secondary Calligraphic Facet Highlight on "ث" tooth -->
+    <path
+      d="M 278 216
+         C 294 216 306 230 314 248
+         L 310 250
+         C 304 235 292 222 278 222
+         C 266 222 254 232 242 248
+         L 238 245
+         C 250 228 264 216 278 216 Z"
+      fill="url(#goldLight)"
+    />
+
+    <!-- Sweeping Tail Highlight along the "ر" curve -->
+    <path
+      d="M 252 260
+         C 236 280 216 295 186 304
+         C 158 312 134 316 116 322
+         C 128 318 150 314 176 307
+         C 202 300 226 286 244 268 Z"
+      fill="url(#goldLight)"
+      opacity="0.85"
+    />
+
+    <!-- THE THREE GOLDEN DIAMOND ACCENTS (Above the "ث") -->
+    <!-- Diamond 1 (Top) -->
+    <rect
+      x="272"
+      y="188"
+      width="17"
+      height="17"
+      rx="2"
+      transform="rotate(45 280.5 196.5)"
+      fill="url(#goldGrad)"
+      stroke="#FFF3D1"
+      stroke-width="1"
+    />
+    <!-- Diamond 2 (Left) -->
+    <rect
+      x="254"
+      y="204"
+      width="17"
+      height="17"
+      rx="2"
+      transform="rotate(45 262.5 212.5)"
+      fill="url(#goldGrad)"
+      stroke="#FFF3D1"
+      stroke-width="1"
+    />
+    <!-- Diamond 3 (Right) -->
+    <rect
+      x="290"
+      y="204"
+      width="17"
+      height="17"
+      rx="2"
+      transform="rotate(45 298.5 212.5)"
+      fill="url(#goldGrad)"
+      stroke="#FFF3D1"
+      stroke-width="1"
+    />
+
+    <!-- THE GOLDEN ORNAMENTAL ROSETTE (To the right of Alif) -->
+    <g transform="translate(388, 280)">
+      <!-- Central Top Diamond -->
+      <rect x="-8" y="-22" width="15" height="15" rx="1.5" transform="rotate(45 -0.5 -14.5)" fill="url(#goldGrad)" stroke="#FFF2CC" stroke-width="1" />
+      <!-- Left Diamond -->
+      <rect x="-22" y="-8" width="15" height="15" rx="1.5" transform="rotate(45 -14.5 -0.5)" fill="url(#goldGrad)" stroke="#FFF2CC" stroke-width="1" />
+      <!-- Right Diamond -->
+      <rect x="6" y="-8" width="15" height="15" rx="1.5" transform="rotate(45 13.5 -0.5)" fill="url(#goldGrad)" stroke="#FFF2CC" stroke-width="1" />
+      <!-- Bottom Diamond -->
+      <rect x="-8" y="6" width="15" height="15" rx="1.5" transform="rotate(45 -0.5 13.5)" fill="url(#goldGrad)" stroke="#FFF2CC" stroke-width="1" />
+      <!-- Tiny Center Core -->
+      <circle cx="-0.5" cy="-0.5" r="2.5" fill="#FFF8E0" />
+    </g>
+  </g>
+
+  <!-- 5. SUBTITLE: "رفيق المسلم" WITH GOLDEN DIVIDER ACCENTS -->
+  <g>
+    <!-- Left Golden Spear Flourish -->
+    <line x1="94" y1="352" x2="142" y2="352" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round" />
+    <rect x="135" y="347" width="10" height="10" rx="1" transform="rotate(45 140 352)" fill="url(#goldGrad)" />
+
+    <!-- Right Golden Spear Flourish -->
+    <line x1="370" y1="352" x2="418" y2="352" stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round" />
+    <rect x="367" y="347" width="10" height="10" rx="1" transform="rotate(45 372 352)" fill="url(#goldGrad)" />
+
+    <!-- Clean Typography for "رفيق المسلم" -->
+    <!-- Using exact path curves for high-definition rendering -->
+    <!-- Lettering "رفيق" (R-F-Y-Q) -->
+    <!-- R -->
+    <path d="M 358 340 C 354 346 348 354 340 358 C 334 361 328 362 322 362 L 322 356 C 328 356 332 354 336 350 C 342 344 346 338 350 334 Z" fill="#0A3628" />
+    <!-- F - Y - Q body -->
+    <path d="M 330 342 C 330 336 325 332 318 332 C 311 332 306 336 306 342 C 306 345 308 348 312 350 L 292 350 C 288 345 284 338 276 338 C 268 338 263 344 263 350 L 255 350 L 255 356 L 316 356 C 322 356 326 354 328 350 C 330 348 330 345 330 342 Z M 318 346 C 314 346 312 344 312 342 C 312 339 314 337 318 337 C 321 337 323 339 323 342 C 323 344 321 346 318 346 Z" fill="#0A3628" />
+    <!-- Qaf tail dipping gracefully -->
+    <path d="M 270 350 C 270 358 264 366 254 366 C 244 366 238 358 238 350 L 244 350 C 244 355 248 360 254 360 C 260 360 264 355 264 350 Z" fill="#0A3628" />
+    <!-- Dots for Fa and Qaf -->
+    <circle cx="318" cy="326" r="3.5" fill="#0A3628" />
+    <circle cx="272" cy="330" r="3" fill="#0A3628" />
+    <circle cx="280" cy="330" r="3" fill="#0A3628" />
+    <!-- Dots for Ya -->
+    <circle cx="300" cy="363" r="2.8" fill="#0A3628" />
+    <circle cx="307" cy="363" r="2.8" fill="#0A3628" />
+
+    <!-- Lettering "المسلم" (Al-Muslim) -->
+    <!-- Alif - Lam (الـ) -->
+    <rect x="230" y="332" width="5" height="24" rx="1.5" fill="#0A3628" />
+    <rect x="221" y="332" width="5" height="24" rx="1.5" fill="#0A3628" />
+    <rect x="180" y="351" width="46" height="5" rx="1" fill="#0A3628" />
+    <!-- Meem (مـ) -->
+    <circle cx="214" cy="351" r="5" fill="#0A3628" />
+    <!-- Seen teeth (ـسـ) -->
+    <path d="M 204 351 L 204 344 L 199 344 L 199 351 L 194 351 L 194 344 L 189 344 L 189 351 Z" fill="#0A3628" />
+    <!-- Lam (ـلـ) -->
+    <rect x="178" y="334" width="5.5" height="22" rx="1" fill="#0A3628" />
+    <!-- Final Meem (ـم) with descending tail -->
+    <circle cx="168" cy="351" r="5.5" fill="#0A3628" />
+    <path d="M 164 351 L 164 372 C 164 374 161 376 159 376 C 157 376 155 374 155 372 L 155 351 Z" fill="#0A3628" />
+  </g>
+
+  <!-- 6. THE HOLY OPEN QURAN AT THE BASE -->
+  <!-- Radiance emerging from the spine -->
+  <ellipse cx="256" cy="406" rx="80" ry="32" fill="url(#spineRadiance)" />
+
+  <!-- Outer Emerald Leather Book Covers -->
+  <!-- Left Cover Wing -->
+  <path
+    d="M 256 448
+       C 214 438 148 408 116 368
+       C 152 384 218 412 256 424 Z"
+    fill="url(#emeraldGrad)"
+    stroke="url(#goldGrad)"
+    stroke-width="2"
+  />
+  <!-- Right Cover Wing -->
+  <path
+    d="M 256 448
+       C 298 438 364 408 396 368
+       C 360 384 294 412 256 424 Z"
+    fill="url(#emeraldGrad)"
+    stroke="url(#goldGrad)"
+    stroke-width="2"
+  />
+
+  <!-- Golden Trim & Gilded Quran Pages -->
+  <!-- Left Page Stack with Glowing Gold -->
+  <path
+    d="M 256 424
+       C 220 412 164 386 132 366
+       C 168 376 226 400 256 414 Z"
+    fill="url(#goldLight)"
+  />
+  <!-- Inner Page White Highlight -->
+  <path
+    d="M 256 414
+       C 226 402 178 380 148 370
+       C 180 376 230 395 256 406 Z"
+    fill="#FFFDF7"
+    opacity="0.9"
+  />
+
+  <!-- Right Page Stack with Glowing Gold -->
+  <path
+    d="M 256 424
+       C 292 412 348 386 380 366
+       C 344 376 286 400 256 414 Z"
+    fill="url(#goldLight)"
+  />
+  <!-- Inner Page White Highlight -->
+  <path
+    d="M 256 414
+       C 286 402 334 380 364 370
+       C 332 376 282 395 256 406 Z"
+    fill="#FFFDF7"
+    opacity="0.9"
+  />
+
+  <!-- Center Spine Core Jewel -->
+  <circle cx="256" cy="420" r="3.5" fill="#FFEAA8" />
+  <circle cx="256" cy="446" r="2" fill="#DFB76C" />
+</svg>

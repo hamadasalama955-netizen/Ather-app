@@ -37,6 +37,7 @@ import { IslamicHistoryModal } from './IslamicHistoryModal';
 import { RamadanSectionModal } from './RamadanSectionModal';
 import { HisnMuslimModal } from './HisnMuslimModal';
 import { QiblaCompassModal } from './QiblaCompassModal';
+import { InstallAtharBanner } from '../common/InstallAtharBanner';
 
 interface Props {
   prayerData: PrayerTimesResponse | null;
@@ -547,7 +548,7 @@ export const HomeTab: React.FC<Props> = ({
 
   return (
     <div className="space-y-4 pb-20 animate-in fade-in duration-300">
-      {/* 1. Regal Top Bar (أثَر | Athar - رفيق المسلم + القائمة + الإشعارات + قائمة الخدمات) */}
+      {/* 1. Regal Top Bar (أثر - رفيق المسلم + القائمة + الإشعارات + قائمة الخدمات) */}
       <HomeTopBar
         location={location}
         onOpenLocationModal={onOpenLocationModal}
@@ -556,6 +557,9 @@ export const HomeTab: React.FC<Props> = ({
         isDark={isDark}
         onToggleTheme={onToggleTheme}
       />
+
+      {/* 1.5. Prominent Install Banner (تثبيت تطبيق أثر على الهاتف - Offline 100%) */}
+      <InstallAtharBanner variant="banner" />
 
       {/* 2. Mosque Interactive Hero Card (مشهد الصلاة التفاعلي بألوان متغيرة وهوية واضحة) */}
       <div

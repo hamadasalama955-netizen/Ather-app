@@ -215,6 +215,6 @@ export function formatAyahShareCard(
     });
   }
 
-  card += `\n— من تطبيق «أثَر | Athar - رفيق المسلم»`;
+  card += `\n— من تطبيق «أثر | رفيق المسلم»`;
   return card;
 }

@@ -15,7 +15,9 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="أثَر" />
+    <meta name="apple-mobile-web-app-title" content="أثر" />
+    <meta name="application-name" content="أثر" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -24,6 +26,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Service Worker Registration for Instant Offline-First PWA -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js')
+            .then(function(reg) {
+              console.log('[Athar PWA] ServiceWorker registered successfully:', reg.scope);
+            })
+            .catch(function(err) {
+              console.warn('[Athar PWA] ServiceWorker registration failed:', err);
+            });
+        });
+      }
+    </script>
   </head>
   <body class="bg-stone-100 text-stone-900 dark:bg-stone-950 dark:text-stone-100 font-sans antialiased selection:bg-emerald-600 selection:text-white">
     <div id="root"></div>

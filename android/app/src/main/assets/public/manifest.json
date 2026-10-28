@@ -1,0 +1,47 @@
+{
+  "id": "/",
+  "name": "أثر",
+  "short_name": "أثر",
+  "description": "تطبيق إسلامي عربي متكامل يعمل بدون إنترنت بنسبة 100%: مواقيت الصلاة الدقيقة، عد تنازلي، المصحف الشريف، حصن المسلم، الأذكار والسبحة، ومتابعة العبادات.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "dir": "rtl",
+  "lang": "ar",
+  "theme_color": "#064e3b",
+  "background_color": "#083326",
+  "categories": ["lifestyle", "utilities", "books"],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

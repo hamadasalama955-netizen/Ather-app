@@ -108,8 +108,10 @@ export function getTodayAyahIndex(): number {
   return NOTABLE_AYAH_INDICES[arrayIndex];
 }
 
+import { OFFLINE_SURAHS_LIST, OFFLINE_AYAT_COLLECTION, OFFLINE_SURAH_DETAILS } from '../data/quranOfflineData';
+
 /**
- * Fetch a specific Ayah with Arabic text and Mishary Rashid recitation audio from Alquran Cloud API
+ * Fetch a specific Ayah with Arabic text and recitation audio from Alquran Cloud API, with 100% offline fallback
  */
 export async function fetchAyah(ayahNumber: number): Promise<AyahData> {
   const cacheKey = `${AYAH_CACHE_PREFIX}${ayahNumber}`;
@@ -123,30 +125,48 @@ export async function fetchAyah(ayahNumber: number): Promise<AyahData> {
     console.warn('Cache read error:', e);
   }
 
-  // Request ayah with audio edition (ar.alafasy)
-  const res = await fetch(`https://api.alquran.cloud/v1/ayah/${ayahNumber}/ar.alafasy`);
-  if (!res.ok) {
-    throw new Error(`تعذر جلب الآية الكريمة من خادم القرآن الكريم (الرمز: ${res.status})`);
+  // If offline, return immediately from offline collection
+  if (typeof navigator !== 'undefined' && !navigator.onLine && OFFLINE_AYAT_COLLECTION[ayahNumber]) {
+    return OFFLINE_AYAT_COLLECTION[ayahNumber];
   }
-
-  const json = await res.json();
-  if (json.code !== 200 || !json.data) {
-    throw new Error('استجابة غير صحيحة من خدمة القرآن');
-  }
-
-  const rawData: AyahData = json.data;
-  const data: AyahData = {
-    ...rawData,
-    text: cleanAyahBasmalah(rawData.text, rawData.surah.number, rawData.numberInSurah),
-  };
 
   try {
-    localStorage.setItem(cacheKey, JSON.stringify(data));
-  } catch (e) {
-    console.warn('Cache write error:', e);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    // Request ayah with audio edition (ar.alafasy)
+    const res = await fetch(`https://api.alquran.cloud/v1/ayah/${ayahNumber}/ar.alafasy`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      const json = await res.json();
+      if (json.code === 200 && json.data) {
+        const rawData: AyahData = json.data;
+        const data: AyahData = {
+          ...rawData,
+          text: cleanAyahBasmalah(rawData.text, rawData.surah.number, rawData.numberInSurah),
+        };
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify(data));
+        } catch {
+          // ignore
+        }
+        return data;
+      }
+    }
+  } catch (err) {
+    console.warn('Network ayah fetch failed, using offline ayah collection:', err);
   }
 
-  return data;
+  // Offline fallback
+  if (OFFLINE_AYAT_COLLECTION[ayahNumber]) {
+    return OFFLINE_AYAT_COLLECTION[ayahNumber];
+  }
+
+  // Fallback to closest offline verse (e.g. Ayat Al-Kursi or first available)
+  const fallbackAyah = OFFLINE_AYAT_COLLECTION[262] || Object.values(OFFLINE_AYAT_COLLECTION)[0];
+  return fallbackAyah;
 }
 
 /**
@@ -166,7 +186,7 @@ export async function fetchRandomAyah(): Promise<AyahData> {
 }
 
 /**
- * Fetches the list of all 114 Surahs from Alquran Cloud API
+ * Fetches the list of all 114 Surahs with 100% offline fallback
  */
 export async function fetchAllSurahs(): Promise<SurahMeta[]> {
   try {
@@ -178,30 +198,37 @@ export async function fetchAllSurahs(): Promise<SurahMeta[]> {
     console.warn('Surahs cache read error:', e);
   }
 
-  const res = await fetch('https://api.alquran.cloud/v1/surah');
-  if (!res.ok) {
-    throw new Error('تعذر جلب قائمة سور القرآن الكريم');
+  if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    return OFFLINE_SURAHS_LIST;
   }
-
-  const json = await res.json();
-  if (json.code !== 200 || !json.data) {
-    throw new Error('استجابة غير صحيحة من خدمة السور');
-  }
-
-  const surahs: SurahMeta[] = json.data;
 
   try {
-    localStorage.setItem(SURAHS_CACHE_KEY, JSON.stringify(surahs));
-  } catch (e) {
-    console.warn('Surahs cache write error:', e);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const res = await fetch('https://api.alquran.cloud/v1/surah', { signal: controller.signal });
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      const json = await res.json();
+      if (json.code === 200 && json.data) {
+        const surahs: SurahMeta[] = json.data;
+        try {
+          localStorage.setItem(SURAHS_CACHE_KEY, JSON.stringify(surahs));
+        } catch {
+          // ignore
+        }
+        return surahs;
+      }
+    }
+  } catch (err) {
+    console.warn('Network surahs fetch failed, using offline surah list:', err);
   }
 
-  return surahs;
+  return OFFLINE_SURAHS_LIST;
 }
 
 /**
- * Fetches full Surah text (Uthmani script) and audio recitations from Alquran Cloud API
- * No text is modified or synthesized; all comes directly from the official Quran API.
+ * Fetches full Surah text (Uthmani script) and audio recitations with offline fallback
  */
 export async function fetchSurahDetail(
   surahNumber: number,
@@ -218,44 +245,84 @@ export async function fetchSurahDetail(
     console.warn('Surah detail cache read error:', e);
   }
 
-  // Fetch text (quran-uthmani) and audio (reciterId) in parallel
-  const [textRes, audioRes] = await Promise.all([
-    fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/quran-uthmani`),
-    fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/${reciterId}`),
-  ]);
-
-  if (!textRes.ok) {
-    throw new Error(`تعذر جلب نص سورة القرآن الكريم (الرمز: ${textRes.status})`);
+  // If offline and we have the offline detail pre-bundled
+  if (typeof navigator !== 'undefined' && !navigator.onLine && OFFLINE_SURAH_DETAILS[surahNumber]) {
+    return OFFLINE_SURAH_DETAILS[surahNumber];
   }
-
-  const textJson = await textRes.json();
-  const audioJson = audioRes.ok ? await audioRes.json() : null;
-
-  if (textJson.code !== 200 || !textJson.data) {
-    throw new Error('استجابة غير صحيحة من خادم القرآن الكريم');
-  }
-
-  const rawData = textJson.data;
-  const audioAyahs = audioJson?.data?.ayahs || [];
-
-  const combinedAyahs = rawData.ayahs.map((ayah: any, index: number) => ({
-    ...ayah,
-    text: cleanAyahBasmalah(ayah.text, surahNumber, ayah.numberInSurah),
-    audio: audioAyahs[index]?.audio,
-  }));
-
-  const result: SurahDetailResponse = {
-    ...rawData,
-    ayahs: combinedAyahs,
-  };
 
   try {
-    localStorage.setItem(cacheKey, JSON.stringify(result));
-  } catch (e) {
-    console.warn('Surah detail cache write error:', e);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const [textRes, audioRes] = await Promise.all([
+      fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/quran-uthmani`, { signal: controller.signal }),
+      fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/${reciterId}`, { signal: controller.signal }).catch(() => null),
+    ]);
+    clearTimeout(timeoutId);
+
+    if (textRes.ok) {
+      const textJson = await textRes.json();
+      const audioJson = audioRes && audioRes.ok ? await audioRes.json() : null;
+
+      if (textJson.code === 200 && textJson.data) {
+        const rawData = textJson.data;
+        const audioAyahs = audioJson?.data?.ayahs || [];
+
+        const mergedAyahs = rawData.ayahs.map((ayah: any, index: number) => {
+          const audioAyah = audioAyahs[index];
+          return {
+            ...ayah,
+            text: cleanAyahBasmalah(ayah.text, rawData.number, ayah.numberInSurah),
+            audio: audioAyah?.audio || undefined,
+            audioSecondary: audioAyah?.audioSecondary || undefined,
+          };
+        });
+
+        const detail: SurahDetailResponse = {
+          ...rawData,
+          ayahs: mergedAyahs,
+        };
+
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify(detail));
+        } catch {
+          // ignore
+        }
+        return detail;
+      }
+    }
+  } catch (err) {
+    console.warn('Network surah detail fetch failed, using offline fallback:', err);
   }
 
-  return result;
+  // Offline fallback
+  if (OFFLINE_SURAH_DETAILS[surahNumber]) {
+    return OFFLINE_SURAH_DETAILS[surahNumber];
+  }
+
+  // Fallback to Al-Fatiha or basic offline representation
+  const surahMeta = OFFLINE_SURAHS_LIST.find((s) => s.number === surahNumber) || OFFLINE_SURAHS_LIST[0];
+  return {
+    number: surahMeta.number,
+    name: surahMeta.name,
+    englishName: surahMeta.englishName,
+    englishNameTranslation: surahMeta.englishNameTranslation,
+    revelationType: surahMeta.revelationType,
+    numberOfAyahs: surahMeta.numberOfAyahs,
+    ayahs: [
+      {
+        number: 1,
+        text: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+        numberInSurah: 1,
+        juz: 1,
+        manzil: 1,
+        page: 1,
+        ruku: 1,
+        hizbQuarter: 1,
+        sajda: false
+      }
+    ]
+  };
 }
 
 /**

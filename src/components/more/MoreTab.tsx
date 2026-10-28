@@ -15,6 +15,7 @@ import {
 import { ThemeMode, AppSettings, LocationConfig } from '../../types';
 import { TrackerSubView } from '../tracker/TrackerTab';
 import { PWAInstallButton } from '../common/PWAInstallButton';
+import { InstallAtharBanner } from '../common/InstallAtharBanner';
 import { CALCULATION_METHODS } from '../../utils/constants';
 import { CalendarCheck, Flame, BookHeart, Coins, Sparkles as SparklesIcon, ChevronLeft, BookOpen } from 'lucide-react';
 
@@ -170,8 +171,9 @@ export const MoreTab: React.FC<Props> = ({
       {/* 3. PWA Install Section */}
       <div className="space-y-2">
         <h3 className="text-xs font-bold text-stone-600 dark:text-stone-300 px-1">
-          تثبيت التطبيق (PWA)
+          تثبيت التطبيق على الموبايل (100% Offline)
         </h3>
+        <InstallAtharBanner variant="card" />
         <PWAInstallButton variant="card" />
       </div>
 

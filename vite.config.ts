@@ -14,9 +14,9 @@ export default defineConfig(() => {
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icon.svg'],
         manifest: {
           id: '/',
-          name: 'أثَر | Athar - رفيق المسلم',
-          short_name: 'أثَر',
-          description: 'تطبيق إسلامي عربي متكامل: مواقيت الصلاة الدقيقة، عد تنازلي، المصحف الشريف، حصن المسلم، وتجربة PWA متوافقة مع الموبايل.',
+          name: 'أثر',
+          short_name: 'أثر',
+          description: 'تطبيق إسلامي عربي متكامل يعمل بدون إنترنت بنسبة 100%: مواقيت الصلاة الدقيقة، عد تنازلي، المصحف الشريف، حصن المسلم، الأذكار والسبحة، ومتابعة العبادات.',
           theme_color: '#064e3b',
           background_color: '#f8fafc',
           display: 'standalone',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Sparkles, Star, BookOpen, Check } from 'lucide-react';
+import { Search, Star, BookOpen, Check } from 'lucide-react';
 import { ALLAH_NAMES } from '../../data/allahNamesData';
 import { AllahName } from '../../types';
 
@@ -57,13 +57,13 @@ export const AllahNamesSection: React.FC = () => {
   return (
     <div className="space-y-4">
       {/* Featured Name of the Day Card */}
-      <div className="rounded-3xl bg-gradient-to-br from-amber-600 via-amber-700 to-emerald-900 text-white p-5 shadow-lg relative overflow-hidden">
-        <div className="flex items-center justify-between text-xs text-amber-200 mb-2">
+      <div className="rounded-3xl bg-gradient-to-br from-[#1a1814] via-[#141414] to-[#0a0a0a] border border-[#d4af37]/40 text-white p-5 shadow-lg relative overflow-hidden">
+        <div className="flex items-center justify-between text-xs text-[#d4af37] mb-2">
           <div className="flex items-center gap-1.5 font-bold">
-            <Sparkles className="w-4 h-4 text-amber-300" />
+            <BookOpen className="w-4 h-4 text-[#d4af37]" />
             <span>اسم اليوم للتأمل والدعاء</span>
           </div>
-          <span className="font-mono text-[11px] bg-white/10 px-2 py-0.5 rounded-full">
+          <span className="font-mono text-[11px] bg-white/10 px-2 py-0.5 rounded-full text-[#d4af37]">
             #{featuredName.id} من 99
           </span>
         </div>
@@ -71,28 +71,28 @@ export const AllahNamesSection: React.FC = () => {
         <div className="text-center py-2">
           <h2
             style={{ fontFamily: 'var(--font-quran), Amiri, serif' }}
-            className="text-4xl sm:text-5xl font-bold tracking-wide text-amber-100 select-text"
+            className="text-4xl sm:text-5xl font-bold tracking-wide text-[#d4af37] select-text"
           >
             {featuredName.name}
           </h2>
           <p className="text-sm font-medium text-white/95 mt-2 max-w-sm mx-auto leading-relaxed">
             {featuredName.meaning}
           </p>
-          <div className="mt-3 inline-block bg-black/20 backdrop-blur-xs px-3.5 py-1.5 rounded-xl border border-white/15 text-xs text-amber-100">
+          <div className="mt-3 inline-block bg-black/40 backdrop-blur-xs px-3.5 py-1.5 rounded-xl border border-[#d4af37]/20 text-xs text-stone-200">
             💡 {featuredName.reflection}
           </div>
         </div>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 p-3 space-y-2.5 shadow-sm">
+      <div className="rounded-2xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 p-3 space-y-2.5 shadow-sm">
         <div className="relative">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="ابحث بالاسم أو المعنى (مثال: الرحيم، الرزاق، العفو)..."
-            className="w-full pr-9 pl-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white placeholder-stone-400 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-600 border border-stone-200 dark:border-stone-700"
+            className="w-full pr-9 pl-4 py-2.5 rounded-xl bg-stone-100 dark:bg-[#1a1814] text-stone-900 dark:text-white placeholder-stone-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#d4af37] border border-stone-200 dark:border-stone-700"
           />
           <Search className="w-4 h-4 text-stone-400 absolute right-3 top-3 pointer-events-none" />
         </div>
@@ -103,8 +103,8 @@ export const AllahNamesSection: React.FC = () => {
               onClick={() => setOnlySaved(false)}
               className={`px-3 py-1.5 rounded-xl font-semibold transition ${
                 !onlySaved
-                  ? 'bg-emerald-800 text-white'
-                  : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300'
+                  ? 'bg-[#d4af37] text-stone-950 font-bold'
+                  : 'bg-stone-100 dark:bg-[#1a1814] text-stone-600 dark:text-stone-300'
               }`}
             >
               جميع الأسماء (99)
@@ -114,7 +114,7 @@ export const AllahNamesSection: React.FC = () => {
               className={`flex items-center gap-1 px-3 py-1.5 rounded-xl font-semibold transition ${
                 onlySaved
                   ? 'bg-amber-500 text-stone-950 font-bold'
-                  : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300'
+                  : 'bg-stone-100 dark:bg-[#1a1814] text-stone-600 dark:text-stone-300'
               }`}
             >
               <Star className="w-3.5 h-3.5 fill-current" />
@@ -135,16 +135,16 @@ export const AllahNamesSection: React.FC = () => {
           return (
             <div
               key={item.id}
-              className="p-3.5 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-xs hover:border-emerald-500/40 transition-all flex flex-col justify-between space-y-2 group"
+              className="p-3.5 rounded-2xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 shadow-xs hover:border-[#d4af37]/50 transition-all flex flex-col justify-between space-y-2 group"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-lg bg-stone-100 dark:bg-stone-800 text-stone-500 text-[11px] font-mono flex items-center justify-center font-bold">
+                  <span className="w-6 h-6 rounded-lg bg-stone-100 dark:bg-[#1a1814] text-stone-500 text-[11px] font-mono flex items-center justify-center font-bold">
                     {item.id}
                   </span>
                   <h3
                     style={{ fontFamily: 'var(--font-quran), Amiri, serif' }}
-                    className="text-xl font-bold text-emerald-900 dark:text-emerald-300"
+                    className="text-xl font-bold text-stone-900 dark:text-[#d4af37]"
                   >
                     {item.name}
                   </h3>

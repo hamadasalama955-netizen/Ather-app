@@ -28,9 +28,9 @@ export const StreakAnalyticsCard: React.FC<Props> = ({ analytics }) => {
   const strokeOffset = ringCircumference - (ringCircumference * weeklyPercentage) / 100;
 
   return (
-    <div className="rounded-3xl bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 p-4 sm:p-5 shadow-sm space-y-4">
+    <div className="rounded-3xl bg-white dark:bg-[#141414] border border-stone-200/90 dark:border-[#d4af37]/25 p-4 sm:p-5 shadow-sm space-y-4">
       {/* 1. Motivational Bright Flame Hero Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-600 via-amber-500 to-emerald-600 text-white p-5 shadow-lg">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-600 via-amber-600 to-[#d4af37] text-white p-5 shadow-lg">
         {/* Ambient flame glow particle */}
         <div className="absolute -top-10 -right-10 w-44 h-44 bg-yellow-300/25 rounded-full blur-2xl pointer-events-none" />
 
@@ -74,11 +74,11 @@ export const StreakAnalyticsCard: React.FC<Props> = ({ analytics }) => {
       </div>
 
       {/* 2. Colorful Progress Ring & Weekly Summary Card */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-stone-50 via-emerald-50/40 to-amber-50/40 dark:from-stone-850 dark:via-emerald-950/20 dark:to-amber-950/20 border border-stone-200/80 dark:border-stone-800 flex items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[#1a1814] border border-stone-200/80 dark:border-[#d4af37]/25 flex items-center justify-between gap-4">
         {/* Info Text */}
         <div className="space-y-1">
-          <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-bold text-xs">
-            <TrendingUp className="w-4 h-4" />
+          <div className="flex items-center gap-1.5 text-stone-900 dark:text-[#d4af37] font-bold text-xs">
+            <TrendingUp className="w-4 h-4 text-[#d4af37]" />
             <span>حلقة الإنجاز الأسبوعي</span>
           </div>
           <h4 className="text-sm font-extrabold text-stone-900 dark:text-white">
@@ -106,8 +106,8 @@ export const StreakAnalyticsCard: React.FC<Props> = ({ analytics }) => {
             <defs>
               <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#f59e0b" />
-                <stop offset="50%" stopColor="#10b981" />
-                <stop offset="100%" stopColor="#059669" />
+                <stop offset="50%" stopColor="#d4af37" />
+                <stop offset="100%" stopColor="#c5a059" />
               </linearGradient>
             </defs>
             {/* Foreground Animated Ring */}
@@ -129,7 +129,7 @@ export const StreakAnalyticsCard: React.FC<Props> = ({ analytics }) => {
             <span className="text-lg font-black font-mono tabular-nums text-stone-900 dark:text-white leading-none">
               {weeklyPercentage}%
             </span>
-            <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
+            <span className="text-[9px] font-bold text-[#d4af37]">
               إنجاز
             </span>
           </div>
@@ -156,7 +156,7 @@ export const StreakAnalyticsCard: React.FC<Props> = ({ analytics }) => {
                   <div
                     className={`w-full rounded-lg transition-all duration-500 ${
                       day.totalScorePercent >= 80
-                        ? 'bg-gradient-to-t from-emerald-600 to-emerald-400 shadow-sm shadow-emerald-500/30'
+                        ? 'bg-gradient-to-t from-[#c5a059] to-[#d4af37] shadow-sm shadow-[#d4af37]/30'
                         : day.totalScorePercent >= 50
                         ? 'bg-gradient-to-t from-amber-500 to-yellow-400 shadow-sm shadow-amber-500/30'
                         : 'bg-stone-300 dark:bg-stone-600'

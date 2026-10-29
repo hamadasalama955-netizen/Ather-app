@@ -4,556 +4,390 @@ export type TimeOfDayPeriod = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' |
 
 interface Props {
   period: TimeOfDayPeriod;
+  isDark?: boolean;
   className?: string;
 }
 
-export const MosqueTimeScene: React.FC<Props> = ({ period, className = '' }) => {
-  // 6 Dynamic Atmospheric Color Palettes (Daylight Asr matches the user's reference image!)
-  const config = {
-    // 1. وقت الفجر: سماء الفجر الهادئة وزرقة الفجر الصافي مع هلال وفوانيس مضيئة
-    fajr: {
-      skyGradient: {
-        id: 'fajrSky',
-        x1: '0',
-        y1: '0',
-        x2: '1',
-        y2: '1',
-        stops: [
-          { offset: '0%', color: '#0b1d3a' },
-          { offset: '40%', color: '#142c52' },
-          { offset: '75%', color: '#1e4878' },
-          { offset: '100%', color: '#68b4e0' },
-        ],
-      },
-      starsOpacity: 0.7,
-      celestial: {
-        type: 'crescent' as const,
-        cx: 310,
-        cy: 42,
-        color: '#f0f9ff',
-        glow: '#7dd3fc',
-      },
-      sunGlow: false,
-      birdsOpacity: 0.3,
-      domeFill: '#132847',
-      domeBorder: '#38bdf8',
-      facadeFill: '#e2e8f0',
-      facadeShadow: '#cbd5e1',
-      blueTile: '#1d4ed8',
-      goldArch: '#f59e0b',
-      doorColor: '#78350f',
-      windowGlass: '#fef08a',
-      windowGlowOpacity: 0.8,
-      treeColor: '#1e3a29',
-      treeColorDark: '#14281c',
-      courtyardFill: '#475569',
-      basePlinth: '#1e293b',
-    },
+export const MosqueTimeScene: React.FC<Props> = ({ period, isDark = false, className = '' }) => {
+  // If in dark mode, or during night periods (maghrib, night, fajr), display the luxurious night scene
+  const isNightScene = isDark || period === 'maghrib' || period === 'night' || period === 'fajr';
 
-    // 2. وقت الشروق: ألوان الإشراق الوردية والذهبية الدافئة
-    sunrise: {
-      skyGradient: {
-        id: 'sunriseSky',
-        x1: '0',
-        y1: '0',
-        x2: '1',
-        y2: '1',
-        stops: [
-          { offset: '0%', color: '#31103f' },
-          { offset: '35%', color: '#7c1c4d' },
-          { offset: '70%', color: '#c2410c' },
-          { offset: '100%', color: '#fde047' },
-        ],
-      },
-      starsOpacity: 0,
-      celestial: {
-        type: 'sun' as const,
-        cx: 315,
-        cy: 50,
-        color: '#fef08a',
-        glow: '#f97316',
-      },
-      sunGlow: true,
-      birdsOpacity: 0.85,
-      domeFill: '#241b35',
-      domeBorder: '#fb923c',
-      facadeFill: '#fef2f2',
-      facadeShadow: '#fecaca',
-      blueTile: '#1e3a8a',
-      goldArch: '#f59e0b',
-      doorColor: '#991b1b',
-      windowGlass: '#fef08a',
-      windowGlowOpacity: 0.5,
-      treeColor: '#2b5138',
-      treeColorDark: '#1c3625',
-      courtyardFill: '#78350f',
-      basePlinth: '#451a03',
-    },
+  if (isNightScene) {
+    // 1. NIGHT SCENE (مطابق للوحة الهاتف في الوضع الليلي - صورة image_7280db7e.png)
+    // سماء ليلية كحلية/سوداء متدرجة، نجوم تتلألأ، هلال ذهبي مضيء في الأعلى، ومسجد فخم بإضاءة نوافذ وقباب ذهبية صفراء
+    return (
+      <div className={`relative w-full h-44 sm:h-52 overflow-hidden select-none pointer-events-none rounded-2xl ${className}`}>
+        <svg
+          viewBox="0 0 380 200"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-full object-cover"
+          preserveAspectRatio="xMidYMid slice"
+        >
+          <defs>
+            {/* Night Sky Gradient */}
+            <linearGradient id="royalNightSky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#050811" />
+              <stop offset="40%" stopColor="#0a1222" />
+              <stop offset="75%" stopColor="#111c30" />
+              <stop offset="100%" stopColor="#1a2538" />
+            </linearGradient>
 
-    // 3. وقت الظهر: سماء نهارية زرقاء صافية ناصعة وشمس ناصعة
-    dhuhr: {
-      skyGradient: {
-        id: 'dhuhrSky',
-        x1: '0',
-        y1: '0',
-        x2: '1',
-        y2: '1',
-        stops: [
-          { offset: '0%', color: '#7dd3fc' },
-          { offset: '50%', color: '#bae6fd' },
-          { offset: '85%', color: '#e0f2fe' },
-          { offset: '100%', color: '#f0f9ff' },
-        ],
-      },
-      starsOpacity: 0,
-      celestial: {
-        type: 'bright-sun' as const,
-        cx: 312,
-        cy: 40,
-        color: '#ffffff',
-        glow: '#fef08a',
-      },
-      sunGlow: true,
-      birdsOpacity: 0.95,
-      domeFill: '#1b2d4f',
-      domeBorder: '#60a5fa',
-      facadeFill: '#ffffff',
-      facadeShadow: '#e2e8f0',
-      blueTile: '#255896',
-      goldArch: '#f2d294',
-      doorColor: '#b46654',
-      windowGlass: '#0f172a',
-      windowGlowOpacity: 0.25,
-      treeColor: '#4d8c58',
-      treeColorDark: '#35633e',
-      courtyardFill: '#97816f',
-      basePlinth: '#524338',
-    },
+            {/* Radiant Crescent Glow */}
+            <radialGradient id="crescentGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#fef08a" stopOpacity="0.8" />
+              <stop offset="40%" stopColor="#fde047" stopOpacity="0.35" />
+              <stop offset="70%" stopColor="#d4af37" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#000000" stopOpacity="0" />
+            </radialGradient>
 
-    // 4. وقت العصر: (مطابق تماماً للصورة المرفقة - ألوان فاتحة دافئة وجميلة)
-    asr: {
-      skyGradient: {
-        id: 'asrSky',
-        x1: '0',
-        y1: '0',
-        x2: '1',
-        y2: '1',
-        stops: [
-          { offset: '0%', color: '#bce4f7' },   // Soft pale sky blue (Left)
-          { offset: '45%', color: '#d8edf8' },  // Gentle azure
-          { offset: '75%', color: '#fcead2' },  // Warm soft golden peach
-          { offset: '100%', color: '#fae1be' }, // Golden sunlight horizon (Right)
-        ],
-      },
-      starsOpacity: 0,
-      celestial: {
-        type: 'sun' as const,
-        cx: 312,
-        cy: 40,                                // Positioned in open sky near dome
-        color: '#fffbeb',
-        glow: '#fde68a',
-      },
-      sunGlow: true,
-      birdsOpacity: 0.95,
-      domeFill: '#1b2d4f',                     // Deep navy blue dome as in image
-      domeBorder: '#3b82f6',
-      facadeFill: '#ffffff',                   // Crisp white mosque walls
-      facadeShadow: '#e6edf5',
-      blueTile: '#255896',                     // Iconic cobalt/royal blue mosaic borders
-      goldArch: '#f2d294',                     // Sandstone/golden inner vaulted arches
-      doorColor: '#b46654',                    // Terracotta arched doorway
-      windowGlass: '#142037',                  // Dark navy arched window frames
-      windowGlowOpacity: 0.25,
-      treeColor: '#4d8c58',                    // Lush green trees behind walls
-      treeColorDark: '#33613c',
-      courtyardFill: '#97816f',                // Sandy courtyard floor
-      basePlinth: '#524338',                   // Ground base plinth
-    },
+            {/* Window Glow Filter */}
+            <radialGradient id="windowGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#fffbeb" stopOpacity="1" />
+              <stop offset="50%" stopColor="#fef08a" stopOpacity="0.95" />
+              <stop offset="90%" stopColor="#f59e0b" stopOpacity="0.8" />
+            </radialGradient>
 
-    // 5. وقت المغرب: شفق الغروب البنفسجي والأحمر الناري مع هلال رقيق
-    maghrib: {
-      skyGradient: {
-        id: 'maghribSky',
-        x1: '0',
-        y1: '0',
-        x2: '1',
-        y2: '1',
-        stops: [
-          { offset: '0%', color: '#1e1035' },
-          { offset: '30%', color: '#581c87' },
-          { offset: '60%', color: '#9f1239' },
-          { offset: '85%', color: '#c2410c' },
-          { offset: '100%', color: '#f59e0b' },
-        ],
-      },
-      starsOpacity: 0.4,
-      celestial: {
-        type: 'crescent' as const,
-        cx: 310,
-        cy: 42,
-        color: '#fef3c7',
-        glow: '#f97316',
-      },
-      sunGlow: false,
-      birdsOpacity: 0.6,
-      domeFill: '#1f1532',
-      domeBorder: '#fb923c',
-      facadeFill: '#fdf2f8',
-      facadeShadow: '#fbcfe8',
-      blueTile: '#1e3a8a',
-      goldArch: '#f59e0b',
-      doorColor: '#7f1d1d',
-      windowGlass: '#fde047',
-      windowGlowOpacity: 0.85,
-      treeColor: '#233d2c',
-      treeColorDark: '#16281d',
-      courtyardFill: '#5b21b6',
-      basePlinth: '#2e1065',
-    },
+            {/* Central Portal Inner Warmth */}
+            <linearGradient id="portalWarmth" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#fef08a" />
+              <stop offset="60%" stopColor="#f59e0b" />
+              <stop offset="100%" stopColor="#d97706" />
+            </linearGradient>
+          </defs>
 
-    // 6. وقت العشاء والليل: سماء ليلية كحلية ساحرة مرصعة بالنجوم مع هلال لامع ونوافذ مضاءة
-    night: {
-      skyGradient: {
-        id: 'nightSky',
-        x1: '0',
-        y1: '0',
-        x2: '1',
-        y2: '1',
-        stops: [
-          { offset: '0%', color: '#030c17' },
-          { offset: '45%', color: '#07182c' },
-          { offset: '80%', color: '#0e2b48' },
-          { offset: '100%', color: '#163b5c' },
-        ],
-      },
-      starsOpacity: 0.95,
-      celestial: {
-        type: 'crescent' as const,
-        cx: 310,
-        cy: 38,
-        color: '#fef9c3',
-        glow: '#fde047',
-      },
-      sunGlow: false,
-      birdsOpacity: 0.15,
-      domeFill: '#0d1f36',
-      domeBorder: '#dfb76c',
-      facadeFill: '#e2e8f0',
-      facadeShadow: '#94a3b8',
-      blueTile: '#1e3a8a',
-      goldArch: '#f59e0b',
-      doorColor: '#451a03',
-      windowGlass: '#fde047',
-      windowGlowOpacity: 0.95,
-      treeColor: '#12251a',
-      treeColorDark: '#0b1710',
-      courtyardFill: '#334155',
-      basePlinth: '#0f172a',
-    },
-  }[period];
+          {/* Background Sky */}
+          <rect width="380" height="200" fill="url(#royalNightSky)" />
 
-  return (
-    <div className={`relative w-full h-full overflow-hidden select-none pointer-events-none ${className}`}>
-      <svg
-        viewBox="0 0 380 160"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full object-cover"
-        preserveAspectRatio="xMidYEnd meet"
-      >
-        <defs>
-          {/* Dynamic Sky Gradient */}
-          <linearGradient
-            id={config.skyGradient.id}
-            x1={config.skyGradient.x1}
-            y1={config.skyGradient.y1}
-            x2={config.skyGradient.x2}
-            y2={config.skyGradient.y2}
-          >
-            {config.skyGradient.stops.map((stop, i) => (
-              <stop key={i} offset={stop.offset} stopColor={stop.color} />
-            ))}
-          </linearGradient>
-
-          {/* Sun Glow Filter */}
-          <radialGradient id={`sunHalo_${period}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
-            <stop offset="40%" stopColor="#fef08a" stopOpacity="0.45" />
-            <stop offset="70%" stopColor="#fde68a" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
-          </radialGradient>
-
-          {/* Dome Lighting Gradient */}
-          <linearGradient id={`domeGrad_${period}`} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#2c4772" />
-            <stop offset="60%" stopColor={config.domeFill} />
-            <stop offset="100%" stopColor="#101c30" />
-          </linearGradient>
-        </defs>
-
-        {/* 1. Sky Canvas */}
-        <rect width="380" height="160" fill={`url(#${config.skyGradient.id})`} />
-
-        {/* 2. Stars (Fajr, Maghrib, Night) */}
-        {config.starsOpacity > 0 && (
-          <g opacity={config.starsOpacity}>
-            <circle cx="28" cy="18" r="0.8" fill="#ffffff" />
-            <circle cx="56" cy="24" r="1.1" fill="#fef08a" />
-            <circle cx="92" cy="14" r="0.7" fill="#ffffff" />
-            <circle cx="128" cy="22" r="0.9" fill="#ffffff" />
-            <circle cx="164" cy="16" r="0.8" fill="#ffffff" />
-            <circle cx="210" cy="25" r="1.0" fill="#fef08a" />
-            <circle cx="250" cy="15" r="0.7" fill="#ffffff" />
-            <circle cx="280" cy="28" r="0.9" fill="#ffffff" />
-            <circle cx="340" cy="18" r="0.8" fill="#ffffff" />
-            <circle cx="75" cy="35" r="0.6" fill="#ffffff" />
-            <circle cx="145" cy="32" r="0.7" fill="#ffffff" />
+          {/* Twinkling Stars */}
+          <g opacity="0.85">
+            <circle cx="35" cy="25" r="0.8" fill="#ffffff" />
+            <circle cx="75" cy="40" r="1.1" fill="#fef08a" />
+            <circle cx="110" cy="20" r="0.7" fill="#ffffff" />
+            <circle cx="145" cy="45" r="0.9" fill="#ffffff" />
+            <circle cx="170" cy="18" r="1.2" fill="#fef08a" />
+            <circle cx="215" cy="35" r="0.8" fill="#ffffff" />
+            <circle cx="260" cy="22" r="1.0" fill="#fef08a" />
+            <circle cx="305" cy="42" r="0.7" fill="#ffffff" />
+            <circle cx="345" cy="26" r="0.9" fill="#ffffff" />
+            <circle cx="90" cy="65" r="0.6" fill="#ffffff" />
+            <circle cx="280" cy="60" r="0.7" fill="#ffffff" />
+            <circle cx="50" cy="80" r="0.8" fill="#ffffff" />
+            <circle cx="330" cy="75" r="0.8" fill="#ffffff" />
           </g>
-        )}
 
-        {/* 3. Celestial Body: Sun or Crescent Moon */}
-        {config.celestial.type === 'crescent' ? (
+          {/* Golden Crescent Moon with Outer Halo (Centered at Top) */}
           <g>
-            {/* Crescent Outer Glow */}
-            <circle cx={config.celestial.cx} cy={config.celestial.cy} r="16" fill={config.celestial.glow} opacity="0.3" />
-            {/* Elegant Crescent Moon */}
+            <circle cx="190" cy="46" r="32" fill="url(#crescentGlow)" />
+            {/* Elegant Golden Crescent */}
             <path
-              d={`M ${config.celestial.cx} ${config.celestial.cy - 11}
-                  A 11 11 0 1 0 ${config.celestial.cx + 9} ${config.celestial.cy + 7}
-                  A 9.5 9.5 0 1 1 ${config.celestial.cx} ${config.celestial.cy - 11} Z`}
-              fill={config.celestial.color}
+              d="M 190 28 A 17 17 0 1 0 205 56 A 15 15 0 1 1 190 28 Z"
+              fill="#fef08a"
+              stroke="#fde047"
+              strokeWidth="0.5"
             />
-            {/* Luminous Star Companion */}
-            <circle cx={config.celestial.cx + 13} cy={config.celestial.cy - 6} r="1.4" fill={config.celestial.color} />
           </g>
-        ) : (
-          <g>
-            {/* Radiant Sun with Soft Atmospheric Halo as in image */}
-            <circle cx={config.celestial.cx} cy={config.celestial.cy} r="32" fill={`url(#sunHalo_${period})`} />
-            <circle cx={config.celestial.cx} cy={config.celestial.cy} r="16" fill="#ffffff" opacity="0.85" />
-            <circle cx={config.celestial.cx} cy={config.celestial.cy} r="11" fill={config.celestial.color} />
-          </g>
-        )}
 
-        {/* 4. Flock of Swallows / Birds soaring in flight (As in the reference image!) */}
-        <g opacity={config.birdsOpacity}>
-          {/* High Sky Swallows */}
-          <path d="M 148 48 Q 151 45 154 47 Q 157 45 160 48 Q 154 46 148 48 Z" fill="#1e293b" />
-          <path d="M 164 42 Q 167 39 170 41 Q 173 39 176 42 Q 170 40 164 42 Z" fill="#1e293b" />
-          <path d="M 180 46 Q 183 43 186 45 Q 189 43 192 46 Q 186 44 180 46 Z" fill="#1e293b" />
-          <path d="M 196 52 Q 199 49 202 51 Q 205 49 208 52 Q 202 50 196 52 Z" fill="#1e293b" />
-
-          {/* Mid Sky Swallows */}
-          <path d="M 162 90 Q 165 87 168 89 Q 171 87 174 90 Q 168 88 162 90 Z" fill="#1e293b" />
-          <path d="M 172 82 Q 175 79 178 81 Q 181 79 184 82 Q 178 80 172 82 Z" fill="#1e293b" />
-          <path d="M 186 86 Q 188 84 191 85 Q 193 84 196 86 Q 191 85 186 86 Z" fill="#1e293b" />
-          <path d="M 176 96 Q 178 94 181 95 Q 183 94 186 96 Q 181 95 176 96 Z" fill="#1e293b" />
-          <path d="M 194 92 Q 196 90 198 91 Q 200 90 203 92 Q 198 91 194 92 Z" fill="#1e293b" />
-          <path d="M 183 76 Q 185 74 187 75 Q 189 74 191 76 Q 187 75 183 76 Z" fill="#1e293b" />
-        </g>
-
-        {/* 5. Lush Green Foliage / Trees behind Mosque Walls (Left & Right) */}
-        {/* Left Treetops */}
-        <ellipse cx="28" cy="115" rx="22" ry="18" fill={config.treeColor} />
-        <ellipse cx="44" cy="110" rx="16" ry="15" fill={config.treeColorDark} />
-        <ellipse cx="14" cy="120" rx="15" ry="14" fill={config.treeColorDark} />
-        {/* Center Foliage behind Gallery */}
-        <ellipse cx="178" cy="112" rx="26" ry="16" fill={config.treeColor} />
-        <ellipse cx="202" cy="115" rx="18" ry="14" fill={config.treeColorDark} />
-        {/* Right Foliage behind Dome & Minaret */}
-        <ellipse cx="340" cy="122" rx="24" ry="16" fill={config.treeColor} />
-        <ellipse cx="360" cy="118" rx="20" ry="15" fill={config.treeColorDark} />
-        <ellipse cx="320" cy="126" rx="16" ry="12" fill={config.treeColorDark} />
-
-        {/* 6. Ground Base Plinth & Paved Courtyard (As in image) */}
-        <rect x="0" y="138" width="380" height="22" fill={config.courtyardFill} />
-        <rect x="0" y="146" width="380" height="14" fill={config.basePlinth} />
-
-        {/* ======================================================== */}
-        {/* 7. MOSQUE ARCHITECTURE: PRECISELY MATCHING THE USER IMAGE */}
-        {/* ======================================================== */}
-
-        {/* --- A. LEFT TALL MINARET --- */}
-        <g>
-          {/* Main White Shaft */}
-          <rect x="49" y="72" width="13" height="66" fill={config.facadeFill} />
-          {/* Decorative Blue Ring Band */}
-          <rect x="49" y="80" width="13" height="2.5" fill={config.blueTile} />
-          <rect x="49" y="96" width="13" height="2" fill={config.blueTile} />
-          {/* Minaret Balcony with brackets */}
-          <rect x="46" y="70" width="19" height="3" rx="0.5" fill={config.facadeShadow} />
-          <rect x="47" y="67" width="17" height="3" fill={config.blueTile} />
-          {/* Upper Lantern Chamber */}
-          <rect x="50" y="58" width="11" height="9" fill={config.facadeFill} />
-          {/* Arched Lantern Opening */}
-          <path d="M 53 66 L 53 61 Q 55.5 59 58 61 L 58 66 Z" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-          {/* Dark Navy Conical/Dome Roof */}
-          <path d="M 48 58 Q 55.5 50 63 58 Z" fill={config.domeFill} />
-          {/* Golden Finial & Crescent */}
-          <line x1="55.5" y1="52" x2="55.5" y2="47" stroke="#dfb76c" strokeWidth="1.2" strokeLinecap="round" />
-          <circle cx="55.5" cy="46" r="1.5" fill="#dfb76c" />
-        </g>
-
-        {/* --- B. LEFT COLONNADE WING (Low white building on the far left) --- */}
-        <g>
-          {/* Building Wall */}
-          <rect x="30" y="112" width="46" height="26" fill={config.facadeFill} stroke={config.facadeShadow} strokeWidth="0.5" />
-          {/* Blue Decorative Roof Cornice */}
-          <rect x="29" y="110" width="48" height="2.5" fill={config.blueTile} />
-          <rect x="29" y="108" width="48" height="2" fill={config.facadeShadow} />
-          {/* Arched Windows (with blue frame and dark glass) */}
-          <g>
-            {/* Window 1 */}
-            <rect x="37" y="117" width="9" height="15" fill={config.blueTile} rx="1" />
-            <path d="M 39 130 L 39 122 Q 41.5 119 44 122 L 44 130 Z" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-            {/* Window 2 */}
-            <rect x="58" y="117" width="9" height="15" fill={config.blueTile} rx="1" />
-            <path d="M 60 130 L 60 122 Q 62.5 119 65 122 L 65 130 Z" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-          </g>
-        </g>
-
-        {/* --- C. GRAND MONUMENTAL IWAN / PORTAL (LEFT-CENTER - Standout Feature!) --- */}
-        <g>
-          {/* Main Tall Rectangular Pylon */}
-          <rect x="76" y="80" width="60" height="58" fill={config.facadeFill} />
-          {/* Upper Decorative Parapet Frieze */}
-          <rect x="74" y="78" width="64" height="3" fill={config.blueTile} />
-          <rect x="75" y="75" width="62" height="3" fill={config.facadeShadow} />
-          {/* Ornate Cobalt Blue Mosaic Frame Band */}
-          <rect x="80" y="84" width="52" height="54" fill="none" stroke={config.blueTile} strokeWidth="4" />
-          {/* Inner Decorative Accent Line */}
-          <rect x="83" y="87" width="46" height="51" fill="none" stroke={config.facadeShadow} strokeWidth="1" />
-
-          {/* Grand Pointed Horseshoe Arch (with Golden Sandstone Vault) */}
+          {/* Distant Mosque Silhouettes (Layer 1 - Background depth) */}
           <path
-            d="M 86 138 L 86 108 Q 86 92 106 92 Q 126 92 126 108 L 126 138 Z"
-            fill={config.goldArch}
-          />
-          {/* Inner Vault Depth Shadow */}
-          <path
-            d="M 90 138 L 90 110 Q 90 97 106 97 Q 122 97 122 110 L 122 138 Z"
-            fill="#e2ba6d"
+            d="M 60 160 L 60 120 Q 75 110 90 120 L 90 160 Z M 290 160 L 290 120 Q 305 110 320 120 L 320 160 Z"
+            fill="#08101a"
             opacity="0.6"
           />
 
-          {/* Terracotta/Wood Traditional Doorway */}
+          {/* Main Mosque Silhouettes with Golden Window Illumination */}
+          {/* Main Mosque Base Wall */}
+          <rect x="70" y="125" width="240" height="75" fill="#121824" stroke="#d4af37" strokeWidth="0.5" strokeOpacity="0.3" />
+
+          {/* Central Grand Dome */}
           <path
-            d="M 98 138 L 98 118 Q 106 114 114 118 L 114 138 Z"
-            fill={config.doorColor}
+            d="M 145 125 C 145 80, 190 68, 190 68 C 190 68, 235 80, 235 125 Z"
+            fill="#161f30"
+            stroke="#d4af37"
+            strokeWidth="1.2"
           />
-          {/* Door Framing & Transom */}
-          <rect x="97" y="117" width="18" height="1.5" fill={config.blueTile} />
-          <line x1="106" y1="118" x2="106" y2="138" stroke="#522b22" strokeWidth="0.8" />
-        </g>
+          {/* Dome Ribs in Gold */}
+          <path d="M 190 68 Q 165 95 165 125" stroke="#d4af37" strokeWidth="0.7" strokeOpacity="0.6" fill="none" />
+          <path d="M 190 68 Q 215 95 215 125" stroke="#d4af37" strokeWidth="0.7" strokeOpacity="0.6" fill="none" />
+          <line x1="190" y1="68" x2="190" y2="125" stroke="#d4af37" strokeWidth="0.7" strokeOpacity="0.6" />
 
-        {/* --- D. CENTRAL CONNECTING GALLERY WING --- */}
-        <g>
-          {/* White Facade Wall */}
-          <rect x="136" y="104" width="88" height="34" fill={config.facadeFill} />
-          {/* Roof Parapet with Blue Decorative Inset */}
-          <rect x="136" y="102" width="88" height="3" fill={config.blueTile} />
-          <rect x="136" y="100" width="88" height="2" fill={config.facadeShadow} />
-          {/* Lower Base Molding */}
-          <rect x="136" y="136" width="88" height="2.5" fill="#524338" />
+          {/* Golden Finial & Crescent on Central Dome */}
+          <line x1="190" y1="68" x2="190" y2="52" stroke="#d4af37" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="190" cy="58" r="2" fill="#d4af37" />
+          <path d="M 190 52 A 3 3 0 1 0 192.5 48 A 2.5 2.5 0 1 1 190 52 Z" fill="#d4af37" />
 
-          {/* Row of 3 Elegant Arched Windows with Blue Surrounds */}
-          {/* Window 1 */}
-          <rect x="146" y="110" width="11" height="20" fill={config.blueTile} rx="1" />
-          <path d="M 148 128 L 148 116 Q 151.5 113 155 116 L 155 128 Z" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-          {/* Window 2 */}
-          <rect x="174" y="110" width="11" height="20" fill={config.blueTile} rx="1" />
-          <path d="M 176 128 L 176 116 Q 179.5 113 183 116 L 183 128 Z" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-          {/* Window 3 */}
-          <rect x="202" y="110" width="11" height="20" fill={config.blueTile} rx="1" />
-          <path d="M 204 128 L 204 116 Q 207.5 113 211 116 L 211 128 Z" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-        </g>
-
-        {/* --- E. RIGHT-CENTER WING: GRAND NAVY DOME & SECONDARY IWAN --- */}
-        {/* Massive Navy Dome (Positioned behind gallery as in image) */}
-        <g>
-          {/* Dome Drum */}
-          <rect x="238" y="84" width="60" height="22" fill={config.facadeShadow} />
-          {/* Row of Clerestory Windows on Drum */}
-          <circle cx="246" cy="94" r="2.5" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-          <circle cx="258" cy="94" r="2.5" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-          <circle cx="270" cy="94" r="2.5" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-          <circle cx="282" cy="94" r="2.5" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-
-          {/* Grand Ribbed Navy Blue Dome */}
+          {/* Left Dome */}
           <path
-            d="M 234 86 C 234 50, 268 44, 268 44 C 268 44, 302 50, 302 86 Z"
-            fill={`url(#domeGrad_${period})`}
-            stroke={config.domeBorder}
-            strokeWidth="1"
+            d="M 95 125 C 95 95, 125 86, 125 86 C 125 86, 155 95, 155 125 Z"
+            fill="#141c2c"
+            stroke="#d4af37"
+            strokeWidth="0.8"
           />
-          {/* Golden Finial & Crescent on Dome */}
-          <line x1="268" y1="44" x2="268" y2="34" stroke="#dfb76c" strokeWidth="1.8" strokeLinecap="round" />
-          <circle cx="268" cy="38" r="2" fill="#dfb76c" />
-          <path
-            d="M 268 33 A 3 3 0 1 0 270.5 29 A 2.5 2.5 0 1 1 268 33 Z"
-            fill="#dfb76c"
-          />
-        </g>
+          <line x1="125" y1="86" x2="125" y2="74" stroke="#d4af37" strokeWidth="1.2" strokeLinecap="round" />
+          <circle cx="125" cy="78" r="1.5" fill="#d4af37" />
 
-        {/* Secondary Portal / Pavilion (In front of Dome on Left of Dome) */}
-        <g>
-          <rect x="206" y="92" width="46" height="46" fill={config.facadeFill} />
-          <rect x="204" y="90" width="50" height="3" fill={config.blueTile} />
-          {/* Mosaic Frame */}
-          <rect x="210" y="95" width="38" height="43" fill="none" stroke={config.blueTile} strokeWidth="3" />
-          {/* Golden Arch */}
+          {/* Right Dome */}
           <path
-            d="M 215 138 L 215 114 Q 215 102 229 102 Q 243 102 243 114 L 243 138 Z"
-            fill={config.goldArch}
+            d="M 225 125 C 225 95, 255 86, 255 86 C 255 86, 285 95, 285 125 Z"
+            fill="#141c2c"
+            stroke="#d4af37"
+            strokeWidth="0.8"
           />
-          {/* Inner Niche */}
-          <path
-            d="M 218 138 L 218 116 Q 229 107 240 116 L 240 138 Z"
-            fill="#e2ba6d"
-            opacity="0.5"
-          />
-        </g>
+          <line x1="255" y1="86" x2="255" y2="74" stroke="#d4af37" strokeWidth="1.2" strokeLinecap="round" />
+          <circle cx="255" cy="78" r="1.5" fill="#d4af37" />
 
-        {/* Arcaded Colonnade Gallery (Below the Dome as in image) */}
-        <g>
-          <rect x="246" y="112" width="80" height="26" fill={config.facadeFill} />
-          <rect x="246" y="110" width="80" height="2.5" fill={config.blueTile} />
-          <rect x="246" y="108" width="80" height="2" fill={config.facadeShadow} />
+          {/* Left Tall Minaret */}
+          <g>
+            <rect x="74" y="65" width="14" height="100" fill="#131b2a" stroke="#d4af37" strokeWidth="0.6" strokeOpacity="0.4" />
+            <rect x="71" y="62" width="20" height="4" rx="1" fill="#d4af37" />
+            {/* Minaret Balcony Opening with Light */}
+            <path d="M 78 72 L 78 68 Q 81 65 84 68 L 84 72 Z" fill="url(#windowGlow)" />
+            {/* Upper Conical Spire */}
+            <path d="M 73 62 Q 81 48 89 62 Z" fill="#1a2538" stroke="#d4af37" strokeWidth="0.8" />
+            <line x1="81" y1="48" x2="81" y2="40" stroke="#d4af37" strokeWidth="1.2" />
+            <circle cx="81" cy="40" r="1.5" fill="#d4af37" />
+          </g>
 
-          {/* Row of 8 Arched Blue Windows (0 0 0 0 0 0 0 0 as seen in the image!) */}
-          {[0, 1, 2, 3, 4, 5, 6, 7].map((idx) => {
-            const x = 252 + idx * 9;
-            return (
-              <g key={idx}>
-                <rect x={x} y="116" width="6.5" height="16" fill={config.blueTile} rx="0.8" />
+          {/* Right Tall Minaret */}
+          <g>
+            <rect x="292" y="65" width="14" height="100" fill="#131b2a" stroke="#d4af37" strokeWidth="0.6" strokeOpacity="0.4" />
+            <rect x="289" y="62" width="20" height="4" rx="1" fill="#d4af37" />
+            {/* Minaret Balcony Opening with Light */}
+            <path d="M 296 72 L 296 68 Q 299 65 302 68 L 302 72 Z" fill="url(#windowGlow)" />
+            {/* Upper Conical Spire */}
+            <path d="M 291 62 Q 299 48 307 62 Z" fill="#1a2538" stroke="#d4af37" strokeWidth="0.8" />
+            <line x1="299" y1="48" x2="299" y2="40" stroke="#d4af37" strokeWidth="1.2" />
+            <circle cx="299" cy="40" r="1.5" fill="#d4af37" />
+          </g>
+
+          {/* Outer Far Left Small Minaret */}
+          <rect x="42" y="92" width="10" height="70" fill="#0f1622" />
+          <path d="M 41 92 Q 47 80 53 92 Z" fill="#161f30" stroke="#d4af37" strokeWidth="0.5" />
+
+          {/* Outer Far Right Small Minaret */}
+          <rect x="328" y="92" width="10" height="70" fill="#0f1622" />
+          <path d="M 327 92 Q 333 80 339 92 Z" fill="#161f30" stroke="#d4af37" strokeWidth="0.5" />
+
+          {/* Glowing Mosque Windows on Facade (الشبابيك المضيئة الفخمة كما بالصورة) */}
+          {/* Row of Arched Windows Left Wing */}
+          <g>
+            {[90, 106, 122].map((x) => (
+              <g key={`w_left_${x}`}>
                 <path
-                  d={`M ${x + 1} 130 L ${x + 1} 121 Q ${x + 3.25} 118 ${x + 5.5} 121 L ${x + 5.5} 130 Z`}
-                  fill={config.windowGlass}
-                  opacity={config.windowGlowOpacity}
+                  d={`M ${x} 145 L ${x} 134 Q ${x + 4} 130 ${x + 8} 134 L ${x + 8} 145 Z`}
+                  fill="url(#windowGlow)"
+                  filter="drop-shadow(0px 0px 4px #f59e0b)"
+                />
+                {/* Window Arch Frame */}
+                <path
+                  d={`M ${x} 145 L ${x} 134 Q ${x + 4} 130 ${x + 8} 134 L ${x + 8} 145 Z`}
+                  stroke="#d4af37"
+                  strokeWidth="0.8"
+                  fill="none"
                 />
               </g>
-            );
-          })}
+            ))}
+          </g>
+
+          {/* Grand Illuminated Center Portal (المحراب والبوابة الوسطى المضيئة بنور ذهبي دافئ) */}
+          <g>
+            {/* Grand Arch Frame */}
+            <path
+              d="M 168 185 L 168 140 Q 190 120 212 140 L 212 185 Z"
+              fill="#182132"
+              stroke="#d4af37"
+              strokeWidth="2"
+            />
+            {/* Inner Golden Radiant Vault */}
+            <path
+              d="M 174 185 L 174 145 Q 190 128 206 145 L 206 185 Z"
+              fill="url(#portalWarmth)"
+              filter="drop-shadow(0px 0px 8px #f59e0b)"
+            />
+            {/* Traditional Arch Motif inside */}
+            <path
+              d="M 180 185 L 180 152 Q 190 140 200 152 L 200 185 Z"
+              fill="#fffbeb"
+              opacity="0.9"
+            />
+          </g>
+
+          {/* Row of Arched Windows Right Wing */}
+          <g>
+            {[250, 266, 282].map((x) => (
+              <g key={`w_right_${x}`}>
+                <path
+                  d={`M ${x} 145 L ${x} 134 Q ${x + 4} 130 ${x + 8} 134 L ${x + 8} 145 Z`}
+                  fill="url(#windowGlow)"
+                  filter="drop-shadow(0px 0px 4px #f59e0b)"
+                />
+                <path
+                  d={`M ${x} 145 L ${x} 134 Q ${x + 4} 130 ${x + 8} 134 L ${x + 8} 145 Z`}
+                  stroke="#d4af37"
+                  strokeWidth="0.8"
+                  fill="none"
+                />
+              </g>
+            ))}
+          </g>
+
+          {/* Ground Silhouette & Courtyard Base */}
+          <rect x="0" y="180" width="380" height="20" fill="#080c14" />
+          <line x1="0" y1="180" x2="380" y2="180" stroke="#d4af37" strokeWidth="0.8" strokeOpacity="0.4" />
+        </svg>
+      </div>
+    );
+  }
+
+  // 2. DAYLIGHT SCENE (مطابق للوحة الهاتف في الوضع النهاري - صورة image_7280db7e.png)
+  // سماء ذهبية نهارية دافئة، شمس وضاءة، غيوم لطيفة، ومسجد أبيض عريق بقباب زرقاء ملكية ومآذن رشيقة
+  return (
+    <div className={`relative w-full h-44 sm:h-52 overflow-hidden select-none pointer-events-none rounded-2xl ${className}`}>
+      <svg
+        viewBox="0 0 380 200"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full object-cover"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          {/* Daytime Warm Sky Gradient */}
+          <linearGradient id="daySkyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#fef3c7" />
+            <stop offset="40%" stopColor="#fde68a" />
+            <stop offset="75%" stopColor="#fef08a" />
+            <stop offset="100%" stopColor="#fed7aa" />
+          </linearGradient>
+
+          {/* Radiant Sun Glow */}
+          <radialGradient id="daySunGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+            <stop offset="40%" stopColor="#fef08a" stopOpacity="0.6" />
+            <stop offset="70%" stopColor="#fde047" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+          </radialGradient>
+
+          {/* Blue Dome Gradient */}
+          <linearGradient id="blueDomeGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#4a8bc2" />
+            <stop offset="45%" stopColor="#255d8f" />
+            <stop offset="100%" stopColor="#183b5e" />
+          </linearGradient>
+        </defs>
+
+        {/* Sky Canvas */}
+        <rect width="380" height="200" fill="url(#daySkyGrad)" />
+
+        {/* Soft Fluffy Clouds in Sky */}
+        <g fill="#ffffff" opacity="0.6">
+          <ellipse cx="65" cy="55" rx="35" ry="12" />
+          <ellipse cx="85" cy="48" rx="25" ry="14" />
+          <ellipse cx="310" cy="50" rx="40" ry="13" />
+          <ellipse cx="330" cy="42" rx="25" ry="15" />
         </g>
 
-        {/* --- F. RIGHT TALL MINARET --- */}
+        {/* Radiant Warm Sun Behind Dome */}
         <g>
-          {/* Minaret Shaft */}
-          <rect x="326" y="68" width="13" height="70" fill={config.facadeFill} />
-          <rect x="326" y="78" width="13" height="2.5" fill={config.blueTile} />
-          <rect x="326" y="94" width="13" height="2" fill={config.blueTile} />
-          {/* Balcony */}
-          <rect x="323" y="66" width="19" height="3" rx="0.5" fill={config.facadeShadow} />
-          <rect x="324" y="63" width="17" height="3" fill={config.blueTile} />
-          {/* Lantern Chamber */}
-          <rect x="327" y="54" width="11" height="9" fill={config.facadeFill} />
-          <path d="M 330 62 L 330 57 Q 332.5 55 335 57 L 335 62 Z" fill={config.windowGlass} opacity={config.windowGlowOpacity} />
-          {/* Dark Navy Dome Roof */}
-          <path d="M 325 54 Q 332.5 46 340 54 Z" fill={config.domeFill} />
-          {/* Finial & Crescent */}
-          <line x1="332.5" y1="48" x2="332.5" y2="43" stroke="#dfb76c" strokeWidth="1.2" strokeLinecap="round" />
-          <circle cx="332.5" cy="42" r="1.5" fill="#dfb76c" />
+          <circle cx="190" cy="90" r="50" fill="url(#daySunGlow)" />
+          <circle cx="190" cy="90" r="28" fill="#ffffff" opacity="0.8" />
         </g>
+
+        {/* Distant Hills / Mountains */}
+        <path d="M 0 160 Q 90 135 180 155 Q 270 140 380 160 L 380 200 L 0 200 Z" fill="#e2c88f" opacity="0.5" />
+
+        {/* Mosque Architecture (White Facades with Royal Blue Domes) */}
+        {/* Main Base Wall */}
+        <rect x="75" y="125" width="230" height="65" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="0.8" />
+
+        {/* Central Grand Blue Dome */}
+        <path
+          d="M 150 125 C 150 82, 190 70, 190 70 C 190 70, 230 82, 230 125 Z"
+          fill="url(#blueDomeGrad)"
+          stroke="#1d4ed8"
+          strokeWidth="1"
+        />
+        {/* Golden Crescent on Central Dome */}
+        <line x1="190" y1="70" x2="190" y2="56" stroke="#d4af37" strokeWidth="1.6" strokeLinecap="round" />
+        <circle cx="190" cy="62" r="1.8" fill="#d4af37" />
+        <path d="M 190 56 A 2.5 2.5 0 1 0 192.2 52 A 2 2 0 1 1 190 56 Z" fill="#d4af37" />
+
+        {/* Left Blue Dome */}
+        <path
+          d="M 100 125 C 100 98, 125 90, 125 90 C 125 90, 150 98, 150 125 Z"
+          fill="url(#blueDomeGrad)"
+          stroke="#1d4ed8"
+          strokeWidth="0.8"
+        />
+        <line x1="125" y1="90" x2="125" y2="80" stroke="#d4af37" strokeWidth="1.2" />
+        <circle cx="125" cy="80" r="1.4" fill="#d4af37" />
+
+        {/* Right Blue Dome */}
+        <path
+          d="M 230 125 C 230 98, 255 90, 255 90 C 255 90, 280 98, 280 125 Z"
+          fill="url(#blueDomeGrad)"
+          stroke="#1d4ed8"
+          strokeWidth="0.8"
+        />
+        <line x1="255" y1="90" x2="255" y2="80" stroke="#d4af37" strokeWidth="1.2" />
+        <circle cx="255" cy="80" r="1.4" fill="#d4af37" />
+
+        {/* Left Minaret */}
+        <g>
+          <rect x="76" y="68" width="13" height="100" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.6" />
+          <rect x="74" y="66" width="17" height="3" fill="#2563eb" />
+          <path d="M 75 66 Q 82.5 54 90 66 Z" fill="url(#blueDomeGrad)" />
+          <line x1="82.5" y1="54" x2="82.5" y2="47" stroke="#d4af37" strokeWidth="1.2" />
+          <circle cx="82.5" cy="47" r="1.5" fill="#d4af37" />
+        </g>
+
+        {/* Right Minaret */}
+        <g>
+          <rect x="291" y="68" width="13" height="100" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.6" />
+          <rect x="289" y="66" width="17" height="3" fill="#2563eb" />
+          <path d="M 290 66 Q 297.5 54 305 66 Z" fill="url(#blueDomeGrad)" />
+          <line x1="297.5" y1="54" x2="297.5" y2="47" stroke="#d4af37" strokeWidth="1.2" />
+          <circle cx="297.5" cy="47" r="1.5" fill="#d4af37" />
+        </g>
+
+        {/* Outer Far Minarets */}
+        <rect x="46" y="95" width="9" height="70" fill="#f1f5f9" />
+        <path d="M 45 95 Q 50.5 84 56 95 Z" fill="url(#blueDomeGrad)" />
+        <rect x="325" y="95" width="9" height="70" fill="#f1f5f9" />
+        <path d="M 324 95 Q 329.5 84 335 95 Z" fill="url(#blueDomeGrad)" />
+
+        {/* Arched Windows with Blue Borders */}
+        {[92, 108, 124, 252, 268, 284].map((x) => (
+          <g key={`day_win_${x}`}>
+            <path
+              d={`M ${x} 146 L ${x} 136 Q ${x + 3.5} 133 ${x + 7} 136 L ${x + 7} 146 Z`}
+              fill="#1e293b"
+            />
+            <path
+              d={`M ${x} 146 L ${x} 136 Q ${x + 3.5} 133 ${x + 7} 136 L ${x + 7} 146 Z`}
+              stroke="#2563eb"
+              strokeWidth="0.8"
+              fill="none"
+            />
+          </g>
+        ))}
+
+        {/* Grand Arched Center Entrance */}
+        <g>
+          <path
+            d="M 172 185 L 172 144 Q 190 126 208 144 L 208 185 Z"
+            fill="#1e293b"
+            stroke="#cbd5e1"
+            strokeWidth="1.5"
+          />
+          <path
+            d="M 177 185 L 177 148 Q 190 134 203 148 L 203 185 Z"
+            fill="#0f172a"
+          />
+        </g>
+
+        {/* Courtyard Floor */}
+        <rect x="0" y="180" width="380" height="20" fill="#cbd5e1" />
+        <rect x="0" y="185" width="380" height="15" fill="#94a3b8" />
       </svg>
     </div>
   );

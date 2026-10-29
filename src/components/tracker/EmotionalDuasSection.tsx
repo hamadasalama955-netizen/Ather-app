@@ -9,7 +9,6 @@ import {
   Check,
   Share2,
   RefreshCw,
-  Sparkles,
   Feather,
 } from 'lucide-react';
 import { EMOTIONAL_DUAS } from '../../data/emotionalDuasData';
@@ -64,11 +63,11 @@ export const EmotionalDuasSection: React.FC = () => {
       sublabel: 'حفظ النعم وحسن الأمل',
       icon: Smile,
       badgeText: 'الرجاء وحسن الظن',
-      bgPastel: 'from-emerald-500/10 via-teal-500/10 to-green-500/10',
-      borderPastel: 'border-emerald-300/60 dark:border-emerald-800/50',
-      textPastel: 'text-emerald-700 dark:text-emerald-300',
-      cardBg: 'bg-emerald-50/40 dark:bg-emerald-950/20',
-      buttonColor: 'bg-emerald-600 hover:bg-emerald-700 text-white',
+      bgPastel: 'from-[#d4af37]/15 via-amber-500/10 to-[#c5a059]/10',
+      borderPastel: 'border-[#d4af37]/40 dark:border-[#d4af37]/30',
+      textPastel: 'text-stone-900 dark:text-[#d4af37]',
+      cardBg: 'bg-[#d4af37]/10 dark:bg-[#141414]',
+      buttonColor: 'bg-[#d4af37] hover:bg-[#c5a059] text-stone-950',
     },
     {
       id: 'sustenance_ease',
@@ -272,7 +271,7 @@ export const EmotionalDuasSection: React.FC = () => {
                     className="p-2 rounded-xl bg-white dark:bg-stone-800 hover:bg-stone-100 text-stone-600 dark:text-stone-300 border border-stone-200/80 dark:border-stone-700 transition"
                   >
                     {copiedId === dua.id ? (
-                      <Check className="w-4 h-4 text-emerald-600" />
+                      <Check className="w-4 h-4 text-[#d4af37]" />
                     ) : (
                       <Copy className="w-4 h-4" />
                     )}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Info, RefreshCw, CheckCircle2, Coins, ArrowUpRight, DollarSign, Scale } from 'lucide-react';
+import { Info, RefreshCw, CheckCircle2, Coins, ArrowUpRight, DollarSign, Scale } from 'lucide-react';
 
 export const ZakatCalculatorSection: React.FC = () => {
   // Inputs
@@ -73,8 +73,8 @@ export const ZakatCalculatorSection: React.FC = () => {
 
           <div className="text-xs mt-2 font-medium">
             {hasReachedNisab ? (
-              <span className="inline-flex items-center gap-1.5 text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-full border border-emerald-500/30 text-[11px] font-bold">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="inline-flex items-center gap-1.5 text-[#d4af37] bg-[#d4af37]/15 px-3 py-1 rounded-full border border-[#d4af37]/30 text-[11px] font-bold">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#d4af37]" />
                 وجبت الزكاة (المال بلغ النصاب الشرعي المقدر بـ 85 جم ذهب)
               </span>
             ) : netWealth > 0 ? (

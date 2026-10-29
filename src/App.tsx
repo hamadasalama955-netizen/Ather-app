@@ -101,12 +101,9 @@ export default function App() {
   }, [settings.selectedLocation, settings.methodId, settings.asrSchool]);
 
   return (
-    <div className="min-h-screen bg-stone-200/60 dark:bg-stone-950 flex flex-col justify-between antialiased selection:bg-emerald-600 selection:text-white transition-colors duration-200">
-      {/* Offline Alert Indicator */}
-      <OfflineIndicator />
-
+    <div className="min-h-screen bg-stone-200/60 dark:bg-[#0a0a0a] flex flex-col justify-between antialiased selection:bg-[#d4af37] selection:text-black transition-colors duration-200">
       {/* Mobile-first centered frame on desktop, full-width responsive on mobile */}
-      <div className="w-full max-w-md mx-auto min-h-screen bg-[#fcfbf7] dark:bg-[#0b241c] flex flex-col relative shadow-xl sm:border-x sm:border-stone-300/40 dark:sm:border-[#dfb76c]/25">
+      <div className="w-full max-w-md mx-auto min-h-screen bg-[#fcfbf7] dark:bg-[#0f0f0f] flex flex-col relative shadow-xl sm:border-x sm:border-stone-300/40 dark:sm:border-[rgba(212,175,55,0.2)]">
         {/* Top App Header (Shown on other tabs, while Home has its dedicated HomeTopBar) */}
         {activeTab !== 'home' && (
           <TopHeader

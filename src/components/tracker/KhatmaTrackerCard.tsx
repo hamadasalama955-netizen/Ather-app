@@ -7,7 +7,6 @@ import {
   Flame,
   Plus,
   Minus,
-  Sparkles,
   Trophy,
   Save,
   RotateCcw,
@@ -105,7 +104,7 @@ export const KhatmaTrackerCard: React.FC<Props> = ({ onOpenQuranTab }) => {
         <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1.5 text-center sm:text-right">
             <div className="inline-flex items-center gap-1.5 text-xs text-amber-300 font-bold px-2.5 py-0.5 rounded-full bg-amber-950/60 border border-amber-500/40">
-              <Sparkles className="w-3.5 h-3.5" />
+              <BookOpen className="w-3.5 h-3.5" />
               <span>مصحف التلاوة والتدبر</span>
             </div>
 

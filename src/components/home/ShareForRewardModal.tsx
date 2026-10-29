@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Check, Copy, Share2, Sparkles, Heart } from 'lucide-react';
+import { X, Check, Share2 } from 'lucide-react';
 import { AjrSharingSvg } from './ServicesSvgIcons';
 
 interface Props {
@@ -63,7 +63,7 @@ export const ShareForRewardModal: React.FC<Props> = ({ isOpen, onClose, inline =
   if (!isOpen) return null;
 
   const handleShare = async (item: ShareItem) => {
-    const formatted = `🌿 ${item.title} 🌿\n\n${item.text}\n\n[المصدر: ${item.source}]\n\n✨ تطبيق أثَر | Athar - رفيق المسلم`;
+    const formatted = `✨ ${item.title} ✨\n\n${item.text}\n\n[المصدر: ${item.source}]\n\n✨ تطبيق أثَر | Athar - رفيق المسلم`;
 
     if (navigator.share) {
       try {
@@ -95,10 +95,10 @@ export const ShareForRewardModal: React.FC<Props> = ({ isOpen, onClose, inline =
       {SHARABLE_ITEMS.map((item) => (
         <div
           key={item.id}
-          className="p-4 rounded-3xl bg-white dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 space-y-2.5 shadow-xs transition hover:border-[#dfb76c]/40"
+          className="p-4 rounded-3xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 space-y-2.5 shadow-xs transition hover:border-[#d4af37]/40"
         >
           <div className="flex items-center justify-between text-xs">
-            <span className="font-bold text-[#0d3b2e] dark:text-[#dfb76c]">
+            <span className="font-bold text-stone-900 dark:text-[#d4af37]">
               {item.category}
             </span>
             <span className="text-[10px] text-stone-500 dark:text-stone-400">
@@ -120,11 +120,11 @@ export const ShareForRewardModal: React.FC<Props> = ({ isOpen, onClose, inline =
           <div className="flex items-center justify-end gap-2 pt-1 border-t border-stone-100 dark:border-stone-800/80">
             <button
               onClick={() => handleShare(item)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0d3b2e] hover:bg-[#124a3a] text-[#dfb76c] text-xs font-bold transition active:scale-95 shadow-xs"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#d4af37] hover:bg-[#c5a059] text-stone-950 text-xs font-bold transition active:scale-95 shadow-xs"
             >
               {copiedId === item.id ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <Check className="w-3.5 h-3.5 text-stone-950" />
                   <span>تم النسخ</span>
                 </>
               ) : (
@@ -143,24 +143,24 @@ export const ShareForRewardModal: React.FC<Props> = ({ isOpen, onClose, inline =
   if (inline) {
     return (
       <div className="space-y-4 pb-12 animate-in fade-in duration-200">
-        <div className="p-4 rounded-3xl bg-gradient-to-r from-[#0d3b2e] to-[#09231b] text-white border border-[#dfb76c]/30 shadow-md flex items-center justify-between">
+        <div className="p-4 rounded-3xl bg-gradient-to-r from-[#1a1814] to-[#141414] text-white border border-[#d4af37]/30 shadow-md flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-[#dfb76c]/20 border border-[#dfb76c]/30 flex items-center justify-center text-[#dfb76c]">
+            <div className="w-10 h-10 rounded-2xl bg-[#d4af37]/20 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37]">
               <AjrSharingSvg className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-white flex items-center gap-1.5">
-                <span>الأجر بالنشر</span>
-                <Sparkles className="w-3.5 h-3.5 text-[#dfb76c]" />
+              <h2 className="text-sm font-bold text-white">
+                الأجر بالنشر
               </h2>
               <p className="text-[10px] text-stone-300">
                 الدال على الخير كفاعله · صدقة جارية
               </p>
             </div>
           </div>
-          <div className="text-left bg-black/20 px-3 py-1.5 rounded-xl border border-white/10">
+
+          <div className="text-left bg-black/40 px-3 py-1.5 rounded-xl border border-[#d4af37]/20">
             <div className="text-[10px] text-stone-300">مشاركاتك المباركة</div>
-            <div className="text-sm font-bold font-mono text-[#dfb76c] text-center">{totalShares}</div>
+            <div className="text-sm font-bold font-mono text-[#d4af37] text-center">{totalShares}</div>
           </div>
         </div>
         {listItems}
@@ -169,18 +169,17 @@ export const ShareForRewardModal: React.FC<Props> = ({ isOpen, onClose, inline =
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="w-full max-w-sm max-h-[90vh] bg-[#fcfbf7] dark:bg-[#0b241c] text-stone-900 dark:text-stone-100 rounded-3xl p-5 shadow-2xl flex flex-col justify-between border border-[#dfb76c]/40 animate-in zoom-in-95 duration-200 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="w-full max-w-sm max-h-[90vh] bg-[#faf8f5] dark:bg-[#141414] text-stone-900 dark:text-stone-100 rounded-3xl p-5 shadow-2xl flex flex-col justify-between border border-[#d4af37]/40 animate-in zoom-in-95 duration-200 overflow-hidden">
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-3 border-b border-stone-200/80 dark:border-stone-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-[#0d3b2e] dark:bg-[#122e23] border border-[#dfb76c]/30 flex items-center justify-center text-[#dfb76c]">
+            <div className="w-10 h-10 rounded-2xl bg-[#1a1814] border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37]">
               <AjrSharingSvg className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[#0d3b2e] dark:text-[#dfb76c] flex items-center gap-1.5">
-                <span>الأجر بالنشر</span>
-                <Sparkles className="w-3.5 h-3.5 text-[#dfb76c]" />
+              <h3 className="text-sm font-bold text-stone-900 dark:text-[#d4af37]">
+                الأجر بالنشر
               </h3>
               <p className="text-[10px] text-stone-500 dark:text-stone-400">
                 الدال على الخير كفاعله · صدقة جارية

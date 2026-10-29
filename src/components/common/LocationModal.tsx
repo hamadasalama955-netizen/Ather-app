@@ -52,12 +52,12 @@ export const LocationModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-md max-h-[85vh] flex flex-col rounded-t-3xl sm:rounded-3xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-0 sm:p-4 animate-in fade-in duration-200">
+      <div className="w-full max-w-md max-h-[85vh] flex flex-col rounded-t-3xl sm:rounded-3xl bg-[#faf8f5] dark:bg-[#141414] border border-[#d4af37]/30 shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-stone-200 dark:border-stone-800">
           <div className="flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+            <MapPin className="w-5 h-5 text-[#d4af37]" />
             <h2 className="text-base font-bold text-stone-900 dark:text-white">
               تحديد الموقع ومواقيت الصلاة
             </h2>
@@ -76,13 +76,13 @@ export const LocationModal: React.FC<Props> = ({
           <button
             onClick={onRequestGPS}
             disabled={isLocating}
-            className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-sm shadow-sm transition active:scale-[0.98] disabled:opacity-75"
+            className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-[#d4af37] hover:bg-[#c5a059] text-stone-950 font-semibold text-sm shadow-sm transition active:scale-[0.98] disabled:opacity-75"
           >
             <div className="flex items-center gap-2.5">
-              <Navigation className={`w-4 h-4 text-amber-300 ${isLocating ? 'animate-spin' : ''}`} />
+              <Navigation className={`w-4 h-4 text-stone-950 ${isLocating ? 'animate-spin' : ''}`} />
               <span>{isLocating ? 'جاري تحديد موقعك عبر GPS...' : 'استخدام موقعي الحالي (GPS)'}</span>
             </div>
-            <span className="text-xs bg-emerald-800/80 px-2 py-0.5 rounded-lg text-emerald-100">
+            <span className="text-xs bg-black/15 px-2 py-0.5 rounded-lg text-stone-950 font-bold">
               دقيق وتلقائي
             </span>
           </button>
@@ -101,7 +101,7 @@ export const LocationModal: React.FC<Props> = ({
               placeholder="ابحث عن مدينة أو دولة..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800/70 border border-stone-200 dark:border-stone-700/60 text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+              className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#d4af37]"
             />
           </div>
 
@@ -122,12 +122,12 @@ export const LocationModal: React.FC<Props> = ({
                     onClick={() => handleSelect(loc)}
                     className={`w-full flex items-center justify-between p-2.5 rounded-xl text-right text-xs transition ${
                       isSelected
-                        ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-300 font-bold border border-emerald-300 dark:border-emerald-800'
-                        : 'hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300'
+                        ? 'bg-[#d4af37]/20 text-[#d4af37] font-bold border border-[#d4af37]/40'
+                        : 'hover:bg-stone-100 dark:hover:bg-stone-900 text-stone-700 dark:text-stone-300'
                     }`}
                   >
                     <span>{loc.label}</span>
-                    {isSelected && <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />}
+                    {isSelected && <Check className="w-4 h-4 text-[#d4af37] shrink-0" />}
                   </button>
                 );
               })}
@@ -145,20 +145,20 @@ export const LocationModal: React.FC<Props> = ({
                 placeholder="المدينة (مثال: الإسكندرية)"
                 value={customCity}
                 onChange={(e) => setCustomCity(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-800/70 border border-stone-200 dark:border-stone-700/60 text-xs text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-emerald-600"
+                className="w-full px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
               />
               <input
                 type="text"
                 placeholder="الدولة (مثال: مصر)"
                 value={customCountry}
                 onChange={(e) => setCustomCountry(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-800/70 border border-stone-200 dark:border-stone-700/60 text-xs text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-emerald-600"
+                className="w-full px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
               />
             </div>
             <button
               type="submit"
               disabled={!customCity.trim()}
-              className="w-full py-2 rounded-xl bg-stone-800 dark:bg-stone-700 hover:bg-stone-900 dark:hover:bg-stone-600 text-white font-medium text-xs transition disabled:opacity-50"
+              className="w-full py-2 rounded-xl bg-stone-800 dark:bg-stone-800 hover:bg-[#d4af37] hover:text-stone-950 text-white font-medium text-xs transition disabled:opacity-50"
             >
               تأكيد وتطبيق
             </button>

@@ -290,6 +290,7 @@ export interface MushafPageAyah {
     numberOfAyahs: number;
   };
   audio?: string;
+  audioUrl?: string;
 }
 
 export interface MushafPageData {

@@ -3,7 +3,6 @@ import {
   CalendarCheck,
   Flame,
   Calendar,
-  Sparkles,
   HeartHandshake,
   Coins,
   ChevronLeft,
@@ -36,6 +35,7 @@ export type TrackerSubView =
   | 'analytics'
   | 'calendar'
   | 'names'
+  | 'allah_names'
   | 'duas'
   | 'zakat';
 
@@ -88,7 +88,7 @@ export const TrackerTab: React.FC<Props> = ({
     { id: 'emotional_duas', label: 'الذكر حسب الحالة', icon: Heart },
     { id: 'analytics', label: 'الستريك والإحصائيات', icon: Flame },
     { id: 'calendar', label: 'التقويم والمناسبات', icon: Calendar },
-    { id: 'names', label: 'أسماء الله الحسنى', icon: Sparkles },
+    { id: 'names', label: 'أسماء الله الحسنى', icon: BookOpen },
     { id: 'duas', label: 'الأدعية المأثورة', icon: HeartHandshake },
     { id: 'zakat', label: 'حاسبة الزكاة', icon: Coins },
   ];
@@ -99,7 +99,7 @@ export const TrackerTab: React.FC<Props> = ({
       {!hideNavigation && (
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar pt-1">
           {navItems.map((item) => {
-            const isActive = subView === item.id;
+            const isActive = subView === item.id || (item.id === 'names' && subView === 'allah_names');
             const Icon = item.icon;
 
             return (
@@ -108,11 +108,11 @@ export const TrackerTab: React.FC<Props> = ({
                 onClick={() => setSubView(item.id)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-bold transition-all whitespace-nowrap shrink-0 active:scale-95 ${
                   isActive
-                    ? 'bg-emerald-800 text-white shadow-sm'
-                    : 'bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800'
+                    ? 'bg-[#d4af37] text-stone-950 font-extrabold shadow-sm'
+                    : 'bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-[#1a1814]'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-amber-300' : 'text-stone-400'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-stone-950' : 'text-stone-400'}`} />
                 <span>{item.label}</span>
               </button>
             );
@@ -165,7 +165,7 @@ export const TrackerTab: React.FC<Props> = ({
       )}
 
       {/* Sub View 4: أسماء الله الحسنى الـ 99 */}
-      {subView === 'names' && (
+      {(subView === 'names' || subView === 'allah_names') && (
         <div className="space-y-4 animate-in fade-in duration-200">
           <AllahNamesSection />
         </div>

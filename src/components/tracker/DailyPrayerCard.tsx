@@ -3,7 +3,6 @@ import {
   Check,
   ChevronDown,
   ChevronUp,
-  Sparkles,
   Sun,
   Moon,
   Sunset,
@@ -85,11 +84,11 @@ export const DailyPrayerCard: React.FC<Props> = ({ log, onUpdateLog }) => {
           <span
             className={`inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full ${
               allFardDone
-                ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
+                ? 'bg-[#d4af37]/20 text-stone-900 dark:text-[#d4af37] border border-[#d4af37]/40'
                 : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300'
             }`}
           >
-            {allFardDone ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> : null}
+            {allFardDone ? <CheckCircle2 className="w-3.5 h-3.5 text-[#d4af37]" /> : null}
             <span>{fardCompleted} من 5 فروض</span>
           </span>
         </div>
@@ -98,7 +97,7 @@ export const DailyPrayerCard: React.FC<Props> = ({ log, onUpdateLog }) => {
       {/* Progress Line */}
       <div className="w-full bg-stone-100 dark:bg-stone-800 h-2 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-teal-500 via-emerald-500 to-amber-400 rounded-full transition-all duration-300"
+          className="h-full bg-gradient-to-r from-[#c5a059] via-[#d4af37] to-[#e5c96b] rounded-full transition-all duration-300"
           style={{ width: `${(fardCompleted / 5) * 100}%` }}
         />
       </div>
@@ -171,7 +170,7 @@ export const DailyPrayerCard: React.FC<Props> = ({ log, onUpdateLog }) => {
           className="w-full flex items-center justify-between py-2 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-teal-700 dark:hover:text-teal-400 transition"
         >
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-500" />
+            <ListTodo className="w-4 h-4 text-amber-500" />
             <span>السنن الرواتب والنوافل (الوتر والضحى)</span>
             <span className="text-[11px] font-normal text-stone-500">
               ({rawatibCompleted + nawafilCompleted}/7 مكتملة)
@@ -204,7 +203,7 @@ export const DailyPrayerCard: React.FC<Props> = ({ log, onUpdateLog }) => {
                     onClick={() => toggle(item.key)}
                     className={`w-full min-h-[44px] flex items-center justify-between p-2.5 rounded-xl border text-right transition active:scale-[0.99] ${
                       isDone
-                        ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500/50 text-emerald-950 dark:text-emerald-200'
+                        ? 'bg-[#d4af37]/15 dark:bg-[#d4af37]/10 border-[#d4af37]/40 text-stone-900 dark:text-[#d4af37]'
                         : 'bg-stone-50/70 dark:bg-stone-800/40 border-stone-200/60 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-100'
                     }`}
                   >
@@ -212,7 +211,7 @@ export const DailyPrayerCard: React.FC<Props> = ({ log, onUpdateLog }) => {
                       <div
                         className={`w-5 h-5 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                           isDone
-                            ? 'bg-emerald-600 text-white'
+                            ? 'bg-[#d4af37] text-stone-950'
                             : 'border-2 border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-800'
                         }`}
                       >

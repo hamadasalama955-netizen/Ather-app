@@ -5,8 +5,11 @@
 @theme {
   --font-sans: 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-quran: 'Amiri', 'Traditional Arabic', serif;
-  --color-emerald-deep: #064e3b;
   --color-gold-accent: #d4af37;
+  --color-gold-warm: #c5a059;
+  --color-charcoal-deep: #0a0a0a;
+  --color-charcoal-card: #141414;
+  --color-ivory-main: #faf8f5;
 }
 
 :root {
@@ -14,6 +17,27 @@
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   -webkit-user-select: none;
+  --bg-main: #faf8f5;
+  --bg-card: #ffffff;
+  --border-gold: rgba(212, 175, 55, 0.25);
+  --gold-primary: #d4af37;
+  --gold-secondary: #c5a059;
+  --text-title: #1c1917;
+  --text-subtitle: #78716c;
+}
+
+/* Luxurious Charcoal Black & Warm Gold Dark Mode Identity */
+.dark {
+  color-scheme: dark;
+  --bg-main: #0a0a0a;
+  --bg-surface: #0f0f0f;
+  --bg-card: #141414;
+  --bg-card-hover: #1a1814;
+  --border-gold: rgba(212, 175, 55, 0.2);
+  --gold-primary: #d4af37;
+  --gold-secondary: #c5a059;
+  --text-title: #ffffff;
+  --text-subtitle: #a39e93;
 }
 
 html, body, #root {
@@ -30,6 +54,112 @@ html, body, #root {
   touch-action: manipulation;
 }
 
+body {
+  background-color: #faf8f5;
+  color: #1c1917;
+}
+
+/* Dark mode global background & body rules */
+.dark body {
+  background-color: #0a0a0a !important;
+  color: #ffffff !important;
+}
+
+/* Global eradication of green in favor of Royal Charcoal & Gold */
+.bg-emerald-950,
+.bg-emerald-900,
+.bg-emerald-800,
+.bg-emerald-700,
+.bg-\[\#0d3b2e\],
+.bg-\[\#09231b\],
+.bg-\[\#122e23\],
+.bg-\[\#0b241c\],
+.bg-\[\#144f3e\] {
+  background-color: #141414 !important;
+  color: #d4af37 !important;
+}
+
+html:not(.dark) .bg-emerald-800,
+html:not(.dark) .bg-emerald-700,
+html:not(.dark) .bg-\[\#0d3b2e\],
+html:not(.dark) .bg-\[\#144f3e\] {
+  background: linear-gradient(to bottom, #d4af37, #b89328) !important;
+  color: #0a0a0a !important;
+}
+
+.text-emerald-900,
+.text-emerald-800,
+.text-emerald-700,
+.text-emerald-600,
+.text-emerald-500,
+.text-emerald-400,
+.text-emerald-300,
+.text-\[\#0d3b2e\] {
+  color: #d4af37 !important;
+}
+
+html:not(.dark) .text-emerald-800,
+html:not(.dark) .text-emerald-900,
+html:not(.dark) .text-\[\#0d3b2e\] {
+  color: #8c6b2d !important;
+}
+
+.border-emerald-900,
+.border-emerald-800,
+.border-emerald-700,
+.border-emerald-600,
+.border-emerald-500,
+.border-emerald-400,
+.border-emerald-300 {
+  border-color: rgba(212, 175, 55, 0.3) !important;
+}
+
+/* Dark Mode Card Backgrounds & Gold Borders */
+.dark .dark\:bg-\[\#0b241c\],
+.dark .dark\:bg-\[\#081e17\],
+.dark .dark\:bg-\[\#09231b\],
+.dark .dark\:bg-\[\#0f2e22\],
+.dark .dark\:bg-\[\#122e23\],
+.dark .dark\:bg-stone-900,
+.dark .dark\:bg-stone-950,
+.dark .dark\:bg-emerald-950 {
+  background-color: #141414 !important;
+}
+
+.dark .dark\:bg-\[\#061b14\]\/80,
+.dark .dark\:bg-\[\#081f17\]\/80,
+.dark .dark\:bg-\[\#0b2b20\]\/90,
+.dark .dark\:bg-\[\#0d3b2e\]\/60 {
+  background-color: #1a1814 !important;
+}
+
+/* Subtle Transparent Gold Borders in Dark Mode */
+.dark .dark\:border-\[\#dfb76c\]\/25,
+.dark .dark\:border-\[\#dfb76c\]\/30,
+.dark .dark\:border-\[\#dfb76c\]\/40,
+.dark .dark\:border-\[\#dfb76c\]\/50,
+.dark .dark\:border-stone-800,
+.dark .dark\:border-emerald-800 {
+  border-color: rgba(212, 175, 55, 0.2) !important;
+}
+
+/* Dark mode typography */
+.dark h1, .dark h2, .dark h3, .dark h4, .dark .dark\:text-white {
+  color: #ffffff !important;
+}
+
+.dark .dark\:text-\[\#dfb76c\],
+.dark .dark\:text-amber-400,
+.dark .dark\:text-amber-300 {
+  color: #d4af37 !important;
+}
+
+.dark .dark\:text-stone-300,
+.dark .dark\:text-stone-400,
+.dark .dark\:text-stone-500 {
+  color: #a39e93 !important;
+}
+
 /* Allow selection specifically for readable verses, hadith, and input fields */
 .select-text,
 .selectable-text,
@@ -41,7 +171,7 @@ textarea {
   -webkit-user-select: text !important;
 }
 
-/* Custom scrollbar for subtle Islamic touch */
+/* Custom scrollbar for subtle Islamic gold touch */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -50,11 +180,11 @@ textarea {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.2);
+  background: rgba(212, 175, 55, 0.25);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.4);
+  background: rgba(212, 175, 55, 0.45);
 }
 
 /* Mobile notch and navigation bar safe-area insets */

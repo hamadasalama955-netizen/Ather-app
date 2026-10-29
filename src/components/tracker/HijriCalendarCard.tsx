@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Moon, Sun, Star, Info, Sparkles, Sliders, Compass, Award } from 'lucide-react';
+import { Calendar, Moon, Sun, Star, Info, Sliders, Compass, Award } from 'lucide-react';
 import { HijriDateInfo } from '../../types';
 import {
   HIJRI_MAJOR_OCCASIONS,
@@ -129,7 +129,7 @@ export const HijriCalendarCard: React.FC<Props> = ({
         {isAnyFastDay ? (
           <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-400/20 via-sky-400/15 to-indigo-950 border border-amber-400/40 flex items-start gap-3">
             <div className="w-9 h-9 rounded-xl bg-amber-400 text-stone-950 flex items-center justify-center font-bold shrink-0 shadow-md">
-              <Sparkles className="w-4 h-4" />
+              <Award className="w-4 h-4" />
             </div>
             <div className="space-y-0.5">
               <div className="text-xs font-bold text-amber-200">

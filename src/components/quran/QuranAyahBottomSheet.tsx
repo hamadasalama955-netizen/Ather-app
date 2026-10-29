@@ -9,7 +9,6 @@ import {
   Check,
   Share2,
   BookOpen,
-  Sparkles,
   Volume2,
   Languages,
 } from 'lucide-react';
@@ -108,14 +107,14 @@ export const QuranAyahBottomSheet: React.FC<Props> = ({
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* Bottom Sheet Modal */}
-      <div className="relative w-full max-w-xl max-h-[85vh] bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 rounded-t-3xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-300 z-10">
+      <div className="relative w-full max-w-xl max-h-[85vh] bg-white dark:bg-[#141414] border-t border-stone-200 dark:border-stone-800 rounded-t-3xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-300 z-10">
         {/* Grab bar */}
         <div className="w-12 h-1.5 bg-stone-300 dark:bg-stone-700 rounded-full mx-auto my-2 shrink-0" />
 
         {/* Top Header Bar */}
         <div className="flex items-center justify-between px-5 py-2.5 border-b border-stone-100 dark:border-stone-800 shrink-0">
           <div className="flex items-center gap-2">
-            <span className="w-7 h-7 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold flex items-center justify-center border border-emerald-500/30">
+            <span className="w-7 h-7 rounded-xl bg-[#d4af37]/20 text-[#d4af37] text-xs font-mono font-bold flex items-center justify-center border border-[#d4af37]/30">
               {ayah.numberInSurah}
             </span>
             <div>
@@ -147,7 +146,7 @@ export const QuranAyahBottomSheet: React.FC<Props> = ({
               onClick={onToggleBookmark}
               className={`p-2 rounded-xl text-xs font-bold transition active:scale-95 ${
                 isBookmarked
-                  ? 'bg-emerald-800 text-white shadow-sm'
+                  ? 'bg-[#d4af37] text-stone-950 font-bold shadow-sm'
                   : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200'
               }`}
               title="فاصلة المصحف"
@@ -187,7 +186,7 @@ export const QuranAyahBottomSheet: React.FC<Props> = ({
               onClick={() => setActiveTab('tafseer')}
               className={`py-2 rounded-xl transition flex items-center justify-center gap-1.5 ${
                 activeTab === 'tafseer'
-                  ? 'bg-white dark:bg-stone-700 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-stone-700 text-[#d4af37] shadow-xs'
                   : 'text-stone-500 dark:text-stone-400'
               }`}
             >
@@ -199,7 +198,7 @@ export const QuranAyahBottomSheet: React.FC<Props> = ({
               onClick={() => setActiveTab('words')}
               className={`py-2 rounded-xl transition flex items-center justify-center gap-1.5 ${
                 activeTab === 'words'
-                  ? 'bg-white dark:bg-stone-700 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                  ? 'bg-white dark:bg-stone-700 text-[#d4af37] shadow-xs'
                   : 'text-stone-500 dark:text-stone-400'
               }`}
             >
@@ -211,9 +210,9 @@ export const QuranAyahBottomSheet: React.FC<Props> = ({
           {/* 2. Tafseer Tab */}
           {activeTab === 'tafseer' && (
             <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-850 border border-stone-200/80 dark:border-stone-800 space-y-2 animate-in fade-in duration-200">
-              <div className="flex items-center justify-between text-xs font-bold text-emerald-800 dark:text-emerald-400">
+              <div className="flex items-center justify-between text-xs font-bold text-[#d4af37]">
                 <span className="flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <BookOpen className="w-3.5 h-3.5" />
                   <span>تفسير الآية (الميسر):</span>
                 </span>
                 <span className="text-[10px] text-stone-400 font-normal">
@@ -223,7 +222,7 @@ export const QuranAyahBottomSheet: React.FC<Props> = ({
 
               {isLoadingTafseer ? (
                 <div className="py-6 text-center text-xs text-stone-400 animate-pulse space-y-2">
-                  <div className="w-6 h-6 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto" />
+                  <div className="w-6 h-6 border-2 border-[#d4af37] border-t-transparent rounded-full animate-spin mx-auto" />
                   <p>جاري استخراج التفسير الميسر المعتمد...</p>
                 </div>
               ) : (
@@ -237,7 +236,7 @@ export const QuranAyahBottomSheet: React.FC<Props> = ({
           {/* 3. Word Meanings Tab */}
           {activeTab === 'words' && (
             <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-850 border border-stone-200/80 dark:border-stone-800 space-y-3 animate-in fade-in duration-200">
-              <div className="flex items-center justify-between text-xs font-bold text-emerald-800 dark:text-emerald-400">
+              <div className="flex items-center justify-between text-xs font-bold text-[#d4af37]">
                 <span className="flex items-center gap-1.5">
                   <Languages className="w-3.5 h-3.5" />
                   <span>معاني المفردات واللغويات الصعبة في الآية:</span>
@@ -254,7 +253,7 @@ export const QuranAyahBottomSheet: React.FC<Props> = ({
                       key={idx}
                       className="p-2.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200/60 dark:border-stone-700/80 flex items-start gap-2.5"
                     >
-                      <span className="px-2 py-0.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 font-bold text-xs shrink-0 font-serif">
+                      <span className="px-2 py-0.5 rounded-lg bg-[#d4af37]/20 text-[#d4af37] font-bold text-xs shrink-0 font-serif">
                         {m.word}
                       </span>
                       <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed">
@@ -277,7 +276,7 @@ export const QuranAyahBottomSheet: React.FC<Props> = ({
           {/* Copy Ayah with Tafseer */}
           <button
             onClick={handleCopyCard}
-            className="flex-1 py-2.5 px-3 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm"
+            className="flex-1 py-2.5 px-3 rounded-2xl bg-[#d4af37] hover:bg-[#c5a059] text-stone-950 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm"
           >
             {copiedType === 'card' ? (
               <>

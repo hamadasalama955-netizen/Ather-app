@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Check, Plus, Minus, ChevronLeft, Bookmark, CheckCircle2, ListChecks, Sparkles } from 'lucide-react';
+import { BookOpen, Check, Plus, Minus, ChevronLeft, Bookmark, CheckCircle2, ListChecks } from 'lucide-react';
 import { PrayerLog } from '../../types';
 
 interface Props {

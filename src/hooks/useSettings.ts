@@ -6,11 +6,11 @@ const SETTINGS_KEY = 'noor_app_settings';
 
 const DEFAULT_SETTINGS: AppSettings = {
   theme: 'system',
-  methodId: 4, // Umm al-Qura Makkah
+  methodId: 5, // Egyptian General Authority of Survey
   asrSchool: 'standard',
   timeFormat24: false,
   soundEnabled: true,
-  selectedLocation: PRESET_LOCATIONS[0], // Makkah
+  selectedLocation: PRESET_LOCATIONS[2], // Cairo, Egypt (القاهرة)
 };
 
 export function useSettings() {
@@ -18,7 +18,13 @@ export function useSettings() {
     try {
       const stored = localStorage.getItem(SETTINGS_KEY);
       if (stored) {
-        return { ...DEFAULT_SETTINGS, ...JSON.parse(stored) };
+        const parsed = JSON.parse(stored);
+        // If stored was old default Makkah, migrate to Cairo
+        if (parsed.selectedLocation?.city === 'Makkah' && !parsed._userCustomized) {
+          parsed.selectedLocation = PRESET_LOCATIONS[2];
+          parsed.methodId = 5;
+        }
+        return { ...DEFAULT_SETTINGS, ...parsed };
       }
     } catch (e) {
       console.warn('Failed reading settings from storage:', e);

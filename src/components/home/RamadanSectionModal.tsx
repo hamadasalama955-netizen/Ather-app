@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import {
   X,
   Moon,
-  Sparkles,
   Share2,
   Printer,
   Calendar,
@@ -23,6 +22,7 @@ interface Props {
   location?: LocationConfig;
   prayerData?: PrayerTimesResponse | null;
   inline?: boolean;
+  isDark?: boolean;
 }
 
 interface ImsakiyaRow {
@@ -42,6 +42,7 @@ export const RamadanSectionModal: React.FC<Props> = ({
   location,
   prayerData,
   inline = false,
+  isDark = false,
 }) => {
   const [fastingToday, setFastingToday] = useState(() => {
     return localStorage.getItem('noor_fasting_today') === 'true';
@@ -59,61 +60,44 @@ export const RamadanSectionModal: React.FC<Props> = ({
 
   // Generate 30 days of Ramadan Imsakiya
   const imsakiyaDays: ImsakiyaRow[] = useMemo(() => {
-    // Parse base fajr & maghrib
-    const [fajrH, fajrM] = fajrTime.split(':').map((n) => parseInt(n, 10));
-    const [magH, magM] = maghribTime.split(':').map((n) => parseInt(n, 10));
-
-    const weekdays = [
-      'الأحد',
-      'الإثنين',
-      'الثلاثاء',
-      'الأربعاء',
-      'الخميس',
-      'الجمعة',
-      'السبت',
-    ];
-
+    const weekdays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
     const rows: ImsakiyaRow[] = [];
+
     const now = new Date();
+    const baseFajrParts = fajrTime.split(':').map((v) => parseInt(v, 10));
+    const baseMaghribParts = maghribTime.split(':').map((v) => parseInt(v, 10));
+
+    const fajrBaseMinutes = (baseFajrParts[0] || 4) * 60 + (baseFajrParts[1] || 48);
+    const maghribBaseMinutes = (baseMaghribParts[0] || 18) * 60 + (baseMaghribParts[1] || 14);
 
     for (let day = 1; day <= 30; day++) {
-      // Small seasonal progression: Fajr gets ~1 min earlier every 3 days, Maghrib ~1 min later
-      const fajrDelta = -Math.floor((day - 1) / 3);
-      const magDelta = Math.floor((day - 1) / 3);
+      const rowDate = new Date(now.getFullYear(), 2, day);
+      const weekdayAr = weekdays[rowDate.getDay()];
+      const dayDiff = day - (isCurrentlyRamadan ? currentRamadanDay : 1);
 
-      const totalFajrM = fajrH * 60 + fajrM + fajrDelta;
-      const totalMagM = magH * 60 + magM + magDelta;
+      const fMin = fajrBaseMinutes - Math.round(dayDiff * 0.7);
+      const mMin = maghribBaseMinutes + Math.round(dayDiff * 0.5);
 
-      const calcFajrH = Math.floor(totalFajrM / 60);
-      const calcFajrM = totalFajrM % 60;
+      const fH = Math.floor(fMin / 60);
+      const fM = fMin % 60;
+      const mH = Math.floor(mMin / 60);
+      const mM = mMin % 60;
 
-      const calcMagH = Math.floor(totalMagM / 60);
-      const calcMagM = totalMagM % 60;
-
-      const formattedFajr = `${calcFajrH.toString().padStart(2, '0')}:${calcFajrM
-        .toString()
-        .padStart(2, '0')}`;
-      const formattedMaghrib = `${calcMagH.toString().padStart(2, '0')}:${calcMagM
-        .toString()
-        .padStart(2, '0')}`;
-
-      // Weekday progression
-      const dateForDay = new Date(now.getFullYear(), 2, day); // approximate Ramadan frame
-      const weekdayAr = weekdays[(dateForDay.getDay() + day - 1) % 7];
-      const gregorianDateStr = `${day} مارس`;
+      const fStr = `${fH.toString().padStart(2, '0')}:${fM.toString().padStart(2, '0')}`;
+      const mStr = `${mH.toString().padStart(2, '0')}:${mM.toString().padStart(2, '0')}`;
 
       rows.push({
         dayNumber: day,
         weekdayAr,
-        gregorianDateStr,
-        fajr: formattedFajr,
-        maghrib: formattedMaghrib,
-        isToday: day === currentRamadanDay,
+        gregorianDateStr: `${day} مارس`,
+        fajr: fStr,
+        maghrib: mStr,
+        isToday: isCurrentlyRamadan ? day === currentRamadanDay : day === 1,
       });
     }
 
     return rows;
-  }, [fajrTime, maghribTime, currentRamadanDay]);
+  }, [fajrTime, maghribTime, isCurrentlyRamadan, currentRamadanDay]);
 
   if (!isOpen) return null;
 
@@ -142,264 +126,353 @@ export const RamadanSectionModal: React.FC<Props> = ({
   };
 
   const modalContent = (
-    <div className="w-full bg-[#071d16] text-[#fcfbf7] rounded-3xl shadow-2xl border border-[#dfb76c]/40 flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
-      {/* ========================================================
-          1. TOP REGAL NIGHT HEADER WITH MOSQUE & WARM GLOW
-         ======================================================== */}
-      <div className="relative bg-gradient-to-b from-[#04120e] via-[#09251d] to-[#0d3429] p-4 sm:p-5 border-b border-[#dfb76c]/30 overflow-hidden shrink-0">
-        {/* Background Stars / Sparkles */}
-        <div className="absolute inset-0 opacity-40 pointer-events-none">
-          <span className="absolute top-3 left-10 text-[#fef08a] text-xs">✦</span>
-          <span className="absolute top-7 right-14 text-white text-[10px]">★</span>
-          <span className="absolute top-12 left-1/3 text-[#dfb76c] text-[9px]">✦</span>
-          <span className="absolute top-4 right-1/4 text-white text-xs">★</span>
-        </div>
-
+    <div
+      className={`w-full rounded-3xl shadow-2xl border flex flex-col overflow-hidden animate-in zoom-in-95 duration-200 ${
+        isDark
+          ? 'bg-[#141414] text-[#fcfbf7] border-[#d4af37]/40'
+          : 'bg-[#faf8f5] text-stone-900 border-[#d4af37]/35 shadow-xl'
+      }`}
+    >
+      {/* 1. Header with Mosque and Title */}
+      <div
+        className={`relative p-4 sm:p-5 border-b overflow-hidden shrink-0 ${
+          isDark
+            ? 'bg-gradient-to-b from-[#0a0a0a] via-[#141414] to-[#1a1814] border-[#d4af37]/30 text-white'
+            : 'bg-gradient-to-b from-white via-[#faf8f5] to-[#f4f1ea] border-[#d4af37]/25 text-stone-900'
+        }`}
+      >
         {/* Close button */}
         {!inline && (
           <button
             onClick={onClose}
-            className="absolute top-3.5 left-3.5 z-20 p-2 rounded-2xl bg-[#04120e]/80 hover:bg-white/10 text-stone-300 border border-white/10 transition active:scale-95"
+            className={`absolute top-3.5 left-3.5 z-20 p-2 rounded-2xl transition active:scale-95 ${
+              isDark
+                ? 'bg-[#141414]/90 hover:bg-white/10 text-stone-300 border border-white/10'
+                : 'bg-white hover:bg-stone-100 text-stone-600 border border-stone-200 shadow-2xs'
+            }`}
             title="إغلاق"
           >
             <X className="w-5 h-5" />
           </button>
         )}
 
-          {/* Header Content */}
-          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-right">
-            <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#dfb76c]/20 border border-[#dfb76c]/40 text-[#dfb76c] text-[11px] font-bold">
-                <Moon className="w-3.5 h-3.5" />
-                <span>شهر القرآن والبركات</span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                إمساكية شهر رمضان المبارك
-              </h2>
-              <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#dfb76c]">
-                <MapPin className="w-3.5 h-3.5" />
-                <span className="font-semibold text-white">{cityName}</span>
-                <span>•</span>
-                <span className="text-stone-300">١٤٤٧ هـ - ٢٠٢٦ م</span>
-              </div>
-            </div>
-
-            {/* Glowing Mosque Night Vector Stamp */}
-            <div className="relative w-28 h-18 sm:w-36 sm:h-20 flex items-center justify-center">
-              <svg viewBox="0 0 160 80" className="w-full h-full drop-shadow-[0_0_12px_rgba(223,183,108,0.4)]">
-                {/* Night Glow */}
-                <circle cx="80" cy="40" r="35" fill="#dfb76c" opacity="0.15" />
-                {/* Crescent Moon */}
-                <path d="M125 15 A 9 9 0 1 0 133 30 A 8 8 0 1 1 125 15 Z" fill="#fef08a" />
-                {/* Minaret Left */}
-                <rect x="25" y="25" width="8" height="55" fill="#061c16" />
-                <path d="M25 25 L29 12 L33 25 Z" fill="#dfb76c" />
-                <circle cx="29" cy="11" r="1.5" fill="#fef08a" />
-                {/* Minaret Right */}
-                <rect x="127" y="25" width="8" height="55" fill="#061c16" />
-                <path d="M127 25 L131 12 L135 25 Z" fill="#dfb76c" />
-                <circle cx="131" cy="11" r="1.5" fill="#fef08a" />
-                {/* Central Grand Dome */}
-                <path d="M50 80 L50 50 C50 30, 80 20, 80 20 C80 20, 110 30, 110 50 L110 80 Z" fill="#09261e" stroke="#dfb76c" strokeWidth="1.2" />
-                <line x1="80" y1="20" x2="80" y2="10" stroke="#dfb76c" strokeWidth="1.5" />
-                <circle cx="80" cy="9" r="1.5" fill="#fef08a" />
-                {/* Illuminated Keyhole Door */}
-                <path d="M72 80 L72 65 C72 60, 76 58, 80 58 C84 58, 88 60, 88 65 L88 80 Z" fill="#fef08a" opacity="0.85" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================
-            2. FASTING SUMMARY CARDS & PROPHETIC DUAA
-           ======================================================== */}
-        <div className="p-3 sm:p-4 space-y-3 bg-[#061812] border-b border-[#dfb76c]/20 shrink-0">
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {/* Suhoor Card */}
-            <div className="p-2.5 rounded-2xl bg-[#09251d] border border-[#dfb76c]/30 flex items-center justify-between">
-              <div className="space-y-0.5">
-                <span className="text-[10px] text-stone-300 font-semibold flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-[#dfb76c]" />
-                  <span>السحور والإمساك (الفجر)</span>
-                </span>
-                <div className="text-base sm:text-lg font-black text-[#dfb76c] font-mono tabular-nums">
-                  {fajrTime}
-                </div>
-              </div>
-              <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#dfb76c]/20 text-[#dfb76c] font-bold">
-                إمساك
-              </span>
-            </div>
-
-            {/* Iftar Card */}
-            <div className="p-2.5 rounded-2xl bg-[#09251d] border border-amber-500/40 flex items-center justify-between">
-              <div className="space-y-0.5">
-                <span className="text-[10px] text-stone-300 font-semibold flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-amber-400" />
-                  <span>موعد الإفطار (المغرب)</span>
-                </span>
-                <div className="text-base sm:text-lg font-black text-amber-400 font-mono tabular-nums">
-                  {maghribTime}
-                </div>
-              </div>
-              <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold">
-                إفطار
-              </span>
-            </div>
-
-            {/* Fasting Today Button */}
-            <div className="col-span-2 sm:col-span-1 p-2 rounded-2xl bg-[#0d3429] border border-[#dfb76c]/30 flex items-center justify-between">
-              <div className="space-y-0.5">
-                <span className="text-[10px] text-stone-300">تسجيل صيام اليوم</span>
-                <div className="text-xs font-bold text-white">
-                  {fastingToday ? 'مُسجّل صائماً ✓' : 'هل أنت صائم اليوم؟'}
-                </div>
-              </div>
-              <button
-                onClick={handleToggleFasting}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 ${
-                  fastingToday
-                    ? 'bg-[#dfb76c] text-[#051711] shadow-md font-black'
-                    : 'bg-white/10 hover:bg-white/20 text-stone-200'
-                }`}
-              >
-                {fastingToday ? 'تم الصيام' : 'تسجيل'}
-              </button>
-            </div>
-          </div>
-
-          {/* Prophetic Duaa */}
-          <div className="px-3 py-2 rounded-2xl bg-[#0b2b21] border border-[#dfb76c]/20 flex items-center justify-between gap-2 text-xs">
-            <div className="flex items-center gap-1.5 text-[#dfb76c] shrink-0 font-bold">
-              <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400" />
-              <span>دعاء الإفطار:</span>
-            </div>
-            <p
-              style={{ fontFamily: 'var(--font-quran), Amiri, serif' }}
-              className="text-stone-100 font-semibold truncate text-center sm:text-right"
+        {/* Header Content */}
+        <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-right">
+          <div className="space-y-1">
+            <div
+              className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-bold border ${
+                isDark
+                  ? 'bg-[#dfb76c]/20 border-[#dfb76c]/40 text-[#dfb76c]'
+                  : 'bg-[#eef2e6] border-[#2e4426]/20 text-[#2e4426]'
+              }`}
             >
-              «ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ، وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ»
-            </p>
-          </div>
-        </div>
-
-        {/* ========================================================
-            3. LUXURIOUS IMSAKIYA TABLE (اليوم | رمضان | الميلادي | الفجر | المغرب)
-           ======================================================== */}
-        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2 no-scrollbar print:overflow-visible">
-          <div className="flex items-center justify-between px-1 mb-1">
-            <span className="text-xs font-bold text-[#dfb76c] flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" />
-              <span>جدول أيام الشهر الفضيل (٣٠ يوماً)</span>
-            </span>
-            <span className="text-[10px] text-stone-400">
-              * تم تمييز اليوم الحالي وتأكيد وقتي السحور والإفطار
-            </span>
-          </div>
-
-          <div className="rounded-2xl border border-[#dfb76c]/30 overflow-hidden shadow-md">
-            {/* Table Header */}
-            <div className="grid grid-cols-5 text-center text-xs font-black bg-[#04120e] text-[#dfb76c] py-2.5 px-1 border-b border-[#dfb76c]/30">
-              <div>اليوم</div>
-              <div>رمضان</div>
-              <div>الميلادي</div>
-              <div>الفجر (الإمساك)</div>
-              <div>المغرب (الإفطار)</div>
+              <Moon className="w-3.5 h-3.5" />
+              <span>شهر القرآن والبركات</span>
             </div>
-
-            {/* Table Rows */}
-            <div className="divide-y divide-[#dfb76c]/15 text-xs">
-              {imsakiyaDays.map((row) => (
-                <div
-                  key={row.dayNumber}
-                  className={`grid grid-cols-5 text-center items-center py-2 px-1 transition-all ${
-                    row.isToday
-                      ? 'bg-gradient-to-r from-[#dfb76c]/30 via-[#0e3b2e] to-[#dfb76c]/25 text-white font-extrabold shadow-inner'
-                      : row.dayNumber % 2 === 0
-                      ? 'bg-[#09221a]/60 hover:bg-[#0c2f24]'
-                      : 'bg-[#061812]/70 hover:bg-[#0c2f24]'
-                  }`}
-                >
-                  {/* Weekday */}
-                  <div className="flex items-center justify-center gap-1 font-semibold">
-                    {row.isToday && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#dfb76c] animate-pulse" />
-                    )}
-                    <span>{row.weekdayAr}</span>
-                  </div>
-
-                  {/* Ramadan Day Number */}
-                  <div className="flex items-center justify-center">
-                    <span
-                      className={`inline-flex items-center justify-center w-6 h-6 rounded-full font-bold font-mono text-xs ${
-                        row.isToday
-                          ? 'bg-[#dfb76c] text-[#051711] shadow-xs'
-                          : 'bg-white/10 text-[#dfb76c]'
-                      }`}
-                    >
-                      {row.dayNumber}
-                    </span>
-                  </div>
-
-                  {/* Gregorian Date */}
-                  <div className="text-stone-300 font-mono text-[11px]">
-                    {row.gregorianDateStr}
-                  </div>
-
-                  {/* Fajr (Suhoor) */}
-                  <div className="font-mono font-bold text-[#dfb76c] tabular-nums">
-                    {row.fajr}
-                  </div>
-
-                  {/* Maghrib (Iftar) */}
-                  <div className="font-mono font-bold text-amber-400 tabular-nums">
-                    {row.maghrib}
-                  </div>
-                </div>
-              ))}
+            <h2
+              className={`text-xl sm:text-2xl font-black tracking-tight ${
+                isDark ? 'text-white' : 'text-[#2e4426]'
+              }`}
+            >
+              إمساكية شهر رمضان المبارك
+            </h2>
+            <div
+              className={`flex items-center justify-center sm:justify-start gap-2 text-xs font-semibold ${
+                isDark ? 'text-[#dfb76c]' : 'text-stone-600'
+              }`}
+            >
+              <MapPin className="w-3.5 h-3.5" />
+              <span>{cityName}</span>
+              <span>•</span>
+              <span>١٤٤٧ هـ - ٢٠٢٦ م</span>
             </div>
-          </div>
-        </div>
-
-        {/* ========================================================
-            4. BOTTOM CIRCULAR INTERACTIVE ACTION BUTTONS
-           ======================================================== */}
-        <div className="p-3 sm:p-4 bg-[#04120e] border-t border-[#dfb76c]/30 flex items-center justify-between gap-3 shrink-0">
-          <div className="text-xs text-stone-300">
-            <span className="font-bold text-white">إمساكية {cityName}</span>
-            <span className="text-stone-500 mr-1.5">جاهزة للمشاركة والطباعة</span>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            {/* Circular Button: WhatsApp Share */}
-            <button
-              onClick={handleShareWhatsApp}
-              className="group flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg transition active:scale-95"
-              title="مشاركة الإمساكية عبر واتساب"
-            >
-              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:rotate-12 transition-transform">
-                <Share2 className="w-3.5 h-3.5" />
-              </div>
-              <span className="hidden sm:inline">مشاركة عبر واتساب</span>
-              <span className="sm:hidden">مشاركة</span>
-            </button>
-
-            {/* Circular Button: PDF Export / Print */}
-            <button
-              onClick={handlePrintPdf}
-              className="group flex items-center gap-2 px-4 py-2 rounded-full bg-[#dfb76c] hover:bg-amber-400 text-stone-950 text-xs font-extrabold shadow-lg transition active:scale-95"
-              title="تصدير وطباعة الإمساكية بصيغة PDF"
-            >
-              <div className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Printer className="w-3.5 h-3.5" />
-              </div>
-              <span className="hidden sm:inline">تصدير / طباعة PDF</span>
-              <span className="sm:hidden">طباعة</span>
-            </button>
           </div>
         </div>
       </div>
-    );
+
+      {/* 2. Fasting Summary Cards & Prophetic Duaa */}
+      <div
+        className={`p-3 sm:p-4 space-y-3 border-b shrink-0 ${
+          isDark
+            ? 'bg-[#161616] border-[#dfb76c]/20'
+            : 'bg-[#f4f2ec] border-[#d4af37]/20'
+        }`}
+      >
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {/* Suhoor Card */}
+          <div
+            className={`p-2.5 rounded-2xl border flex items-center justify-between ${
+              isDark
+                ? 'bg-[#1a1814] border-[#dfb76c]/30 text-white'
+                : 'bg-white border-stone-200 text-stone-800 shadow-2xs'
+            }`}
+          >
+            <div className="space-y-0.5">
+              <span className="text-[10px] text-stone-400 font-semibold flex items-center gap-1">
+                <Clock className="w-3 h-3 text-[#d4af37]" />
+                <span>السحور والإمساك (الفجر)</span>
+              </span>
+              <div
+                className={`text-base sm:text-lg font-black font-mono tabular-nums ${
+                  isDark ? 'text-[#d4af37]' : 'text-[#2e4426]'
+                }`}
+              >
+                {fajrTime}
+              </div>
+            </div>
+            <span
+              className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${
+                isDark ? 'bg-[#dfb76c]/20 text-[#dfb76c]' : 'bg-[#eef2e6] text-[#2e4426]'
+              }`}
+            >
+              إمساك
+            </span>
+          </div>
+
+          {/* Iftar Card */}
+          <div
+            className={`p-2.5 rounded-2xl border flex items-center justify-between ${
+              isDark
+                ? 'bg-[#1a1814] border-amber-500/40 text-white'
+                : 'bg-white border-stone-200 text-stone-800 shadow-2xs'
+            }`}
+          >
+            <div className="space-y-0.5">
+              <span className="text-[10px] text-stone-400 font-semibold flex items-center gap-1">
+                <Clock className="w-3 h-3 text-amber-500" />
+                <span>موعد الإفطار (المغرب)</span>
+              </span>
+              <div
+                className={`text-base sm:text-lg font-black font-mono tabular-nums ${
+                  isDark ? 'text-amber-400' : 'text-[#2e4426]'
+                }`}
+              >
+                {maghribTime}
+              </div>
+            </div>
+            <span
+              className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${
+                isDark ? 'bg-amber-500/20 text-amber-300' : 'bg-amber-100 text-amber-800'
+              }`}
+            >
+              إفطار
+            </span>
+          </div>
+
+          {/* Fasting Today Button */}
+          <div
+            className={`col-span-2 sm:col-span-1 p-2 rounded-2xl border flex items-center justify-between ${
+              isDark
+                ? 'bg-[#1a1814] border-[#dfb76c]/30 text-white'
+                : 'bg-white border-stone-200 text-stone-800 shadow-2xs'
+            }`}
+          >
+            <div className="space-y-0.5">
+              <span className="text-[10px] text-stone-400">تسجيل صيام اليوم</span>
+              <div
+                className={`text-xs font-bold ${
+                  isDark ? 'text-white' : 'text-stone-900'
+                }`}
+              >
+                {fastingToday ? 'مُسجّل صائماً ✓' : 'هل أنت صائم اليوم؟'}
+              </div>
+            </div>
+            <button
+              onClick={handleToggleFasting}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 ${
+                fastingToday
+                  ? isDark
+                    ? 'bg-[#dfb76c] text-[#051711] shadow-md font-black'
+                    : 'bg-[#2e4426] text-white shadow-md font-black'
+                  : isDark
+                  ? 'bg-white/10 hover:bg-white/20 text-stone-200'
+                  : 'bg-stone-100 hover:bg-stone-200 text-stone-700'
+              }`}
+            >
+              {fastingToday ? 'تم الصيام' : 'تسجيل'}
+            </button>
+          </div>
+        </div>
+
+        {/* Prophetic Duaa */}
+        <div
+          className={`px-3 py-2 rounded-2xl border flex items-center justify-between gap-2 text-xs ${
+            isDark
+              ? 'bg-[#1a1814] border-[#dfb76c]/20 text-white'
+              : 'bg-white border-stone-200 text-stone-800 shadow-2xs'
+          }`}
+        >
+          <div className="flex items-center gap-1.5 text-[#d4af37] shrink-0 font-bold">
+            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
+            <span>دعاء الإفطار:</span>
+          </div>
+          <p
+            style={{ fontFamily: 'var(--font-quran), Amiri, serif' }}
+            className={`font-semibold truncate text-center sm:text-right ${
+              isDark ? 'text-stone-100' : 'text-stone-900'
+            }`}
+          >
+            «ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ، وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ»
+          </p>
+        </div>
+      </div>
+
+      {/* 3. Imsakiya Table */}
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2 no-scrollbar print:overflow-visible">
+        <div className="flex items-center justify-between px-1 mb-1">
+          <span
+            className={`text-xs font-bold flex items-center gap-1.5 ${
+              isDark ? 'text-[#dfb76c]' : 'text-[#2e4426]'
+            }`}
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>جدول أيام الشهر الفضيل (٣٠ يوماً)</span>
+          </span>
+          <span className="text-[10px] text-stone-400">
+            * تأكيد وقتي السحور والإفطار
+          </span>
+        </div>
+
+        <div
+          className={`rounded-2xl border overflow-hidden shadow-xs ${
+            isDark ? 'border-[#d4af37]/30 bg-[#141414]' : 'border-stone-200 bg-white'
+          }`}
+        >
+          {/* Table Header */}
+          <div
+            className={`grid grid-cols-5 text-center text-xs font-black py-2.5 px-1 border-b ${
+              isDark
+                ? 'bg-[#0a0a0a] text-[#d4af37] border-[#d4af37]/30'
+                : 'bg-[#f4f2ec] text-[#2e4426] border-stone-200'
+            }`}
+          >
+            <div>اليوم</div>
+            <div>رمضان</div>
+            <div>الميلادي</div>
+            <div>الفجر (الإمساك)</div>
+            <div>المغرب (الإفطار)</div>
+          </div>
+
+          {/* Table Rows */}
+          <div
+            className={`divide-y text-xs ${
+              isDark ? 'divide-[#d4af37]/15' : 'divide-stone-100'
+            }`}
+          >
+            {imsakiyaDays.map((row) => (
+              <div
+                key={row.dayNumber}
+                className={`grid grid-cols-5 text-center items-center py-2 px-1 transition-all ${
+                  row.isToday
+                    ? isDark
+                      ? 'bg-gradient-to-r from-[#d4af37]/30 via-[#1a1814] to-[#d4af37]/25 text-white font-extrabold'
+                      : 'bg-gradient-to-r from-[#eef2e6] via-white to-[#eef2e6] text-[#2e4426] font-black'
+                    : isDark
+                    ? row.dayNumber % 2 === 0
+                      ? 'bg-[#141414]/90'
+                      : 'bg-[#0a0a0a]/90'
+                    : row.dayNumber % 2 === 0
+                    ? 'bg-white'
+                    : 'bg-[#faf8f5]'
+                }`}
+              >
+                {/* Weekday */}
+                <div className="flex items-center justify-center gap-1 font-semibold">
+                  {row.isToday && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] animate-pulse" />
+                  )}
+                  <span>{row.weekdayAr}</span>
+                </div>
+
+                {/* Ramadan Day Number */}
+                <div className="flex items-center justify-center">
+                  <span
+                    className={`inline-flex items-center justify-center w-6 h-6 rounded-full font-bold font-mono text-xs ${
+                      row.isToday
+                        ? 'bg-[#d4af37] text-stone-950 shadow-xs'
+                        : isDark
+                        ? 'bg-white/10 text-[#d4af37]'
+                        : 'bg-stone-100 text-[#2e4426]'
+                    }`}
+                  >
+                    {row.dayNumber}
+                  </span>
+                </div>
+
+                {/* Gregorian Date */}
+                <div
+                  className={`font-mono text-[11px] ${
+                    isDark ? 'text-stone-300' : 'text-stone-500'
+                  }`}
+                >
+                  {row.gregorianDateStr}
+                </div>
+
+                {/* Fajr */}
+                <div
+                  className={`font-mono font-bold tabular-nums ${
+                    isDark ? 'text-[#d4af37]' : 'text-[#2e4426]'
+                  }`}
+                >
+                  {row.fajr}
+                </div>
+
+                {/* Maghrib */}
+                <div
+                  className={`font-mono font-bold tabular-nums ${
+                    isDark ? 'text-amber-400' : 'text-[#8c6b2d]'
+                  }`}
+                >
+                  {row.maghrib}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Action buttons */}
+      <div
+        className={`p-3 sm:p-4 border-t flex items-center justify-between gap-3 shrink-0 ${
+          isDark
+            ? 'bg-[#0a0a0a] border-[#d4af37]/30 text-stone-300'
+            : 'bg-white border-stone-200 text-stone-800'
+        }`}
+      >
+        <div className="text-xs">
+          <span className={`font-bold ${isDark ? 'text-white' : 'text-[#2e4426]'}`}>
+            إمساكية {cityName}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleShareWhatsApp}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition active:scale-95 ${
+              isDark
+                ? 'bg-[#d4af37] text-stone-950 hover:bg-[#c5a059]'
+                : 'bg-[#2e4426] text-white hover:bg-[#3b5531]'
+            }`}
+          >
+            <Share2 className="w-3.5 h-3.5" />
+            <span>مشاركة</span>
+          </button>
+
+          <button
+            onClick={handlePrintPdf}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition active:scale-95 ${
+              isDark
+                ? 'bg-[#1a1814] text-[#d4af37] border border-[#d4af37]/40'
+                : 'bg-stone-100 text-stone-800 border border-stone-200'
+            }`}
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>طباعة</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   if (inline) {
     return <div className="space-y-4 pb-12 animate-in fade-in duration-200">{modalContent}</div>;

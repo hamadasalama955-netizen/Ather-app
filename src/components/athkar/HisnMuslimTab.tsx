@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Sparkles,
   BookOpen,
   Search,
   ChevronLeft,
@@ -186,7 +185,7 @@ export const HisnMuslimTab: React.FC<Props> = ({
   const topDailyCategories = [
     { title: 'أذكار الصباح', icon: Sun, color: 'text-amber-500 bg-amber-50 dark:bg-amber-950/60' },
     { title: 'أذكار المساء', icon: Moon, color: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/60' },
-    { title: 'الأذكار بعد السلام من الصلاة', icon: Clock, color: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/60' },
+    { title: 'الأذكار بعد السلام من الصلاة', icon: Clock, color: 'text-[#d4af37] bg-[#d4af37]/15 dark:bg-[#d4af37]/10' },
     { title: 'أذكار النوم', icon: Moon, color: 'text-purple-500 bg-purple-50 dark:bg-purple-950/60' },
     { title: 'أذكار الاستيقاظ من النوم', icon: Sun, color: 'text-yellow-600 bg-yellow-50 dark:bg-yellow-950/60' },
   ];
@@ -203,44 +202,43 @@ export const HisnMuslimTab: React.FC<Props> = ({
       )}
 
       {/* Main Header Banner for Hisn Muslim */}
-      <div className="rounded-3xl bg-gradient-to-br from-[#092b21] via-[#0d3b2e] to-[#081e17] text-white p-5 border border-[#dfb76c]/40 shadow-xl space-y-3 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-32 h-32 bg-[#dfb76c]/10 rounded-full blur-2xl pointer-events-none" />
+      <div className="rounded-3xl bg-[#faf8f5] dark:bg-[#141414] text-stone-900 dark:text-white p-5 border border-[#d4af37]/35 shadow-md space-y-3 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-32 h-32 bg-[#d4af37]/10 rounded-full blur-2xl pointer-events-none" />
 
         <div className="flex items-center justify-between relative z-10">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#dfb76c] to-[#c5a059] text-[#0d3b2e] flex items-center justify-center font-bold shadow-md">
-              <ShieldCheck className="w-6 h-6" />
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#aa7c11] text-stone-950 flex items-center justify-center font-bold shadow-md">
+              <ShieldCheck className="w-6 h-6 text-stone-950" />
             </div>
             <div>
-              <h2 className="text-lg sm:text-xl font-black text-white flex items-center gap-1.5">
-                <span>حصن المسلم</span>
-                <Sparkles className="w-4 h-4 text-[#dfb76c]" />
+              <h2 className="text-lg sm:text-xl font-black text-stone-900 dark:text-[#f5e6b8]" style={{ fontFamily: "'Amiri', 'Traditional Arabic', serif" }}>
+                حصن المسلم
               </h2>
-              <p className="text-xs text-[#dfb76c]/90">
+              <p className="text-xs text-[#8c6b2d] dark:text-[#d4af37]">
                 جامع الأذكار اليومية وأوراد التحصين النبوية الشريفة
               </p>
             </div>
           </div>
 
-          <span className="text-[11px] font-bold px-3 py-1.5 rounded-xl bg-white/10 text-[#dfb76c] border border-white/10 shrink-0 font-mono">
+          <span className="text-[11px] font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-[#1a1814] text-[#8c6b2d] dark:text-[#d4af37] border border-[#d4af37]/30 shrink-0 font-mono">
             {categories.length > 0 ? `${categories.length} باباً` : '١٣٥ باباً'}
           </span>
         </div>
 
-        <div className="text-[11px] text-stone-300 pt-2 border-t border-white/10 flex items-center justify-between flex-wrap gap-1">
+        <div className="text-[11px] text-stone-500 dark:text-[#a39e93] pt-2 border-t border-[#d4af37]/20 flex items-center justify-between flex-wrap gap-1">
           <span>المصدر: كتاب «حصن المسلم من أذكار الكتاب والسنة»</span>
-          <span className="text-[#dfb76c] font-semibold">٣٤٥ ذكراً مأثوراً</span>
+          <span className="text-[#8c6b2d] dark:text-[#d4af37] font-semibold">٣٤٥ ذكراً مأثوراً</span>
         </div>
       </div>
 
       {/* 4 Clean Sub-Tab Switches: الأوراد اليومية | أوراد التحصين | أبواب الحصن | المسبحة */}
-      <div className="grid grid-cols-4 gap-1 p-1 bg-stone-200/80 dark:bg-[#122e23] rounded-2xl border border-stone-300/60 dark:border-stone-800 text-[11px] font-bold shadow-2xs">
+      <div className="grid grid-cols-4 gap-1 p-1 bg-[#faf8f5] dark:bg-[#141414] rounded-2xl border border-[#d4af37]/25 text-[11px] font-bold shadow-2xs">
         <button
           onClick={() => setSubTab('daily')}
           className={`py-2 px-1 text-center rounded-xl transition ${
             subTab === 'daily'
-              ? 'bg-white dark:bg-[#0d3b2e] text-[#0d3b2e] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30 font-black'
-              : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+              ? 'bg-[#d4af37] text-stone-950 shadow-xs font-black'
+              : 'text-stone-600 dark:text-[#a39e93] hover:text-[#d4af37]'
           }`}
         >
           أذكار اليوم
@@ -249,8 +247,8 @@ export const HisnMuslimTab: React.FC<Props> = ({
           onClick={() => setSubTab('tahseen')}
           className={`py-2 px-1 text-center rounded-xl transition ${
             subTab === 'tahseen'
-              ? 'bg-white dark:bg-[#0d3b2e] text-[#0d3b2e] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30 font-black'
-              : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+              ? 'bg-[#d4af37] text-stone-950 shadow-xs font-black'
+              : 'text-stone-600 dark:text-[#a39e93] hover:text-[#d4af37]'
           }`}
         >
           أوراد التحصين
@@ -259,8 +257,8 @@ export const HisnMuslimTab: React.FC<Props> = ({
           onClick={() => setSubTab('all')}
           className={`py-2 px-1 text-center rounded-xl transition ${
             subTab === 'all'
-              ? 'bg-white dark:bg-[#0d3b2e] text-[#0d3b2e] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30 font-black'
-              : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+              ? 'bg-[#d4af37] text-stone-950 shadow-xs font-black'
+              : 'text-stone-600 dark:text-[#a39e93] hover:text-[#d4af37]'
           }`}
         >
           أبواب الحصن
@@ -269,8 +267,8 @@ export const HisnMuslimTab: React.FC<Props> = ({
           onClick={() => setSubTab('sebha')}
           className={`py-2 px-1 text-center rounded-xl transition ${
             subTab === 'sebha'
-              ? 'bg-white dark:bg-[#0d3b2e] text-[#0d3b2e] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30 font-black'
-              : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+              ? 'bg-[#d4af37] text-stone-950 shadow-xs font-black'
+              : 'text-stone-600 dark:text-[#a39e93] hover:text-[#d4af37]'
           }`}
         >
           المسبحة
@@ -299,14 +297,14 @@ export const HisnMuslimTab: React.FC<Props> = ({
                 <button
                   key={top.title}
                   onClick={() => setActiveCategory(top.title)}
-                  className="p-4 rounded-3xl bg-white dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 hover:border-[#dfb76c]/60 text-right transition shadow-xs group active:scale-[0.98] flex items-center justify-between gap-3"
+                  className="p-4 rounded-3xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 hover:border-[#d4af37]/60 text-right transition shadow-xs group active:scale-[0.98] flex items-center justify-between gap-3"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${top.color} shadow-2xs`}>
                       <IconComponent className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-stone-900 dark:text-white group-hover:text-[#0d3b2e] dark:group-hover:text-[#dfb76c] transition-colors">
+                      <h4 className="text-sm font-bold text-stone-900 dark:text-white group-hover:text-[#d4af37] transition-colors">
                         {top.title}
                       </h4>
                       <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-0.5">
@@ -315,16 +313,16 @@ export const HisnMuslimTab: React.FC<Props> = ({
                     </div>
                   </div>
 
-                  <ChevronLeft className="w-5 h-5 text-stone-400 group-hover:text-[#0d3b2e] dark:group-hover:text-[#dfb76c] transition-transform group-hover:-translate-x-1 shrink-0" />
+                  <ChevronLeft className="w-5 h-5 text-stone-400 group-hover:text-[#d4af37] transition-transform group-hover:-translate-x-1 shrink-0" />
                 </button>
               );
             })}
           </div>
 
           {/* Quick Banner to Explore All Doors */}
-          <div className="p-4 rounded-3xl bg-gradient-to-r from-[#dfb76c]/15 to-[#0d3b2e]/10 border border-[#dfb76c]/30 flex items-center justify-between gap-2">
+          <div className="p-4 rounded-3xl bg-gradient-to-r from-[#d4af37]/20 to-[#141414] border border-[#d4af37]/30 flex items-center justify-between gap-2">
             <div>
-              <h4 className="text-xs font-bold text-[#0d3b2e] dark:text-[#dfb76c]">
+              <h4 className="text-xs font-bold text-[#d4af37]">
                 تريد أذكاراً لأوقات وأحوال أخرى؟
               </h4>
               <p className="text-[11px] text-stone-600 dark:text-stone-300 mt-0.5">
@@ -333,7 +331,7 @@ export const HisnMuslimTab: React.FC<Props> = ({
             </div>
             <button
               onClick={() => setSubTab('all')}
-              className="px-3 py-1.5 rounded-xl bg-[#0d3b2e] text-[#dfb76c] text-xs font-bold hover:bg-[#114536] transition shrink-0"
+              className="px-3 py-1.5 rounded-xl bg-[#d4af37] text-stone-950 text-xs font-bold hover:bg-[#c5a059] transition shrink-0"
             >
               عرض الأبواب
             </button>
@@ -361,26 +359,26 @@ export const HisnMuslimTab: React.FC<Props> = ({
                   key={item.id}
                   className={`p-4 sm:p-5 rounded-3xl border transition-all shadow-xs space-y-3 ${
                     isCompleted
-                      ? 'bg-emerald-50/70 dark:bg-[#0f2e22] border-emerald-500/50'
-                      : 'bg-white dark:bg-[#122e23] border-stone-200/80 dark:border-stone-800 hover:border-[#dfb76c]/50'
+                      ? 'bg-[#d4af37]/10 dark:bg-[#141414] border-[#d4af37]/40'
+                      : 'bg-white dark:bg-[#141414] border-stone-200/80 dark:border-[#d4af37]/25 hover:border-[#d4af37]/50'
                   }`}
                 >
                   {/* Card Header: Category & Counter */}
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-[#0d3b2e] dark:text-[#dfb76c] flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#dfb76c]" />
+                    <span className="text-xs font-bold text-[#d4af37] flex items-center gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#d4af37]" />
                       <span>{item.category}</span>
                     </span>
 
                     <div className="flex items-center gap-2">
                       {isCompleted && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-600 text-white flex items-center gap-1">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-[#d4af37] text-stone-950 flex items-center gap-1">
                           <Check className="w-3 h-3" />
                           <span>اكتمل الورد</span>
                         </span>
                       )}
 
-                      <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-lg bg-[#dfb76c]/20 text-[#855e1b] dark:text-[#dfb76c]">
+                      <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-lg bg-[#d4af37]/20 text-[#855e1b] dark:text-[#d4af37]">
                         {current} / {item.count}
                       </span>
                     </div>
@@ -400,9 +398,8 @@ export const HisnMuslimTab: React.FC<Props> = ({
                   </div>
 
                   {/* Benefit & Evidence */}
-                  <div className="p-3 rounded-2xl bg-stone-50 dark:bg-[#0b241c] border border-stone-200/60 dark:border-stone-800/80 space-y-1 text-xs">
-                    <div className="flex items-baseline gap-1 text-[#0d3b2e] dark:text-[#dfb76c] font-semibold">
-                      <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                  <div className="p-3 rounded-2xl bg-stone-50 dark:bg-[#1a1814] border border-stone-200/60 dark:border-[#d4af37]/20 space-y-1 text-xs">
+                    <div className="text-[#8c6b2d] dark:text-[#d4af37] font-semibold">
                       <span>{item.benefit}</span>
                     </div>
                     <div className="text-[11px] text-stone-500 dark:text-stone-400">
@@ -424,11 +421,11 @@ export const HisnMuslimTab: React.FC<Props> = ({
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleCopyTahseen(item)}
-                        className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-stone-100 dark:bg-[#0d3b2e]/60 text-stone-700 dark:text-stone-200 hover:text-[#0d3b2e] dark:hover:text-[#dfb76c] text-[11px] font-bold transition active:scale-95"
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-stone-100 dark:bg-[#1a1814] text-stone-700 dark:text-stone-200 hover:text-[#d4af37] text-[11px] font-bold transition active:scale-95 border border-transparent dark:border-[#d4af37]/20"
                       >
                         {copiedId === item.id ? (
                           <>
-                            <Check className="w-3.5 h-3.5 text-emerald-600" />
+                            <Check className="w-3.5 h-3.5 text-[#d4af37]" />
                             <span>تم النسخ</span>
                           </>
                         ) : (
@@ -445,7 +442,7 @@ export const HisnMuslimTab: React.FC<Props> = ({
                         className={`px-4 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 ${
                           isCompleted
                             ? 'bg-stone-200 dark:bg-stone-800 text-stone-400 cursor-default'
-                            : 'bg-gradient-to-r from-[#0d3b2e] to-[#144f3e] text-[#dfb76c] border border-[#dfb76c]/40 shadow-xs'
+                            : 'bg-gradient-to-r from-[#d4af37] to-[#c5a059] text-stone-950 border border-[#d4af37]/40 shadow-xs'
                         }`}
                       >
                         {isCompleted ? 'تم' : 'كرر الذكر +1'}
@@ -470,7 +467,7 @@ export const HisnMuslimTab: React.FC<Props> = ({
               placeholder="ابحث في ١٣٥ باباً من حصن المسلم..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-4 pr-10 py-3 rounded-2xl bg-white dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0d3b2e] dark:focus:ring-[#dfb76c] shadow-2xs"
+              className="w-full pl-4 pr-10 py-3 rounded-2xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#d4af37] shadow-2xs"
             />
           </div>
 
@@ -478,7 +475,7 @@ export const HisnMuslimTab: React.FC<Props> = ({
           <div className="space-y-1.5">
             {isLoading ? (
               <div className="py-12 text-center text-xs text-stone-500 animate-pulse space-y-2">
-                <div className="w-8 h-8 rounded-full border-2 border-[#0d3b2e] dark:border-[#dfb76c] border-t-transparent animate-spin mx-auto" />
+                <div className="w-8 h-8 rounded-full border-2 border-[#d4af37] border-t-transparent animate-spin mx-auto" />
                 <p>جاري تحميل كتاب حصن المسلم كاملاً...</p>
               </div>
             ) : error ? (
@@ -498,14 +495,14 @@ export const HisnMuslimTab: React.FC<Props> = ({
                     <button
                       key={cat}
                       onClick={() => setActiveCategory(cat)}
-                      className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-white dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 hover:border-[#dfb76c]/60 hover:bg-stone-50 dark:hover:bg-[#16382b] transition text-right group active:scale-[0.99] shadow-2xs"
+                      className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 hover:border-[#d4af37]/60 hover:bg-stone-50 dark:hover:bg-[#1a1814] transition text-right group active:scale-[0.99] shadow-2xs"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="w-7 h-7 rounded-xl bg-stone-100 dark:bg-[#0b241c] text-stone-600 dark:text-[#dfb76c] font-mono text-xs flex items-center justify-center font-bold border border-stone-200/60 dark:border-stone-800">
+                        <span className="w-7 h-7 rounded-xl bg-stone-100 dark:bg-[#1a1814] text-stone-600 dark:text-[#d4af37] font-mono text-xs flex items-center justify-center font-bold border border-stone-200/60 dark:border-[#d4af37]/20">
                           {idx + 1}
                         </span>
                         <div>
-                          <h4 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white group-hover:text-[#0d3b2e] dark:group-hover:text-[#dfb76c] transition-colors">
+                          <h4 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white group-hover:text-[#d4af37] transition-colors">
                             {cat}
                           </h4>
                           <span className="text-[10px] text-stone-400">
@@ -514,7 +511,7 @@ export const HisnMuslimTab: React.FC<Props> = ({
                         </div>
                       </div>
 
-                      <ChevronLeft className="w-4 h-4 text-stone-400 group-hover:text-[#0d3b2e] dark:group-hover:text-[#dfb76c] transition-transform group-hover:-translate-x-0.5" />
+                      <ChevronLeft className="w-4 h-4 text-stone-400 group-hover:text-[#d4af37] transition-transform group-hover:-translate-x-0.5" />
                     </button>
                   );
                 })}

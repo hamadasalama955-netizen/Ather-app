@@ -8,9 +8,8 @@
   "display": "standalone",
   "orientation": "portrait",
   "dir": "rtl",
-  "lang": "ar",
-  "theme_color": "#064e3b",
-  "background_color": "#083326",
+  "theme_color": "#0a0a0a",
+  "background_color": "#0a0a0a",
   "categories": ["lifestyle", "utilities", "books"],
   "icons": [
     {

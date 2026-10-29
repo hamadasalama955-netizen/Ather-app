@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertCircle, Sparkles, Moon, Sun, Clock, Info } from 'lucide-react';
+import { AlertCircle, Moon, Sun, Clock, Info } from 'lucide-react';
 import { PrayerTimesResponse } from '../../types';
 import { cleanTimeString, parseTimeToDate } from '../../utils/prayerUtils';
 
@@ -14,7 +14,7 @@ export interface SharaiStatus {
   description: string;
   badge: string;
   icon: React.ComponentType<{ className?: string }>;
-  tone: 'warning' | 'emerald' | 'amber' | 'night';
+  tone: 'warning' | 'gold' | 'amber' | 'night';
 }
 
 export function getSharaiStatus(prayerData: PrayerTimesResponse | null, now: Date): SharaiStatus {
@@ -24,8 +24,8 @@ export function getSharaiStatus(prayerData: PrayerTimesResponse | null, now: Dat
       title: 'ألا بذكر الله تطمئن القلوب',
       description: 'حافظ على صلواتك في وقتها واغتنم أوقات الاستجابة والذكر',
       badge: 'فائدة شرعية',
-      icon: Sparkles,
-      tone: 'emerald',
+      icon: Info,
+      tone: 'gold',
     };
   }
 
@@ -81,7 +81,7 @@ export function getSharaiStatus(prayerData: PrayerTimesResponse | null, now: Dat
           title: `وقت استجابة بعد أذان ${p.name}`,
           description: '«الدعاء لا يُرد بين الأذان والإقامة» — اغتنم هذه الدقائق المباركة بالدعاء والتضرع والذكر',
           badge: 'وقت إجابة',
-          icon: Sparkles,
+          icon: Clock,
           tone: 'amber',
         };
       }
@@ -139,7 +139,7 @@ export function getSharaiStatus(prayerData: PrayerTimesResponse | null, now: Dat
         description: '«يُصبح على كل سُلامى من أحدكم صدقة... ويُجزئ من ذلك ركعتان يركعهما من الضحى».',
         badge: 'سنة مؤكدة',
         icon: Sun,
-        tone: 'emerald',
+        tone: 'gold',
       };
     }
   }
@@ -177,7 +177,7 @@ export function getSharaiStatus(prayerData: PrayerTimesResponse | null, now: Dat
     description: 'احرص على إسباغ الوضوء وحضور القلب في الصلاة وملازمة الاستغفار في سائر يومك.',
     badge: 'تذكرة مباركة',
     icon: Info,
-    tone: 'emerald',
+    tone: 'gold',
   };
 }
 
@@ -187,24 +187,24 @@ export const SmartSharaiAlert: React.FC<Props> = ({ prayerData, now }) => {
 
   const toneStyles = {
     warning: {
-      card: 'bg-amber-950/20 dark:bg-amber-950/40 border-amber-600/35 dark:border-amber-600/40 text-amber-950 dark:text-amber-100',
+      card: 'bg-amber-950/10 dark:bg-[#141414] border-amber-600/30 dark:border-amber-500/30 text-stone-900 dark:text-amber-100',
       badge: 'bg-amber-600/15 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-600/30',
       iconBg: 'bg-amber-500/20 text-amber-700 dark:text-amber-300',
     },
     amber: {
-      card: 'bg-amber-500/10 dark:bg-amber-950/30 border-amber-500/30 dark:border-amber-700/40 text-amber-950 dark:text-amber-100',
-      badge: 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/30',
-      iconBg: 'bg-amber-500/25 text-amber-700 dark:text-amber-300',
+      card: 'bg-[#faf8f5] dark:bg-[#141414] border-[#d4af37]/30 text-stone-900 dark:text-[#f5e6b8]',
+      badge: 'bg-[#d4af37]/15 dark:bg-[#d4af37]/20 text-[#8c6b2d] dark:text-[#d4af37] border-[#d4af37]/30',
+      iconBg: 'bg-[#d4af37]/20 text-[#d4af37]',
     },
-    emerald: {
-      card: 'bg-emerald-950/15 dark:bg-emerald-950/30 border-emerald-600/25 dark:border-emerald-700/30 text-emerald-950 dark:text-emerald-100',
-      badge: 'bg-emerald-700/15 dark:bg-emerald-600/20 text-emerald-800 dark:text-emerald-300 border-emerald-600/25',
-      iconBg: 'bg-emerald-700/20 text-emerald-700 dark:text-emerald-300',
+    gold: {
+      card: 'bg-[#faf8f5] dark:bg-[#141414] border-[#d4af37]/30 text-stone-900 dark:text-[#f5e6b8]',
+      badge: 'bg-[#d4af37]/15 dark:bg-[#d4af37]/20 text-[#8c6b2d] dark:text-[#d4af37] border-[#d4af37]/30',
+      iconBg: 'bg-[#d4af37]/20 text-[#d4af37]',
     },
     night: {
-      card: 'bg-[#0a261c] border-[#dfb76c]/40 text-amber-100 shadow-md',
-      badge: 'bg-[#dfb76c]/20 text-[#dfb76c] border-[#dfb76c]/30 font-bold',
-      iconBg: 'bg-[#dfb76c]/20 text-[#dfb76c]',
+      card: 'bg-[#faf8f5] dark:bg-[#141414] border-[#d4af37]/35 text-stone-900 dark:text-[#f5e6b8] shadow-sm',
+      badge: 'bg-[#d4af37]/20 text-[#8c6b2d] dark:text-[#d4af37] border-[#d4af37]/35 font-bold',
+      iconBg: 'bg-[#d4af37]/20 text-[#d4af37]',
     },
   }[status.tone];
 

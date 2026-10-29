@@ -94,6 +94,11 @@ function fixHour(a: number): number {
   return a < 0 ? a + 24.0 : a;
 }
 
+function fixAngle(a: number): number {
+  a = a - 360.0 * Math.floor(a / 360.0);
+  return a < 0 ? a + 360.0 : a;
+}
+
 function padZero(num: number): string {
   return num < 10 ? `0${num}` : `${num}`;
 }
@@ -129,16 +134,19 @@ function getJulianDate(date: Date): number {
  */
 function getSunPosition(jd: number): { declination: number; equationOfTime: number } {
   const D = jd - 2451545.0;
-  const g = fixHour(357.529 + 0.98560028 * D);
-  const q = fixHour(280.459 + 0.98564736 * D);
-  const L = fixHour(q + 1.915 * Math.sin(d2r(g)) + 0.02 * Math.sin(d2r(2 * g)));
+  const g = fixAngle(357.529 + 0.98560028 * D);
+  const q = fixAngle(280.459 + 0.98564736 * D);
+  const L = fixAngle(q + 1.915 * Math.sin(d2r(g)) + 0.02 * Math.sin(d2r(2 * g)));
 
   const e = 23.439 - 0.00000036 * D;
   const d = r2d(Math.asin(Math.sin(d2r(e)) * Math.sin(d2r(L))));
   let RA = r2d(Math.atan2(Math.cos(d2r(e)) * Math.sin(d2r(L)), Math.cos(d2r(L)))) / 15.0;
   RA = fixHour(RA);
 
-  const EqT = q / 15.0 - RA;
+  let EqT = q / 15.0 - RA;
+  if (EqT > 12) EqT -= 24;
+  if (EqT < -12) EqT += 24;
+
   return { declination: d, equationOfTime: EqT };
 }
 
@@ -221,6 +229,23 @@ export function getAstronomicalHijriDate(date: Date, adjustmentDays: number = 0)
 }
 
 /**
+ * Determines whether a location is located within Egypt
+ */
+export function isEgyptLocation(location: LocationConfig): boolean {
+  if (!location) return false;
+  if (location.country?.toLowerCase() === 'egypt' || location.country?.includes('مصر')) return true;
+  if (location.label?.includes('مصر') || location.label?.includes('القاهرة') || location.label?.includes('الإسكندرية') || location.label?.includes('الجيزة')) return true;
+  const city = location.city?.toLowerCase() || '';
+  if (city === 'cairo' || city === 'alexandria' || city === 'giza' || city === 'mansoura' || city === 'tanta' || city === 'asyut' || city === 'luxor' || city === 'aswan') return true;
+  if (location.latitude !== undefined && location.longitude !== undefined) {
+    if (location.latitude >= 21.5 && location.latitude <= 32.0 && location.longitude >= 24.5 && location.longitude <= 36.8) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Main offline calculation function
  */
 export function calculateOfflinePrayerTimes(
@@ -229,11 +254,20 @@ export function calculateOfflinePrayerTimes(
   school: 'standard' | 'hanafi' = 'standard',
   date: Date = new Date()
 ): PrayerTimesResponse {
+  const isEgypt = isEgyptLocation(location);
+  const effectiveMethodId = (isEgypt && methodId === 4) ? 5 : methodId; // Egyptian General Authority
+
   const lat = location.latitude ?? (location.city ? MAKKAH_COORDINATES.latitude : MAKKAH_COORDINATES.latitude);
   const lng = location.longitude ?? (location.city ? MAKKAH_COORDINATES.longitude : MAKKAH_COORDINATES.longitude);
   
   // Local timezone offset in hours
-  const timezoneOffsetHours = -date.getTimezoneOffset() / 60.0;
+  let timezoneOffsetHours = -date.getTimezoneOffset() / 60.0;
+
+  // Egypt Winter Time (التوقيت الشتوي لمصر - UTC+2):
+  // Egypt DST ends in late October and reverts to Standard Winter Time UTC+2.
+  if (isEgypt) {
+    timezoneOffsetHours = 2.0; // Strictly UTC+2 for Egypt Standard Winter Time
+  }
 
   const jd = getJulianDate(date);
   const { declination, equationOfTime } = getSunPosition(jd);
@@ -250,7 +284,7 @@ export function calculateOfflinePrayerTimes(
   const sunsetHour = fixHour(dhuhrHour + sunsetDiff); // Maghrib
 
   // Method parameters
-  const methodParams = METHOD_PARAMS[methodId] || METHOD_PARAMS[4];
+  const methodParams = METHOD_PARAMS[effectiveMethodId] || METHOD_PARAMS[4];
 
   // Fajr
   const fajrDiff = getSunAngleTime(methodParams.fajr, declination, lat, false) ?? -7.5;

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Menu,
   Bell,
   BellRing,
   X,
@@ -9,7 +8,6 @@ import {
   Sun,
   BookOpen,
   Compass,
-  Sparkles,
   Volume2,
   VolumeX,
   Check,
@@ -101,52 +99,40 @@ export const HomeTopBar: React.FC<Props> = ({
 
   return (
     <>
-      {/* 1. Sleek Top Bar Header */}
-      <header className="w-full flex items-center justify-between py-2 px-1 text-stone-900 dark:text-stone-100 gap-1.5 sm:gap-2">
-        {/* Right side in RTL: Menu + Brand */}
-        <div className="flex items-center gap-2">
-          {/* Menu Drawer Toggle */}
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            aria-label="القائمة الرئيسية"
-            title="القائمة السريعة"
-            className="w-9 h-9 rounded-2xl flex items-center justify-center bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 text-stone-700 dark:text-stone-200 hover:border-[#dfb76c]/60 shadow-xs transition active:scale-90"
-          >
-            <Menu className="w-4 h-4 text-[#0d3b2e] dark:text-[#dfb76c]" />
-          </button>
+      {/* 1. Sleek Top Bar Header: App name on right, larger emblem in center, bell on left */}
+      <header className="w-full flex items-center justify-between py-3 px-3 text-stone-900 dark:text-stone-100" dir="rtl">
+        {/* Right: App Name in the empty right space */}
+        <div className="flex flex-col text-right select-none min-w-[100px]">
+          <span className="text-sm sm:text-base font-extrabold text-[#2e4426] dark:text-[#d4af37] tracking-tight leading-tight">
+            أثر رفيق المسلم
+          </span>
+          <span className="text-[10px] font-semibold text-[#8c6b2d] dark:text-[#a39e93] mt-0.5">
+            تطبيق المسلم الجامع
+          </span>
+        </div>
 
-          {/* Brand Name */}
-          <div>
-            <h1 className="text-xs sm:text-sm font-black tracking-tight text-[#0d3b2e] dark:text-[#dfb76c] flex items-center gap-1.5 whitespace-nowrap">
-              <Sparkles className="w-3.5 h-3.5 text-[#dfb76c] shrink-0" />
-              <span>أثَر | Athar - رفيق المسلم</span>
-            </h1>
+        {/* Center: Larger Prominent Circular Gold Logo Emblem */}
+        <div className="flex items-center justify-center">
+          <div
+            onClick={() => setIsMenuOpen(true)}
+            className="w-13 h-13 sm:w-14 sm:h-14 rounded-full p-1 bg-gradient-to-b from-[#1a1814] to-[#0a0a0a] border-2 border-[#d4af37] shadow-[0_2px_16px_rgba(212,175,55,0.55)] flex items-center justify-center cursor-pointer active:scale-95 transition-transform"
+            title="أثر - انقر لفتح القائمة"
+          >
+            <img src="/icon-192.png" alt="أثر" className="w-full h-full object-contain" />
           </div>
         </div>
 
-        {/* Left side in RTL: Prominent Services button + Notification Icon */}
-        <div className="flex items-center gap-1.5">
-          {onOpenServicesGrid && (
-            <button
-              onClick={onOpenServicesGrid}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-gradient-to-r from-[#0d3b2e] to-[#144f3e] hover:from-[#114536] hover:to-[#19614d] text-[#dfb76c] border border-[#dfb76c]/40 text-xs font-bold shadow-xs active:scale-95 transition"
-              title="فتح شبكة الخدمات الإسلامية"
-            >
-              <LayoutGrid className="w-3.5 h-3.5 text-[#dfb76c]" />
-              <span className="text-[11px] font-bold">الخدمات</span>
-            </button>
-          )}
-
-          {/* Notification Icon */}
+        {/* Left: Bell Notification Icon */}
+        <div className="flex items-center justify-end min-w-[100px]">
           <button
             onClick={() => setIsNotificationsOpen(true)}
             aria-label="تنبيهات الأذان والأذكار"
             title="التنبيهات والإشعارات"
-            className="relative w-9 h-9 rounded-2xl flex items-center justify-center bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 text-stone-700 dark:text-stone-200 hover:border-[#dfb76c]/60 shadow-xs transition active:scale-90"
+            className="relative w-10 h-10 rounded-full flex items-center justify-center bg-[#eef2e6] dark:bg-[#141414] border border-[#2e4426]/20 dark:border-[#d4af37]/40 text-[#2e4426] dark:text-[#d4af37] hover:border-[#d4af37] shadow-2xs transition active:scale-90"
           >
-            <Bell className="w-4 h-4 text-[#0d3b2e] dark:text-[#dfb76c]" />
+            <Bell className="w-4.5 h-4.5 text-[#2e4426] dark:text-[#d4af37]" />
             {adhanEnabled && (
-              <span className="absolute top-1.5 left-1.5 w-2 h-2 rounded-full bg-[#dfb76c] ring-2 ring-[#fcfbf7] dark:ring-[#122e23]" />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#d4af37] ring-2 ring-[#eef2e6] dark:ring-[#141414]" />
             )}
           </button>
         </div>
@@ -155,16 +141,16 @@ export const HomeTopBar: React.FC<Props> = ({
       {/* 2. Menu Slide-over Modal */}
       {isMenuOpen && (
         <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="w-full max-w-xs h-full bg-[#fcfbf7] dark:bg-[#0b241c] text-stone-900 dark:text-stone-100 p-5 shadow-2xl flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-300 border-l border-[#dfb76c]/30">
+          <div className="w-full max-w-xs h-full bg-[#faf8f5] dark:bg-[#141414] text-stone-900 dark:text-stone-100 p-5 shadow-2xl flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-300 border-l border-[#d4af37]/30">
             {/* Drawer Top */}
             <div className="space-y-5">
               <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-[#0d3b2e] text-[#dfb76c] flex items-center justify-center font-bold">
-                    <Sparkles className="w-4 h-4" />
+                  <div className="w-8 h-8 rounded-xl bg-[#d4af37] text-stone-950 flex items-center justify-center font-bold">
+                    <BookOpen className="w-4 h-4 text-stone-950" />
                   </div>
                   <div>
-                    <h2 className="text-sm font-bold text-[#0d3b2e] dark:text-[#dfb76c]">أثَر | Athar - رفيق المسلم</h2>
+                    <h2 className="text-sm font-bold text-stone-900 dark:text-[#d4af37]">أثَر - رفيق المسلم</h2>
                     <p className="text-[10px] text-stone-500 dark:text-stone-400">تطبيق إسلامي شامل بدون إعلانات</p>
                   </div>
                 </div>
@@ -184,24 +170,24 @@ export const HomeTopBar: React.FC<Props> = ({
                     setIsMenuOpen(false);
                     onOpenLocationModal();
                   }}
-                  className="flex items-center gap-1.5 p-2.5 rounded-xl bg-stone-100 dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 text-xs font-semibold text-stone-800 dark:text-stone-200 hover:border-[#dfb76c]/50 transition"
+                  className="flex items-center gap-1.5 p-2.5 rounded-xl bg-stone-100 dark:bg-[#1a1814] border border-stone-200/80 dark:border-stone-800 text-xs font-semibold text-stone-800 dark:text-stone-200 hover:border-[#d4af37]/50 transition"
                 >
-                  <MapPin className="w-4 h-4 text-[#dfb76c] shrink-0" />
+                  <MapPin className="w-4 h-4 text-[#d4af37] shrink-0" />
                   <span className="truncate">{location.label.split('(')[0].trim()}</span>
                 </button>
 
                 <button
                   onClick={onToggleTheme}
-                  className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl bg-stone-100 dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 text-xs font-semibold text-stone-800 dark:text-stone-200 hover:border-[#dfb76c]/50 transition"
+                  className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl bg-stone-100 dark:bg-[#1a1814] border border-stone-200/80 dark:border-stone-800 text-xs font-semibold text-stone-800 dark:text-stone-200 hover:border-[#d4af37]/50 transition"
                 >
                   {isDark ? (
                     <>
-                      <Sun className="w-4 h-4 text-amber-400" />
+                      <Sun className="w-4 h-4 text-[#d4af37]" />
                       <span>نهاري</span>
                     </>
                   ) : (
                     <>
-                      <Moon className="w-4 h-4 text-[#0d3b2e]" />
+                      <Moon className="w-4 h-4 text-stone-900" />
                       <span>ليلي</span>
                     </>
                   )}
@@ -220,13 +206,13 @@ export const HomeTopBar: React.FC<Props> = ({
                       setIsMenuOpen(false);
                       onOpenServicesGrid();
                     }}
-                    className="w-full flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#0d3b2e]/10 to-[#dfb76c]/15 text-xs font-bold text-[#0d3b2e] dark:text-[#dfb76c] border border-[#dfb76c]/30 transition text-right shadow-2xs mb-2"
+                    className="w-full flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#d4af37]/15 to-[#d4af37]/5 text-xs font-bold text-stone-900 dark:text-[#d4af37] border border-[#d4af37]/30 transition text-right shadow-2xs mb-2"
                   >
                     <div className="flex items-center gap-2.5">
-                      <LayoutGrid className="w-4 h-4 text-[#dfb76c]" />
+                      <LayoutGrid className="w-4 h-4 text-[#d4af37]" />
                       <span>شبكة الخدمات الإسلامية (١٥ خدمة)</span>
                     </div>
-                    <ChevronLeft className="w-4 h-4 text-[#dfb76c]" />
+                    <ChevronLeft className="w-4 h-4 text-[#d4af37]" />
                   </button>
                 )}
 
@@ -235,10 +221,10 @@ export const HomeTopBar: React.FC<Props> = ({
                     setIsMenuOpen(false);
                     onNavigateTab('quran');
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-100 dark:hover:bg-[#122e23] text-xs font-bold text-stone-800 dark:text-stone-200 transition text-right"
+                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-100 dark:hover:bg-[#1a1814] text-xs font-bold text-stone-800 dark:text-stone-200 transition text-right"
                 >
                   <div className="flex items-center gap-2.5">
-                    <BookOpen className="w-4 h-4 text-[#c5a059]" />
+                    <BookOpen className="w-4 h-4 text-[#d4af37]" />
                     <span>المصحف الشريف (صفحات المصحف)</span>
                   </div>
                   <ChevronLeft className="w-4 h-4 text-stone-400" />
@@ -249,10 +235,10 @@ export const HomeTopBar: React.FC<Props> = ({
                     setIsMenuOpen(false);
                     onNavigateTab('athkar');
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-100 dark:hover:bg-[#122e23] text-xs font-bold text-stone-800 dark:text-stone-200 transition text-right"
+                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-100 dark:hover:bg-[#1a1814] text-xs font-bold text-stone-800 dark:text-stone-200 transition text-right"
                 >
                   <div className="flex items-center gap-2.5">
-                    <ShieldCheck className="w-4 h-4 text-[#dfb76c]" />
+                    <ShieldCheck className="w-4 h-4 text-[#d4af37]" />
                     <span>حصن المسلم (الأذكار والتحصين)</span>
                   </div>
                   <ChevronLeft className="w-4 h-4 text-stone-400" />
@@ -263,10 +249,10 @@ export const HomeTopBar: React.FC<Props> = ({
                     setIsMenuOpen(false);
                     onNavigateTab('prayers');
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-100 dark:hover:bg-[#122e23] text-xs font-bold text-stone-800 dark:text-stone-200 transition text-right"
+                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-100 dark:hover:bg-[#1a1814] text-xs font-bold text-stone-800 dark:text-stone-200 transition text-right"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Compass className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <Compass className="w-4 h-4 text-[#d4af37]" />
                     <span>جدول المواقيت وبوصلة القبلة</span>
                   </div>
                   <ChevronLeft className="w-4 h-4 text-stone-400" />
@@ -277,10 +263,10 @@ export const HomeTopBar: React.FC<Props> = ({
                     setIsMenuOpen(false);
                     onNavigateTab('hadith');
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-100 dark:hover:bg-[#122e23] text-xs font-bold text-stone-800 dark:text-stone-200 transition text-right"
+                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-100 dark:hover:bg-[#1a1814] text-xs font-bold text-stone-800 dark:text-stone-200 transition text-right"
                 >
                   <div className="flex items-center gap-2.5">
-                    <BookOpen className="w-4 h-4 text-[#dfb76c]" />
+                    <BookOpen className="w-4 h-4 text-[#d4af37]" />
                     <span>١٠٠ حديث شريف (البخاري ومسلم)</span>
                   </div>
                   <ChevronLeft className="w-4 h-4 text-stone-400" />
@@ -291,7 +277,7 @@ export const HomeTopBar: React.FC<Props> = ({
                     setIsMenuOpen(false);
                     onNavigateTab('more');
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-100 dark:hover:bg-[#122e23] text-xs font-bold text-stone-800 dark:text-stone-200 transition text-right"
+                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-stone-100 dark:hover:bg-[#1a1814] text-xs font-bold text-stone-800 dark:text-stone-200 transition text-right"
                 >
                   <div className="flex items-center gap-2.5">
                     <ShieldCheck className="w-4 h-4 text-stone-500" />
@@ -304,7 +290,7 @@ export const HomeTopBar: React.FC<Props> = ({
 
             {/* Drawer Bottom */}
             <div className="pt-4 border-t border-stone-200 dark:border-stone-800 text-center space-y-1">
-              <div className="text-[11px] font-bold text-[#0d3b2e] dark:text-[#dfb76c]">
+              <div className="text-[11px] font-bold text-[#d4af37]">
                 أثَر - تطبيق خالي من الإعلانات
               </div>
               <p className="text-[10px] text-stone-400">
@@ -318,15 +304,15 @@ export const HomeTopBar: React.FC<Props> = ({
       {/* 3. Notifications Modal */}
       {isNotificationsOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="w-full max-w-sm bg-[#fcfbf7] dark:bg-[#0b241c] text-stone-900 dark:text-stone-100 rounded-3xl p-5 shadow-2xl space-y-4 border border-[#dfb76c]/40 animate-in zoom-in-95 duration-200">
+          <div className="w-full max-w-sm bg-[#faf8f5] dark:bg-[#141414] text-stone-900 dark:text-stone-100 rounded-3xl p-5 shadow-2xl space-y-4 border border-[#d4af37]/40 animate-in zoom-in-95 duration-200">
             {/* Header */}
             <div className="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-[#dfb76c]/20 text-[#c5a059] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#d4af37]/20 text-[#d4af37] flex items-center justify-center">
                   <BellRing className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-[#0d3b2e] dark:text-[#dfb76c]">
+                  <h3 className="text-sm font-bold text-stone-900 dark:text-[#d4af37]">
                     تنبيهات الصلاة والأذكار
                   </h3>
                   <p className="text-[10px] text-stone-500 dark:text-stone-400">
@@ -346,11 +332,11 @@ export const HomeTopBar: React.FC<Props> = ({
             {/* List of Notification Toggles */}
             <div className="space-y-2.5">
               {/* Adhan alert toggle */}
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-stone-100/80 dark:bg-[#122e23] border border-stone-200/70 dark:border-stone-800">
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-stone-100/80 dark:bg-[#1a1814] border border-stone-200/70 dark:border-stone-800">
                 <div className="space-y-0.5">
                   <div className="text-xs font-bold flex items-center gap-1.5">
                     {adhanEnabled ? (
-                      <Volume2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <Volume2 className="w-3.5 h-3.5 text-[#d4af37]" />
                     ) : (
                       <VolumeX className="w-3.5 h-3.5 text-stone-400" />
                     )}
@@ -363,11 +349,11 @@ export const HomeTopBar: React.FC<Props> = ({
                 <button
                   onClick={handleToggleAdhan}
                   className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors ${
-                    adhanEnabled ? 'bg-[#0d3b2e] dark:bg-[#dfb76c]' : 'bg-stone-300 dark:bg-stone-700'
+                    adhanEnabled ? 'bg-[#d4af37]' : 'bg-stone-300 dark:bg-stone-700'
                   }`}
                 >
                   <div
-                    className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                    className={`bg-white dark:bg-black w-4 h-4 rounded-full shadow-md transform transition-transform ${
                       adhanEnabled ? '-translate-x-5' : 'translate-x-0'
                     }`}
                   />
@@ -375,7 +361,7 @@ export const HomeTopBar: React.FC<Props> = ({
               </div>
 
               {/* Morning Athkar alert */}
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-stone-100/80 dark:bg-[#122e23] border border-stone-200/70 dark:border-stone-800">
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-stone-100/80 dark:bg-[#1a1814] border border-stone-200/70 dark:border-stone-800">
                 <div className="space-y-0.5">
                   <div className="text-xs font-bold">تذكير أذكار الصباح</div>
                   <p className="text-[10px] text-stone-500 dark:text-stone-400">
@@ -385,11 +371,11 @@ export const HomeTopBar: React.FC<Props> = ({
                 <button
                   onClick={handleToggleAthkarMorning}
                   className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors ${
-                    athkarMorningEnabled ? 'bg-[#0d3b2e] dark:bg-[#dfb76c]' : 'bg-stone-300 dark:bg-stone-700'
+                    athkarMorningEnabled ? 'bg-[#d4af37]' : 'bg-stone-300 dark:bg-stone-700'
                   }`}
                 >
                   <div
-                    className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                    className={`bg-white dark:bg-black w-4 h-4 rounded-full shadow-md transform transition-transform ${
                       athkarMorningEnabled ? '-translate-x-5' : 'translate-x-0'
                     }`}
                   />
@@ -397,7 +383,7 @@ export const HomeTopBar: React.FC<Props> = ({
               </div>
 
               {/* Evening Athkar alert */}
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-stone-100/80 dark:bg-[#122e23] border border-stone-200/70 dark:border-stone-800">
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-stone-100/80 dark:bg-[#1a1814] border border-stone-200/70 dark:border-stone-800">
                 <div className="space-y-0.5">
                   <div className="text-xs font-bold">تذكير أذكار المساء</div>
                   <p className="text-[10px] text-stone-500 dark:text-stone-400">
@@ -407,11 +393,11 @@ export const HomeTopBar: React.FC<Props> = ({
                 <button
                   onClick={handleToggleAthkarEvening}
                   className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors ${
-                    athkarEveningEnabled ? 'bg-[#0d3b2e] dark:bg-[#dfb76c]' : 'bg-stone-300 dark:bg-stone-700'
+                    athkarEveningEnabled ? 'bg-[#d4af37]' : 'bg-stone-300 dark:bg-stone-700'
                   }`}
                 >
                   <div
-                    className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                    className={`bg-white dark:bg-black w-4 h-4 rounded-full shadow-md transform transition-transform ${
                       athkarEveningEnabled ? '-translate-x-5' : 'translate-x-0'
                     }`}
                   />
@@ -419,7 +405,7 @@ export const HomeTopBar: React.FC<Props> = ({
               </div>
 
               {/* Tahajjud alert */}
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-stone-100/80 dark:bg-[#122e23] border border-stone-200/70 dark:border-stone-800">
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-stone-100/80 dark:bg-[#1a1814] border border-stone-200/70 dark:border-stone-800">
                 <div className="space-y-0.5">
                   <div className="text-xs font-bold">تذكير الثلث الأخير والقيام</div>
                   <p className="text-[10px] text-stone-500 dark:text-stone-400">
@@ -429,11 +415,11 @@ export const HomeTopBar: React.FC<Props> = ({
                 <button
                   onClick={handleToggleTahajjud}
                   className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors ${
-                    tahajjudEnabled ? 'bg-[#0d3b2e] dark:bg-[#dfb76c]' : 'bg-stone-300 dark:bg-stone-700'
+                    tahajjudEnabled ? 'bg-[#d4af37]' : 'bg-stone-300 dark:bg-stone-700'
                   }`}
                 >
                   <div
-                    className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                    className={`bg-white dark:bg-black w-4 h-4 rounded-full shadow-md transform transition-transform ${
                       tahajjudEnabled ? '-translate-x-5' : 'translate-x-0'
                     }`}
                   />
@@ -445,15 +431,15 @@ export const HomeTopBar: React.FC<Props> = ({
             <div className="pt-2">
               <button
                 onClick={requestBrowserNotification}
-                className="w-full py-2.5 px-3 rounded-xl bg-[#0d3b2e] hover:bg-[#124a3a] text-[#fcfbf7] text-xs font-bold shadow-md transition active:scale-95 flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 px-3 rounded-xl bg-[#d4af37] hover:bg-[#c5a059] text-stone-950 text-xs font-bold shadow-md transition active:scale-95 flex items-center justify-center gap-1.5"
               >
-                <Bell className="w-3.5 h-3.5 text-[#dfb76c]" />
+                <Bell className="w-3.5 h-3.5 text-stone-950" />
                 <span>طلب إذن إشعارات المتصفح والنظام</span>
               </button>
             </div>
 
             {savedSuccess && (
-              <div className="text-center text-xs font-bold text-emerald-600 flex items-center justify-center gap-1 animate-in fade-in">
+              <div className="text-center text-xs font-bold text-[#d4af37] flex items-center justify-center gap-1 animate-in fade-in">
                 <Check className="w-3.5 h-3.5" />
                 <span>تم حفظ تفضيلات التنبيه بنجاح</span>
               </div>

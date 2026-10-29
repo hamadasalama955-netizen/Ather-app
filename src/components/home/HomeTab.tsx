@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Sparkles,
+  BookOpen,
   Play,
   Pause,
   Copy,
@@ -33,10 +33,14 @@ import { PrayerVirtueCard } from './PrayerVirtueCard';
 import { HomeTopBar } from './HomeTopBar';
 import { ServicesGridModal } from './ServicesGridModal';
 import { ShareForRewardModal } from './ShareForRewardModal';
+import { toArabicDigits } from '../quran/MushafIlluminatedBorder';
 import { IslamicHistoryModal } from './IslamicHistoryModal';
 import { RamadanSectionModal } from './RamadanSectionModal';
-import { HisnMuslimModal } from './HisnMuslimModal';
 import { QiblaCompassModal } from './QiblaCompassModal';
+import { DuasComprehensiveModal } from './DuasComprehensiveModal';
+import { QuranIntroModal } from './QuranIntroModal';
+import { AllahNamesModal } from './AllahNamesModal';
+import { HisnMuslimModal } from './HisnMuslimModal';
 import { InstallAtharBanner } from '../common/InstallAtharBanner';
 
 interface Props {
@@ -154,44 +158,44 @@ const PRAYER_THEMES: Record<TimeOfDayPeriod, PrayerThemeConfig> = {
   asr: {
     name: 'وقت العصر والبركة',
     cardBgLight: 'bg-gradient-to-b from-[#f3f9fe] via-[#fefbf6] to-[#faf6ef]',
-    cardBgDark: 'bg-gradient-to-b from-[#09231b] via-[#0d3b2e] to-[#0b241c]',
+    cardBgDark: 'bg-gradient-to-b from-[#141414] via-[#181818] to-[#101010]',
     cardBorderLight: 'border-amber-200/80',
-    cardBorderDark: 'border-[#dfb76c]/40',
+    cardBorderDark: 'border-[#d4af37]/35',
     badgeBgLight: 'bg-white/90 shadow-xs border-stone-200/90',
-    badgeBgDark: 'bg-[#081f17]/80 border-[#dfb76c]/40',
-    badgeTextLight: 'text-[#0d3b2e]',
-    badgeTextDark: 'text-[#dfb76c]',
-    pulseColor: 'bg-amber-500',
-    titleColorLight: 'text-[#0d3b2e]',
+    badgeBgDark: 'bg-[#1a1814] border-[#d4af37]/35',
+    badgeTextLight: 'text-[#8c6b2d]',
+    badgeTextDark: 'text-[#d4af37]',
+    pulseColor: 'bg-[#d4af37]',
+    titleColorLight: 'text-stone-900',
     titleColorDark: 'text-white',
-    nextLabelLight: 'text-[#9c783e]',
-    nextLabelDark: 'text-[#dfb76c]',
+    nextLabelLight: 'text-[#8c6b2d]',
+    nextLabelDark: 'text-[#d4af37]',
     timeColorLight: 'text-stone-700',
     timeColorDark: 'text-stone-300',
-    btnBgLight: 'bg-[#0d3b2e]/10 hover:bg-[#0d3b2e]/15 border-stone-200/80',
+    btnBgLight: 'bg-[#d4af37]/15 hover:bg-[#d4af37]/25 border-[#d4af37]/30',
     btnBgDark: 'bg-white/10 hover:bg-white/20 border-white/10',
-    btnTextLight: 'text-[#0d3b2e]',
-    btnTextDark: 'text-[#dfb76c]',
+    btnTextLight: 'text-[#8c6b2d]',
+    btnTextDark: 'text-[#d4af37]',
     timerBoxBgLight: 'bg-white/90 shadow-xs',
-    timerBoxBgDark: 'bg-[#061b14]/80',
+    timerBoxBgDark: 'bg-[#141414]',
     timerBoxBorderLight: 'border-amber-200/70',
-    timerBoxBorderDark: 'border-[#dfb76c]/30',
+    timerBoxBorderDark: 'border-[#d4af37]/30',
     unitBoxBgLight: 'bg-[#fbf9f4] shadow-2xs',
-    unitBoxBgDark: 'bg-[#0b2b20]/90',
+    unitBoxBgDark: 'bg-[#1a1814]',
     unitBoxBorderLight: 'border-amber-200/60',
-    unitBoxBorderDark: 'border-[#dfb76c]/25',
-    digitColorLight: 'text-[#0d3b2e]',
-    digitColorDark: 'text-[#dfb76c]',
+    unitBoxBorderDark: 'border-[#d4af37]/25',
+    digitColorLight: 'text-stone-900',
+    digitColorDark: 'text-[#d4af37]',
     labelColorLight: 'text-stone-500',
     labelColorDark: 'text-stone-300',
     colonColorLight: 'text-[#c5a059]',
-    colonColorDark: 'text-[#dfb76c]',
+    colonColorDark: 'text-[#d4af37]',
     progressTrackLight: 'bg-stone-200/80',
-    progressTrackDark: 'bg-[#09231b]',
-    progressFillLight: 'bg-gradient-to-r from-[#dfb76c] to-[#0d3b2e]',
-    progressFillDark: 'bg-gradient-to-r from-[#c5a059] to-[#dfb76c]',
-    progressTextLight: 'text-[#0d3b2e]',
-    progressTextDark: 'text-[#dfb76c]',
+    progressTrackDark: 'bg-[#141414]',
+    progressFillLight: 'bg-gradient-to-r from-[#c5a059] to-[#d4af37]',
+    progressFillDark: 'bg-gradient-to-r from-[#aa7c11] to-[#d4af37]',
+    progressTextLight: 'text-[#8c6b2d]',
+    progressTextDark: 'text-[#d4af37]',
   },
   dhuhr: {
     name: 'وقت الظهر ونور النهار',
@@ -433,6 +437,9 @@ export const HomeTab: React.FC<Props> = ({
   const [isRamadanOpen, setIsRamadanOpen] = useState(false);
   const [isHisnMuslimOpen, setIsHisnMuslimOpen] = useState(false);
   const [isQiblaModalOpen, setIsQiblaModalOpen] = useState(false);
+  const [isDuasModalOpen, setIsDuasModalOpen] = useState(false);
+  const [isQuranIntroOpen, setIsQuranIntroOpen] = useState(false);
+  const [isAllahNamesOpen, setIsAllahNamesOpen] = useState(false);
 
   // Live second clock for countdown
   useEffect(() => {
@@ -558,210 +565,163 @@ export const HomeTab: React.FC<Props> = ({
         onToggleTheme={onToggleTheme}
       />
 
-      {/* 1.5. Prominent Install Banner (تثبيت تطبيق أثر على الهاتف - Offline 100%) */}
-      <InstallAtharBanner variant="banner" />
-
-      {/* 2. Mosque Interactive Hero Card (مشهد الصلاة التفاعلي بألوان متغيرة وهوية واضحة) */}
+      {/* 2. Mosque Interactive Hero Card matching image_7280db7e.png */}
       <div
-        className={`relative overflow-hidden rounded-3xl border transition-all duration-500 ${
+        className={`relative overflow-hidden rounded-[32px] p-4 sm:p-5 transition-all duration-300 ${
           isDark
-            ? `${currentTheme.cardBgDark} ${currentTheme.cardBorderDark} text-stone-100 shadow-xl`
-            : `${currentTheme.cardBgLight} ${currentTheme.cardBorderLight} text-stone-900 shadow-lg shadow-amber-950/5`
+            ? 'bg-[#141414] border-2 border-[#d4af37]/70 shadow-[0_0_25px_rgba(212,175,55,0.22)]'
+            : 'bg-[#ffffff] border border-stone-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.04)]'
         }`}
       >
-        {/* Dynamic Vector SVG Mosque Scene - Expansive, clean and fully visible */}
-        <div className="w-full h-44 xs:h-48 sm:h-52 relative overflow-hidden">
-          <MosqueTimeScene period={timePeriod} className="w-full h-full" />
+        {/* Mosque Scene Illustration at Top with Rounded Corners */}
+        <div className="w-full relative overflow-hidden rounded-2xl mb-3">
+          <MosqueTimeScene period={timePeriod} isDark={isDark} className="w-full" />
 
-          {/* Location Badge over illustration */}
-          <div className="absolute top-3 right-3 z-10">
+          {/* Location Badge */}
+          <div className="absolute top-2.5 right-2.5 z-10">
             <button
               onClick={onOpenLocationModal}
               title="تغيير المدينة"
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold backdrop-blur-md transition active:scale-95 shadow-xs ${
                 isDark
-                  ? `${currentTheme.badgeBgDark} ${currentTheme.badgeTextDark}`
-                  : `${currentTheme.badgeBgLight} ${currentTheme.badgeTextLight}`
+                  ? 'bg-black/60 border-[#d4af37]/40 text-[#d4af37]'
+                  : 'bg-white/80 border-[#2e4426]/20 text-[#2e4426]'
               }`}
             >
-              <MapPin className="w-3.5 h-3.5 text-[#dfb76c] shrink-0" />
+              <MapPin className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
               <span className="truncate max-w-[140px]">{location.label.split('(')[0].trim()}</span>
             </button>
           </div>
+        </div>
 
-          {/* Atmospheric Period Badge */}
-          <div className="absolute top-3 left-3 z-10">
+        {/* Prayer Name & Time matching image_7280db7e.png */}
+        <div className="text-center space-y-1 mb-4">
+          <h2
+            className={`text-3xl sm:text-4xl font-black tracking-tight ${
+              isDark ? 'text-[#d4af37]' : 'text-[#2e4426]'
+            }`}
+          >
+            صلاة {currentOrNextArabic}
+          </h2>
+          <div
+            className={`text-base sm:text-lg font-bold font-mono ${
+              isDark ? 'text-[#c5a059]' : 'text-[#4a5f42]'
+            }`}
+          >
+            {nextPrayerInfo
+              ? formatArabicTime(nextPrayerInfo.nextPrayerTime, is24h)
+              : '--:--'}
+          </div>
+        </div>
+
+        {/* 3 Rounded Countdown Boxes matching image_7280db7e.png: [ 02 ] : [ 17 ] : [ 29 ] */}
+        <div className="flex items-center justify-center gap-2 mb-3" dir="ltr">
+          {/* Hours Box */}
+          <div
+            className={`w-16 sm:w-20 py-2 sm:py-2.5 rounded-2xl text-center border transition-all ${
+              isDark
+                ? 'bg-[#0a0a0a] border-[#d4af37]/60 shadow-inner'
+                : 'bg-[#fdfcf9] border-[#2e4426]/30 shadow-2xs'
+            }`}
+          >
+            <span
+              className={`text-2xl sm:text-3xl font-black font-mono leading-none ${
+                isDark ? 'text-[#d4af37]' : 'text-[#2e4426]'
+              }`}
+            >
+              {hoursStr}
+            </span>
+          </div>
+
+          <span className={`text-xl font-black ${isDark ? 'text-[#d4af37]' : 'text-[#2e4426]'}`}>:</span>
+
+          {/* Minutes Box */}
+          <div
+            className={`w-16 sm:w-20 py-2 sm:py-2.5 rounded-2xl text-center border transition-all ${
+              isDark
+                ? 'bg-[#0a0a0a] border-[#d4af37]/60 shadow-inner'
+                : 'bg-[#fdfcf9] border-[#2e4426]/30 shadow-2xs'
+            }`}
+          >
+            <span
+              className={`text-2xl sm:text-3xl font-black font-mono leading-none ${
+                isDark ? 'text-[#d4af37]' : 'text-[#2e4426]'
+              }`}
+            >
+              {minutesStr}
+            </span>
+          </div>
+
+          <span className={`text-xl font-black ${isDark ? 'text-[#d4af37]' : 'text-[#2e4426]'}`}>:</span>
+
+          {/* Seconds Box */}
+          <div
+            className={`w-16 sm:w-20 py-2 sm:py-2.5 rounded-2xl text-center border transition-all ${
+              isDark
+                ? 'bg-[#0a0a0a] border-[#d4af37]/60 shadow-inner'
+                : 'bg-[#fdfcf9] border-[#2e4426]/30 shadow-2xs'
+            }`}
+          >
+            <span
+              className={`text-2xl sm:text-3xl font-black font-mono leading-none ${
+                isDark ? 'text-[#d4af37]' : 'text-[#2e4426]'
+              }`}
+            >
+              {secondsStr}
+            </span>
+          </div>
+        </div>
+
+        {/* Progress Bar towards next prayer */}
+        {nextPrayerInfo && (
+          <div className="w-full space-y-1.5 mb-2">
             <div
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-semibold backdrop-blur-md ${
-                isDark
-                  ? `${currentTheme.badgeBgDark} ${currentTheme.badgeTextDark}`
-                  : `${currentTheme.badgeBgLight} ${currentTheme.badgeTextLight}`
+              className={`w-full h-2 rounded-full overflow-hidden ${
+                isDark ? 'bg-[#222222]' : 'bg-stone-200'
               }`}
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${currentTheme.pulseColor} animate-pulse`} />
-              <span>{currentTheme.name}</span>
+              <div
+                className={`h-full rounded-full transition-all duration-1000 ease-linear ${
+                  isDark
+                    ? 'bg-gradient-to-r from-[#d4af37] to-[#f5e6b8] shadow-[0_0_10px_rgba(212,175,55,0.6)]'
+                    : 'bg-[#2e4426]'
+                }`}
+                style={{ width: `${nextPrayerInfo.progressPercent}%` }}
+              />
             </div>
           </div>
+        )}
+
+        {/* Bottom Subtitle Label matching image_7280db7e.png */}
+        <div
+          className={`text-center text-xs sm:text-sm font-bold mt-2 ${
+            isDark ? 'text-[#d4af37]' : 'text-[#2e4426]'
+          }`}
+        >
+          وقت {currentOrNextArabic} والبركة
         </div>
 
-        {/* Hero Card Content: Countdown & Next Prayer */}
-        <div className="p-4 sm:p-5 pt-2 space-y-4 relative z-10">
-          {/* Next Prayer Title & Time */}
-          <div className="flex items-baseline justify-between">
-            <div>
-              <div className={`flex items-center gap-2 text-xs font-semibold ${
-                isDark ? currentTheme.nextLabelDark : currentTheme.nextLabelLight
-              }`}>
-                <span>الصلاة القادمة</span>
-                <span>•</span>
-                <span className={isDark ? currentTheme.timeColorDark : currentTheme.timeColorLight}>
-                  {nextPrayerInfo
-                    ? formatArabicTime(nextPrayerInfo.nextPrayerTime, is24h)
-                    : '--:--'}
-                </span>
-              </div>
-              <h2 className={`text-3xl sm:text-4xl font-black tracking-tight mt-1 ${
-                isDark ? currentTheme.titleColorDark : currentTheme.titleColorLight
-              }`}>
-                صلاة {currentOrNextArabic}
-              </h2>
-            </div>
-
-            <button
-              onClick={() => onNavigateTab('prayers')}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-xl border text-xs font-bold transition backdrop-blur-md active:scale-95 shrink-0 ${
-                isDark
-                  ? `${currentTheme.btnBgDark} ${currentTheme.btnTextDark}`
-                  : `${currentTheme.btnBgLight} ${currentTheme.btnTextLight}`
-              }`}
-            >
-              <span>المواقيت</span>
-              <ChevronLeft className="w-3.5 h-3.5" />
-            </button>
+        {prayerError && (
+          <div className="text-xs text-rose-200 bg-rose-950/70 p-2.5 rounded-xl border border-rose-800 mt-2">
+            {prayerError}
           </div>
-
-          {/* Large Countdown Timer in Seconds */}
-          <div className={`p-3.5 rounded-2xl border backdrop-blur-md space-y-2 ${
-            isDark
-              ? `${currentTheme.timerBoxBgDark} ${currentTheme.timerBoxBorderDark}`
-              : `${currentTheme.timerBoxBgLight} ${currentTheme.timerBoxBorderLight}`
-          }`}>
-            <div className={`text-[11px] font-medium text-center ${
-              isDark ? currentTheme.labelColorDark : currentTheme.labelColorLight
-            }`}>
-              الوقت المتبقي حتى أذان {currentOrNextArabic}
-            </div>
-
-            <div className="flex items-center justify-center gap-2 text-center" dir="ltr">
-              {/* Hours */}
-              <div className={`flex-1 p-2.5 rounded-xl border ${
-                isDark
-                  ? `${currentTheme.unitBoxBgDark} ${currentTheme.unitBoxBorderDark}`
-                  : `${currentTheme.unitBoxBgLight} ${currentTheme.unitBoxBorderLight}`
-              }`}>
-                <div className={`text-2xl sm:text-3xl font-black font-mono tabular-nums leading-none ${
-                  isDark ? currentTheme.digitColorDark : currentTheme.digitColorLight
-                }`}>
-                  {hoursStr}
-                </div>
-                <div className={`text-[10px] mt-1 font-sans ${
-                  isDark ? currentTheme.labelColorDark : currentTheme.labelColorLight
-                }`}>ساعة</div>
-              </div>
-
-              <span className={`text-xl font-black font-mono ${
-                isDark ? currentTheme.colonColorDark : currentTheme.colonColorLight
-              }`}>:</span>
-
-              {/* Minutes */}
-              <div className={`flex-1 p-2.5 rounded-xl border ${
-                isDark
-                  ? `${currentTheme.unitBoxBgDark} ${currentTheme.unitBoxBorderDark}`
-                  : `${currentTheme.unitBoxBgLight} ${currentTheme.unitBoxBorderLight}`
-              }`}>
-                <div className={`text-2xl sm:text-3xl font-black font-mono tabular-nums leading-none ${
-                  isDark ? currentTheme.digitColorDark : currentTheme.digitColorLight
-                }`}>
-                  {minutesStr}
-                </div>
-                <div className={`text-[10px] mt-1 font-sans ${
-                  isDark ? currentTheme.labelColorDark : currentTheme.labelColorLight
-                }`}>دقيقة</div>
-              </div>
-
-              <span className={`text-xl font-black font-mono ${
-                isDark ? currentTheme.colonColorDark : currentTheme.colonColorLight
-              }`}>:</span>
-
-              {/* Seconds */}
-              <div className={`flex-1 p-2.5 rounded-xl border ${
-                isDark
-                  ? `${currentTheme.unitBoxBgDark} ${currentTheme.unitBoxBorderDark}`
-                  : `${currentTheme.unitBoxBgLight} ${currentTheme.unitBoxBorderLight}`
-              }`}>
-                <div className={`text-2xl sm:text-3xl font-black font-mono tabular-nums leading-none ${
-                  isDark ? currentTheme.digitColorDark : currentTheme.digitColorLight
-                }`}>
-                  {secondsStr}
-                </div>
-                <div className={`text-[10px] mt-1 font-sans ${
-                  isDark ? currentTheme.labelColorDark : currentTheme.labelColorLight
-                }`}>ثانية</div>
-              </div>
-            </div>
-
-            {/* Progress bar towards next prayer */}
-            {nextPrayerInfo && (
-              <div className="pt-2">
-                <div className="flex justify-between text-[10px] mb-1 opacity-80">
-                  <span className={isDark ? 'text-stone-300' : 'text-stone-600'}>
-                    {nextPrayerInfo.prevPrayerArabic}
-                  </span>
-                  <span className={`font-mono font-semibold ${
-                    isDark ? currentTheme.progressTextDark : currentTheme.progressTextLight
-                  }`}>
-                    {nextPrayerInfo.progressPercent}% تمضي
-                  </span>
-                  <span className={isDark ? 'text-stone-300' : 'text-stone-600'}>
-                    {nextPrayerInfo.nextPrayerArabic}
-                  </span>
-                </div>
-                <div className={`w-full h-1.5 rounded-full overflow-hidden ${
-                  isDark ? currentTheme.progressTrackDark : currentTheme.progressTrackLight
-                }`}>
-                  <div
-                    className={`h-full rounded-full transition-all duration-1000 ease-linear ${
-                      isDark ? currentTheme.progressFillDark : currentTheme.progressFillLight
-                    }`}
-                    style={{ width: `${nextPrayerInfo.progressPercent}%` }}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-
-          {prayerError && (
-            <div className="text-xs text-rose-200 bg-rose-950/70 p-2.5 rounded-xl border border-rose-800">
-              {prayerError}
-            </div>
-          )}
-        </div>
+        )}
       </div>
 
       {/* 3. Smart Shar'i Alert Bar (شريط التنبيه الشرعي الذكي لأوقات النهي والإجابة والضحى) */}
       <SmartSharaiAlert prayerData={prayerData} now={now} />
 
       {/* 4. Modern Flat Dual Date Bar (شريط التاريخ المزدوج: هجري وميلادي) */}
-      <div className="rounded-2xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 p-3 shadow-xs flex items-center justify-between gap-2 text-xs">
+      <div className="rounded-2xl bg-[#faf8f5] dark:bg-[#141414] border border-[#d4af37]/25 p-3 shadow-2xs flex items-center justify-between gap-2 text-xs">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-xl bg-[#0d3b2e]/10 dark:bg-[#dfb76c]/15 text-[#0d3b2e] dark:text-[#dfb76c] flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 rounded-xl bg-[#d4af37]/15 text-[#d4af37] flex items-center justify-center shrink-0">
             <Calendar className="w-4 h-4" />
           </div>
           <div>
             <div className="font-bold text-stone-900 dark:text-stone-100">
               {hijriDateString || 'جاري تحميل التاريخ الهجري...'}
             </div>
-            <div className="text-[10px] text-stone-500 dark:text-stone-400">
+            <div className="text-[10px] text-stone-500 dark:text-[#a39e93]">
               التقويم الهجري المعتمد
             </div>
           </div>
@@ -784,9 +744,10 @@ export const HomeTab: React.FC<Props> = ({
         is24h={is24h}
         onNavigatePrayers={() => onNavigateTab('prayers')}
         now={now}
+        isDark={isDark}
       />
 
-      {/* 6. Custom Quick Access Grid (شبكة الخدمات السريعة الـ ١٥ برسم مخصص لكل خدمة) */}
+      {/* 6. Custom Quick Access Grid (الخدمات الإسلامية الـ ١٥) */}
       <QuickAccessGrid
         onNavigateTab={onNavigateTab}
         onOpenAthkar={onOpenAthkar}
@@ -795,8 +756,11 @@ export const HomeTab: React.FC<Props> = ({
         onOpenShareReward={() => setIsShareRewardOpen(true)}
         onOpenIslamicHistory={() => setIsIslamicHistoryOpen(true)}
         onOpenRamadan={() => setIsRamadanOpen(true)}
-        onOpenHisnMuslim={() => onNavigateTab('athkar')}
-        onOpenAllServicesModal={() => setIsServicesModalOpen(true)}
+        onOpenHisnMuslim={() => setIsHisnMuslimOpen(true)}
+        onOpenDuas={() => setIsDuasModalOpen(true)}
+        onOpenQuranIntro={() => setIsQuranIntroOpen(true)}
+        onOpenAllahNames={() => setIsAllahNamesOpen(true)}
+        isDark={isDark}
       />
 
       {/* 7. Spiritual Interactive Virtue Card (فضائل وقت الصلاة الحالية وأذكارها المأثورة) */}
@@ -806,18 +770,18 @@ export const HomeTab: React.FC<Props> = ({
       />
 
       {/* 8. Ayah of the Day (آية اليوم من المصحف الشريف بتلاوة الشيخ مشاري العفاسي) */}
-      <div className="rounded-3xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 p-5 shadow-xs space-y-4">
+      <div className="rounded-3xl bg-[#faf8f5] dark:bg-[#141414] border border-[#d4af37]/25 p-5 shadow-2xs space-y-4">
         {/* Ayah Header */}
-        <div className="flex items-center justify-between border-b border-stone-200/60 dark:border-stone-800 pb-3">
+        <div className="flex items-center justify-between border-b border-[#d4af37]/20 pb-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#dfb76c]/15 text-[#c5a059] flex items-center justify-center font-bold">
-              <Sparkles className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-xl bg-[#d4af37]/15 text-[#d4af37] flex items-center justify-center font-bold">
+              <BookOpen className="w-4 h-4" />
             </div>
             <div>
               <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100">
                 آية اليوم
               </h3>
-              <p className="text-[11px] text-stone-500 dark:text-stone-400">
+              <p className="text-[11px] text-stone-500 dark:text-[#a39e93]">
                 من المصحف الشريف عبر API القرآن المعتمد
               </p>
             </div>
@@ -827,7 +791,7 @@ export const HomeTab: React.FC<Props> = ({
             onClick={handleFetchRandomAyah}
             disabled={isLoadingAyah}
             title="عرض آية كريمة أخرى"
-            className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-xl text-[#0d3b2e] dark:text-[#dfb76c] bg-[#0d3b2e]/8 dark:bg-[#dfb76c]/15 hover:bg-[#0d3b2e]/15 transition active:scale-95 disabled:opacity-50"
+            className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-xl text-[#8c6b2d] dark:text-[#d4af37] bg-[#d4af37]/10 hover:bg-[#d4af37]/20 transition active:scale-95 disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoadingAyah ? 'animate-spin' : ''}`} />
             <span>آية أخرى</span>
@@ -846,7 +810,7 @@ export const HomeTab: React.FC<Props> = ({
             <p className="text-xs text-rose-600 dark:text-rose-400">{ayahError}</p>
             <button
               onClick={handleFetchRandomAyah}
-              className="text-xs font-semibold text-[#0d3b2e] dark:text-[#dfb76c] underline"
+              className="text-xs font-semibold text-[#8c6b2d] dark:text-[#d4af37] underline"
             >
               إعادة المحاولة
             </button>
@@ -857,18 +821,18 @@ export const HomeTab: React.FC<Props> = ({
             <div className="relative text-center px-2 py-1">
               <p
                 style={{ fontFamily: 'var(--font-quran), Amiri, serif' }}
-                className="text-xl sm:text-2xl leading-[2.2] sm:leading-[2.4] text-stone-900 dark:text-stone-100 font-normal select-text"
+                className="text-xl sm:text-2xl leading-[2.2] sm:leading-[2.4] text-stone-900 dark:text-[#f5e6b8] font-normal select-text"
               >
-                <span className="text-[#c5a059] text-lg">﴿</span>
+                <span className="text-[#d4af37] text-lg">﴿</span>
                 {ayah.text}
-                <span className="text-[#c5a059] text-lg">﴾</span>
+                <span className="text-[#d4af37] text-lg">﴾</span>
               </p>
             </div>
 
             {/* Surah Reference Meta */}
-            <div className="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400 pt-2 border-t border-stone-200/60 dark:border-stone-800">
-              <div className="font-semibold text-[#0d3b2e] dark:text-[#dfb76c]">
-                {ayah.surah.name} · الآية {ayah.numberInSurah}
+            <div className="flex items-center justify-between text-xs text-stone-500 dark:text-[#a39e93] pt-2 border-t border-[#d4af37]/20">
+              <div className="font-semibold text-stone-800 dark:text-[#d4af37]">
+                {ayah.surah.name} · الآية {toArabicDigits(ayah.numberInSurah)}
               </div>
 
               <div className="flex items-center gap-1.5">
@@ -886,8 +850,8 @@ export const HomeTab: React.FC<Props> = ({
                       title={isPlayingAudio ? 'إيقاف التلاوة' : 'الاستماع بصوت مشاري العفاسي'}
                       className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-medium transition ${
                         isPlayingAudio
-                          ? 'bg-[#dfb76c] text-[#0b241c] font-bold animate-pulse'
-                          : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200'
+                          ? 'bg-[#d4af37] text-stone-950 font-bold animate-pulse'
+                          : 'bg-stone-100 dark:bg-[#1a1814] text-stone-700 dark:text-[#d4af37] hover:bg-stone-200'
                       }`}
                     >
                       {isPlayingAudio ? (
@@ -909,10 +873,10 @@ export const HomeTab: React.FC<Props> = ({
                 <button
                   onClick={handleCopyAyah}
                   title="نسخ الآية الكريمة"
-                  className="p-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 transition"
+                  className="p-1.5 rounded-xl bg-stone-100 dark:bg-[#1a1814] text-stone-600 dark:text-[#d4af37] hover:bg-stone-200 transition"
                 >
                   {copiedAyah ? (
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <Check className="w-3.5 h-3.5 text-[#d4af37]" />
                   ) : (
                     <Copy className="w-3.5 h-3.5" />
                   )}
@@ -922,6 +886,9 @@ export const HomeTab: React.FC<Props> = ({
           </div>
         ) : null}
       </div>
+
+      {/* 8.5. Bottom PWA Install Banner */}
+      <InstallAtharBanner variant="banner" />
 
       {/* 9. Specialized Modals */}
       <ServicesGridModal
@@ -954,6 +921,7 @@ export const HomeTab: React.FC<Props> = ({
         maghribTime={prayerData?.timings ? cleanTimeString(prayerData.timings.Maghrib) : undefined}
         location={location}
         prayerData={prayerData}
+        isDark={isDark}
       />
 
       <HisnMuslimModal
@@ -965,6 +933,32 @@ export const HomeTab: React.FC<Props> = ({
         isOpen={isQiblaModalOpen}
         onClose={() => setIsQiblaModalOpen(false)}
         location={location}
+        isDark={isDark}
+      />
+
+      <DuasComprehensiveModal
+        isOpen={isDuasModalOpen}
+        onClose={() => setIsDuasModalOpen(false)}
+        isDark={isDark}
+      />
+
+      <QuranIntroModal
+        isOpen={isQuranIntroOpen}
+        onClose={() => setIsQuranIntroOpen(false)}
+        onOpenQuranIndex={() => onNavigateTab('quran')}
+        onOpenMushafPage={(page) => {
+          try {
+            localStorage.setItem('noor_last_mushaf_page', page.toString());
+          } catch {}
+          onNavigateTab('quran');
+        }}
+        isDark={isDark}
+      />
+
+      <AllahNamesModal
+        isOpen={isAllahNamesOpen}
+        onClose={() => setIsAllahNamesOpen(false)}
+        isDark={isDark}
       />
     </div>
   );

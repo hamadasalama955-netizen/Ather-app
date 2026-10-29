@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   RotateCcw,
-  Sparkles,
   Volume2,
   VolumeX,
   Plus,
@@ -10,6 +9,7 @@ import {
   Check,
   Vibrate,
   History,
+  Heart,
 } from 'lucide-react';
 
 const SEBHA_LOCAL_KEY = 'noor_sebha_records_v1';
@@ -231,7 +231,7 @@ export const SebhaSection: React.FC = () => {
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs font-bold text-stone-300 px-1">
           <div className="flex items-center gap-1.5 text-amber-400">
-            <Sparkles className="w-3.5 h-3.5" />
+            <Heart className="w-3.5 h-3.5" />
             <span>اختر الذكر المفضل</span>
           </div>
           <button
@@ -513,7 +513,7 @@ export const SebhaSection: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
           <div className="w-full max-w-sm rounded-3xl bg-stone-900 border border-stone-800 p-5 shadow-2xl text-right space-y-4">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-400" />
+              <Plus className="w-4 h-4 text-amber-400" />
               <span>إضافة صيغة تسبيح أو ذكر جديدة</span>
             </h3>
 

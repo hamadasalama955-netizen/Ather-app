@@ -2,7 +2,7 @@
  * Service Worker for "أثر" (Athar) - 100% Offline-First PWA
  */
 
-const CACHE_NAME = 'athar-pwa-v2';
+const CACHE_NAME = 'athar-pwa-v3';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -14,6 +14,8 @@ const PRECACHE_ASSETS = [
   '/pwa-192x192.png',
   '/pwa-512x512.png',
   '/pwa-maskable-512x512.png',
+  '/icon-192.png',
+  '/icon-512.png',
   '/data/hisn_azkar.json',
   'https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600;700;800;900&display=swap'
 ];

@@ -4,7 +4,6 @@ import {
   AlertTriangle,
   HelpCircle,
   BookOpen,
-  Sparkles,
   ChevronDown,
   ChevronUp,
   RotateCcw,
@@ -110,13 +109,13 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
   return (
     <div className="space-y-4 pb-20 animate-in fade-in duration-300">
       {/* 1. Regal Hero Banner: «صلوا كما رأيتموني أصلي» */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#09231b] via-[#0d3b2e] to-[#0b241c] text-[#fcfbf7] p-5 shadow-xl border border-[#dfb76c]/40">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#0a0a0a] via-[#d4af37] to-[#1a1814] text-[#fcfbf7] p-5 shadow-xl border border-[#dfb76c]/40">
         <div className="absolute top-0 left-0 w-36 h-36 bg-[#dfb76c]/10 rounded-full blur-2xl pointer-events-none" />
 
         <div className="flex items-start justify-between gap-3 relative z-10">
           <div className="space-y-1.5">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#dfb76c]/20 border border-[#dfb76c]/40 text-[#dfb76c] text-[11px] font-bold">
-              <Sparkles className="w-3.5 h-3.5" />
+              <BookOpen className="w-3.5 h-3.5" />
               <span>فقه الصلاة وتصحيحها</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
@@ -127,7 +126,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
             </p>
           </div>
 
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#dfb76c]/25 to-[#0d3b2e] border border-[#dfb76c]/40 flex items-center justify-center text-[#dfb76c] shrink-0 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#dfb76c]/25 to-[#d4af37] border border-[#dfb76c]/40 flex items-center justify-center text-[#dfb76c] shrink-0 shadow-xs">
             <Compass className="w-6 h-6 text-[#dfb76c]" />
           </div>
         </div>
@@ -144,12 +143,12 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
       </div>
 
       {/* 2. Sub-Tab Segmented Switcher (Functional interactive controls) */}
-      <div className="grid grid-cols-5 gap-1 p-1 bg-stone-200/70 dark:bg-[#122e23] rounded-2xl border border-stone-300/60 dark:border-stone-800 text-xs">
+      <div className="grid grid-cols-5 gap-1 p-1 bg-stone-200/70 dark:bg-[#141414] rounded-2xl border border-stone-300/60 dark:border-stone-800 text-xs">
         <button
           onClick={() => setActiveSubTab('audit')}
           className={`py-2 px-1 text-center font-bold rounded-xl transition-all duration-150 ${
             activeSubTab === 'audit'
-              ? 'bg-white dark:bg-[#0d3b2e] text-[#0d3b2e] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30'
+              ? 'bg-white dark:bg-[#d4af37] text-[#d4af37] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30'
               : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
           }`}
         >
@@ -160,7 +159,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
           onClick={() => setActiveSubTab('sahw')}
           className={`py-2 px-1 text-center font-bold rounded-xl transition-all duration-150 ${
             activeSubTab === 'sahw'
-              ? 'bg-white dark:bg-[#0d3b2e] text-[#0d3b2e] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30'
+              ? 'bg-white dark:bg-[#d4af37] text-[#d4af37] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30'
               : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
           }`}
         >
@@ -171,7 +170,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
           onClick={() => setActiveSubTab('mistakes')}
           className={`py-2 px-1 text-center font-bold rounded-xl transition-all duration-150 ${
             activeSubTab === 'mistakes'
-              ? 'bg-white dark:bg-[#0d3b2e] text-[#0d3b2e] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30'
+              ? 'bg-white dark:bg-[#d4af37] text-[#d4af37] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30'
               : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
           }`}
         >
@@ -182,7 +181,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
           onClick={() => setActiveSubTab('guide')}
           className={`py-2 px-1 text-center font-bold rounded-xl transition-all duration-150 ${
             activeSubTab === 'guide'
-              ? 'bg-white dark:bg-[#0d3b2e] text-[#0d3b2e] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30'
+              ? 'bg-white dark:bg-[#d4af37] text-[#d4af37] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30'
               : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
           }`}
         >
@@ -193,7 +192,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
           onClick={() => setActiveSubTab('khushu')}
           className={`py-2 px-1 text-center font-bold rounded-xl transition-all duration-150 ${
             activeSubTab === 'khushu'
-              ? 'bg-white dark:bg-[#0d3b2e] text-[#0d3b2e] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30'
+              ? 'bg-white dark:bg-[#d4af37] text-[#d4af37] dark:text-[#dfb76c] shadow-xs border border-stone-200 dark:border-[#dfb76c]/30'
               : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
           }`}
         >
@@ -205,7 +204,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
       {activeSubTab === 'audit' && (
         <div className="space-y-4 animate-in fade-in duration-200">
           {/* Progress Card */}
-          <div className="p-4 rounded-3xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 shadow-xs space-y-3">
+          <div className="p-4 rounded-3xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100">
@@ -217,7 +216,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               </div>
 
               <div className="text-right">
-                <span className="text-xl font-black text-[#0d3b2e] dark:text-[#dfb76c] font-mono tabular-nums">
+                <span className="text-xl font-black text-[#d4af37] dark:text-[#dfb76c] font-mono tabular-nums">
                   {auditProgressPercent}%
                 </span>
                 <span className="text-[10px] text-stone-400 block font-sans">
@@ -229,7 +228,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
             {/* Progress Bar */}
             <div className="w-full h-2 bg-stone-200 dark:bg-stone-800 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-[#0d3b2e] via-[#10b981] to-[#dfb76c] rounded-full transition-all duration-500 ease-out"
+                className="h-full bg-gradient-to-r from-[#d4af37] via-[#d4af37] to-[#dfb76c] rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${auditProgressPercent}%` }}
               />
             </div>
@@ -261,8 +260,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               onClick={() => setAuditCategory('all')}
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 auditCategory === 'all'
-                  ? 'bg-[#0d3b2e] text-[#dfb76c] dark:bg-[#dfb76c] dark:text-[#0b241c] shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  ? 'bg-[#d4af37] text-stone-950 dark:bg-[#dfb76c] text-stone-950 shadow-xs'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               الكل ({allAuditItems.length})
@@ -271,8 +270,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               onClick={() => setAuditCategory('condition')}
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 auditCategory === 'condition'
-                  ? 'bg-[#0d3b2e] text-[#dfb76c] dark:bg-[#dfb76c] dark:text-[#0b241c] shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  ? 'bg-[#d4af37] text-stone-950 dark:bg-[#dfb76c] text-stone-950 shadow-xs'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               الشروط قبل الصلاة ({PRAYER_CONDITIONS.length})
@@ -281,8 +280,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               onClick={() => setAuditCategory('pillar')}
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 auditCategory === 'pillar'
-                  ? 'bg-[#0d3b2e] text-[#dfb76c] dark:bg-[#dfb76c] dark:text-[#0b241c] shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  ? 'bg-[#d4af37] text-stone-950 dark:bg-[#dfb76c] text-stone-950 shadow-xs'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               الأركان الـ ١٤ ({PRAYER_PILLARS.length})
@@ -291,8 +290,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               onClick={() => setAuditCategory('obligation')}
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 auditCategory === 'obligation'
-                  ? 'bg-[#0d3b2e] text-[#dfb76c] dark:bg-[#dfb76c] dark:text-[#0b241c] shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  ? 'bg-[#d4af37] text-stone-950 dark:bg-[#dfb76c] text-stone-950 shadow-xs'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               الواجبات الـ ٨ ({PRAYER_OBLIGATIONS.length})
@@ -309,16 +308,16 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
                   onClick={() => handleToggleCheck(item.id)}
                   className={`cursor-pointer p-4 rounded-2xl border transition-all duration-150 flex items-start gap-3 select-none ${
                     isChecked
-                      ? 'bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-300/80 dark:border-emerald-800/60'
-                      : 'bg-[#fcfbf7] dark:bg-[#122e23] border-stone-200/80 dark:border-stone-800 hover:border-[#dfb76c]/50'
+                      ? 'bg-#d4af37]/15 dark:bg-black/30 border-#d4af37]/40 dark:border-#d4af37]/40'
+                      : 'bg-[#fcfbf7] dark:bg-[#141414] border-stone-200/80 dark:border-stone-800 hover:border-[#dfb76c]/50'
                   }`}
                 >
                   {/* Interactive Checkbox Indicator */}
                   <div
                     className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                       isChecked
-                        ? 'bg-emerald-600 text-white shadow-xs'
-                        : 'border-2 border-stone-300 dark:border-stone-700 bg-white dark:bg-[#0b241c]'
+                        ? 'bg-[#d4af37] text-white shadow-xs'
+                        : 'border-2 border-stone-300 dark:border-stone-700 bg-white dark:bg-[#1a1814]'
                     }`}
                   >
                     {isChecked && <Check className="w-4 h-4 stroke-[3]" />}
@@ -355,7 +354,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
                     </p>
 
                     <div className="text-[10px] text-stone-500 dark:text-stone-400 flex items-center gap-1.5 pt-0.5">
-                      <span className="font-semibold text-[#0d3b2e] dark:text-[#dfb76c]">الدليل:</span>
+                      <span className="font-semibold text-[#d4af37] dark:text-[#dfb76c]">الدليل:</span>
                       <span className="italic">{item.dalil}</span>
                     </div>
                   </div>
@@ -370,7 +369,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
       {activeSubTab === 'sahw' && (
         <div className="space-y-4 animate-in fade-in duration-200">
           {/* Quick Solver Card */}
-          <div className="p-4 rounded-3xl bg-gradient-to-br from-[#0d3b2e] to-[#09231b] text-[#fcfbf7] border border-[#dfb76c]/40 shadow-md space-y-3">
+          <div className="p-4 rounded-3xl bg-gradient-to-br from-[#d4af37] to-[#0a0a0a] text-[#fcfbf7] border border-[#dfb76c]/40 shadow-md space-y-3">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-xl bg-[#dfb76c]/20 text-[#dfb76c] flex items-center justify-center">
                 <HelpCircle className="w-4 h-4" />
@@ -399,9 +398,9 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               </div>
 
               <div className="p-2.5 rounded-2xl bg-[#061b14]/80 border border-[#dfb76c]/20 space-y-1">
-                <div className="text-emerald-400 font-bold text-xs flex items-center gap-1">
+                <div className="text-[#d4af37] font-bold text-xs flex items-center gap-1">
                   <span>بعد السلام</span>
-                  <span className="text-[9px] px-1 bg-emerald-500/20 rounded">حالتان</span>
+                  <span className="text-[9px] px-1 bg-[#d4af37]/20 rounded">حالتان</span>
                 </div>
                 <p className="text-[11px] text-stone-300 leading-tight">
                   ١. الزيادة (كركعة أو سجود زائد).
@@ -421,8 +420,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               onClick={() => setSahwQuestionType('all')}
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 sahwQuestionType === 'all'
-                  ? 'bg-[#0d3b2e] text-[#dfb76c] dark:bg-[#dfb76c] dark:text-[#0b241c] shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  ? 'bg-[#d4af37] text-stone-950 dark:bg-[#dfb76c] text-stone-950 shadow-xs'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               جميع الحالات ({SUJUD_SAHW_CASES.length})
@@ -431,8 +430,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               onClick={() => setSahwQuestionType('نقص')}
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 sahwQuestionType === 'نقص'
-                  ? 'bg-[#0d3b2e] text-[#dfb76c] dark:bg-[#dfb76c] dark:text-[#0b241c] shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  ? 'bg-[#d4af37] text-stone-950 dark:bg-[#dfb76c] text-stone-950 shadow-xs'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               حالات النقص
@@ -441,8 +440,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               onClick={() => setSahwQuestionType('زيادة')}
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 sahwQuestionType === 'زيادة'
-                  ? 'bg-[#0d3b2e] text-[#dfb76c] dark:bg-[#dfb76c] dark:text-[#0b241c] shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  ? 'bg-[#d4af37] text-stone-950 dark:bg-[#dfb76c] text-stone-950 shadow-xs'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               حالات الزيادة
@@ -451,8 +450,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               onClick={() => setSahwQuestionType('شك')}
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 sahwQuestionType === 'شك'
-                  ? 'bg-[#0d3b2e] text-[#dfb76c] dark:bg-[#dfb76c] dark:text-[#0b241c] shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  ? 'bg-[#d4af37] text-stone-950 dark:bg-[#dfb76c] text-stone-950 shadow-xs'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               حالات الشك
@@ -466,11 +465,11 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               return (
                 <div
                   key={c.id}
-                  className="rounded-2xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 overflow-hidden shadow-xs transition"
+                  className="rounded-2xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 overflow-hidden shadow-xs transition"
                 >
                   <button
                     onClick={() => setExpandedSahwId(isExpanded ? null : c.id)}
-                    className="w-full p-4 flex items-center justify-between text-right gap-3 hover:bg-stone-50/60 dark:hover:bg-[#16382b] transition"
+                    className="w-full p-4 flex items-center justify-between text-right gap-3 hover:bg-stone-50/60 dark:hover:bg-[#1f1d19] transition"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
@@ -481,7 +480,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
                           className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                             c.timing === 'قبل السلام'
                               ? 'bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-300 dark:border-amber-700'
-                              : 'bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
+                              : 'bg-[#d4af37]/20 text-[#d4af37] dark:bg-[#d4af37]/40 dark:text-[#d4af37] border border-[#d4af37] dark:border-[#d4af37]'
                           }`}
                         >
                           يسجد: {c.timing}
@@ -500,8 +499,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
                   {isExpanded && (
                     <div className="px-4 pb-4 pt-1 border-t border-stone-200/60 dark:border-stone-800 space-y-3 text-xs">
                       {/* Practical Solution */}
-                      <div className="p-3 rounded-xl bg-stone-100/70 dark:bg-[#0b241c] border border-stone-200/60 dark:border-stone-800 space-y-1">
-                        <div className="font-bold text-[#0d3b2e] dark:text-[#dfb76c] flex items-center gap-1.5">
+                      <div className="p-3 rounded-xl bg-stone-100/70 dark:bg-[#1a1814] border border-stone-200/60 dark:border-stone-800 space-y-1">
+                        <div className="font-bold text-[#d4af37] dark:text-[#dfb76c] flex items-center gap-1.5">
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           <span>كيف تتصرف وتصحح صلاتك؟</span>
                         </div>
@@ -536,7 +535,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
       {activeSubTab === 'mistakes' && (
         <div className="space-y-4 animate-in fade-in duration-200">
           {/* Header Description */}
-          <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 flex items-center gap-2.5 text-xs">
+          <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 flex items-center gap-2.5 text-xs">
             <div className="w-8 h-8 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
               <ShieldAlert className="w-4 h-4" />
             </div>
@@ -556,8 +555,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               onClick={() => setMistakeFilter('all')}
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 mistakeFilter === 'all'
-                  ? 'bg-[#0d3b2e] text-[#dfb76c] dark:bg-[#dfb76c] dark:text-[#0b241c] shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  ? 'bg-[#d4af37] text-stone-950 dark:bg-[#dfb76c] text-stone-950 shadow-xs'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               الكل ({PRAYER_MISTAKES.length})
@@ -567,7 +566,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 mistakeFilter === 'يبطل الصلاة'
                   ? 'bg-rose-600 text-white shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               يبطل الصلاة
@@ -577,7 +576,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 mistakeFilter === 'محرم وفاسد للصلاة'
                   ? 'bg-amber-600 text-white shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               محرم
@@ -587,7 +586,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
                 mistakeFilter === 'مكروه ومنقص للأجر'
                   ? 'bg-blue-600 text-white shadow-xs'
-                  : 'bg-white dark:bg-[#122e23] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
+                  : 'bg-white dark:bg-[#141414] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800'
               }`}
             >
               مكروه ومنقص للأجر
@@ -599,7 +598,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
             {filteredMistakes.map((m) => (
               <div
                 key={m.id}
-                className="p-4 rounded-3xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 shadow-xs space-y-3"
+                className="p-4 rounded-3xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 shadow-xs space-y-3"
               >
                 <div className="flex items-start justify-between gap-2">
                   <h4 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
@@ -630,8 +629,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
                 </div>
 
                 {/* Correct Practice */}
-                <div className="p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 text-xs space-y-1">
-                  <div className="font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1 text-[11px]">
+                <div className="p-2.5 rounded-xl bg-#d4af37]/15 dark:bg-black/30 border border-[#d4af37]/30 dark:border-[#d4af37]/40 text-xs space-y-1">
+                  <div className="font-bold text-[#d4af37] dark:text-[#d4af37] flex items-center gap-1 text-[11px]">
                     <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                     <span>الصواب النبوي:</span>
                   </div>
@@ -643,7 +642,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
                 {/* Tip & Dalil */}
                 <div className="pt-1 flex flex-col gap-1 text-[10px] text-stone-500 dark:text-stone-400">
                   <div>
-                    <span className="font-bold text-[#0d3b2e] dark:text-[#dfb76c]">نصيحة عملية: </span>
+                    <span className="font-bold text-[#d4af37] dark:text-[#dfb76c]">نصيحة عملية: </span>
                     <span>{m.tip}</span>
                   </div>
                   <div>
@@ -660,8 +659,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
       {/* 6. Sub-Tab 4: صفة صلاة النبي ﷺ خطوة بخطوة مع الأذكار */}
       {activeSubTab === 'guide' && (
         <div className="space-y-4 animate-in fade-in duration-200">
-          <div className="p-3.5 rounded-2xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 flex items-center gap-3 text-xs">
-            <div className="w-8 h-8 rounded-xl bg-[#0d3b2e]/10 dark:bg-[#dfb76c]/15 text-[#0d3b2e] dark:text-[#dfb76c] flex items-center justify-center shrink-0">
+          <div className="p-3.5 rounded-2xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 flex items-center gap-3 text-xs">
+            <div className="w-8 h-8 rounded-xl bg-[#d4af37]/10 dark:bg-[#dfb76c]/15 text-[#d4af37] dark:text-[#dfb76c] flex items-center justify-center shrink-0">
               <BookOpen className="w-4 h-4" />
             </div>
             <div>
@@ -680,14 +679,14 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               return (
                 <div
                   key={step.id}
-                  className="rounded-3xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 overflow-hidden shadow-xs"
+                  className="rounded-3xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 overflow-hidden shadow-xs"
                 >
                   <button
                     onClick={() => setExpandedStepId(isExpanded ? null : step.id)}
-                    className="w-full p-4 flex items-center justify-between text-right gap-3 hover:bg-stone-50/60 dark:hover:bg-[#16382b] transition"
+                    className="w-full p-4 flex items-center justify-between text-right gap-3 hover:bg-stone-50/60 dark:hover:bg-[#1f1d19] transition"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-[#0d3b2e] text-[#dfb76c] font-black font-mono text-xs flex items-center justify-center shrink-0 border border-[#dfb76c]/30">
+                      <div className="w-8 h-8 rounded-xl bg-[#d4af37] text-stone-950 font-black font-mono text-xs flex items-center justify-center shrink-0 border border-[#dfb76c]/30">
                         {step.stepNumber}
                       </div>
 
@@ -700,7 +699,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
                             className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md ${
                               step.type === 'ركن'
                                 ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300'
-                                : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
+                                : 'bg-[#d4af37]/20 text-[#d4af37] dark:bg-[#d4af37]/40 dark:text-[#d4af37]'
                             }`}
                           >
                             {step.type}
@@ -726,18 +725,18 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
 
                       {/* Dhikr with Copy Button if available */}
                       {step.dhikr && (
-                        <div className="p-3 rounded-2xl bg-[#0d3b2e]/8 dark:bg-[#0b241c] border border-[#dfb76c]/30 space-y-2">
+                        <div className="p-3 rounded-2xl bg-[#d4af37]/8 dark:bg-[#1a1814] border border-[#dfb76c]/30 space-y-2">
                           <div className="flex items-center justify-between text-[11px]">
-                            <span className="font-bold text-[#0d3b2e] dark:text-[#dfb76c]">
+                            <span className="font-bold text-[#d4af37] dark:text-[#dfb76c]">
                               الذكر المسنون:
                             </span>
                             <button
                               onClick={() => handleCopyText(step.id, step.dhikr!)}
-                              className="flex items-center gap-1 text-[10px] font-bold text-[#0d3b2e] dark:text-[#dfb76c] hover:underline"
+                              className="flex items-center gap-1 text-[10px] font-bold text-[#d4af37] dark:text-[#dfb76c] hover:underline"
                             >
                               {copiedId === step.id ? (
                                 <>
-                                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                  <Check className="w-3.5 h-3.5 text-[#d4af37]" />
                                   <span>تم النسخ</span>
                                 </>
                               ) : (
@@ -759,7 +758,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
                       )}
 
                       {/* Body Position Guide */}
-                      <div className="p-2.5 rounded-xl bg-stone-100/70 dark:bg-[#16382b] text-[11px] text-stone-700 dark:text-stone-300">
+                      <div className="p-2.5 rounded-xl bg-stone-100/70 dark:bg-[#1f1d19] text-[11px] text-stone-700 dark:text-stone-300">
                         <span className="font-bold text-stone-900 dark:text-stone-100">هيئة الجسد: </span>
                         <span>{step.bodyPosition}</span>
                       </div>
@@ -785,7 +784,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
       {activeSubTab === 'khushu' && (
         <div className="space-y-4 animate-in fade-in duration-200">
           {/* Main Khushu Card */}
-          <div className="p-5 rounded-3xl bg-gradient-to-br from-[#0d3b2e] via-[#124a3a] to-[#0b241c] text-[#fcfbf7] border border-[#dfb76c]/40 shadow-xl space-y-3">
+          <div className="p-5 rounded-3xl bg-gradient-to-br from-[#d4af37] via-[#1f1d19] to-[#1a1814] text-[#fcfbf7] border border-[#dfb76c]/40 shadow-xl space-y-3">
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-2xl bg-[#dfb76c]/20 text-[#dfb76c] flex items-center justify-center font-bold">
                 <Heart className="w-5 h-5 text-[#dfb76c] fill-[#dfb76c]/20" />
@@ -806,7 +805,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
           </div>
 
           {/* Dealing with Khanzab (وسواس الصلاة) */}
-          <div className="p-4 rounded-3xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 shadow-xs space-y-2.5">
+          <div className="p-4 rounded-3xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 shadow-xs space-y-2.5">
             <div className="flex items-center gap-2 text-rose-700 dark:text-rose-400 font-bold text-xs">
               <AlertTriangle className="w-4 h-4" />
               <span>كيف تتعامل مع شيطان الصلاة (خِنْزَب)؟</span>
@@ -814,7 +813,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
             <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed">
               جاء عثمان بن أبي العاص إلى النبي ﷺ فقال: يا رسول الله إن الشيطان قد حال بيني وبين صلاتي وقراءتي يلبسها علي! فقال رسول الله ﷺ:
             </p>
-            <div className="p-3 rounded-2xl bg-stone-100/80 dark:bg-[#0b241c] border border-stone-200 dark:border-stone-800 text-xs italic text-[#0d3b2e] dark:text-[#dfb76c] leading-relaxed">
+            <div className="p-3 rounded-2xl bg-stone-100/80 dark:bg-[#1a1814] border border-stone-200 dark:border-stone-800 text-xs italic text-[#d4af37] dark:text-[#dfb76c] leading-relaxed">
               «ذَاكَ شَيْطَانٌ يُقَالُ لَهُ: خِنْزَبٌ، فَإِذَا أَحْسَسْتَهُ فَتَعَوَّذْ بِاللهِ مِنْهُ، وَاتْفُلْ عَلَى يَسَارِكَ ثَلَاثاً» [صحيح مسلم].
             </div>
             <p className="text-[11px] text-stone-500 dark:text-stone-400">
@@ -828,8 +827,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               ٥ خطوات عملية قبل وأثناء الصلاة:
             </h4>
 
-            <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 space-y-1 text-xs">
-              <div className="font-bold text-[#0d3b2e] dark:text-[#dfb76c] flex items-center gap-1.5">
+            <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 space-y-1 text-xs">
+              <div className="font-bold text-[#d4af37] dark:text-[#dfb76c] flex items-center gap-1.5">
                 <span>١. التهيئة قبل تكبيرة الإحرام:</span>
               </div>
               <p className="text-stone-600 dark:text-stone-300 leading-relaxed text-[11px]">
@@ -837,8 +836,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               </p>
             </div>
 
-            <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 space-y-1 text-xs">
-              <div className="font-bold text-[#0d3b2e] dark:text-[#dfb76c] flex items-center gap-1.5">
+            <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 space-y-1 text-xs">
+              <div className="font-bold text-[#d4af37] dark:text-[#dfb76c] flex items-center gap-1.5">
                 <span>٢. استشعار مناجاة الفاتحة:</span>
               </div>
               <p className="text-stone-600 dark:text-stone-300 leading-relaxed text-[11px]">
@@ -846,8 +845,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               </p>
             </div>
 
-            <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 space-y-1 text-xs">
-              <div className="font-bold text-[#0d3b2e] dark:text-[#dfb76c] flex items-center gap-1.5">
+            <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 space-y-1 text-xs">
+              <div className="font-bold text-[#d4af37] dark:text-[#dfb76c] flex items-center gap-1.5">
                 <span>٣. تنويع الأذكار والسور المقروءة:</span>
               </div>
               <p className="text-stone-600 dark:text-stone-300 leading-relaxed text-[11px]">
@@ -855,8 +854,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               </p>
             </div>
 
-            <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 space-y-1 text-xs">
-              <div className="font-bold text-[#0d3b2e] dark:text-[#dfb76c] flex items-center gap-1.5">
+            <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 space-y-1 text-xs">
+              <div className="font-bold text-[#d4af37] dark:text-[#dfb76c] flex items-center gap-1.5">
                 <span>٤. تركيز البصر على موضع السجود:</span>
               </div>
               <p className="text-stone-600 dark:text-stone-300 leading-relaxed text-[11px]">
@@ -864,8 +863,8 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
               </p>
             </div>
 
-            <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 space-y-1 text-xs">
-              <div className="font-bold text-[#0d3b2e] dark:text-[#dfb76c] flex items-center gap-1.5">
+            <div className="p-3 rounded-2xl bg-[#fcfbf7] dark:bg-[#141414] border border-stone-200/80 dark:border-stone-800 space-y-1 text-xs">
+              <div className="font-bold text-[#d4af37] dark:text-[#dfb76c] flex items-center gap-1.5">
                 <span>٥. صلاة مودع:</span>
               </div>
               <p className="text-stone-600 dark:text-stone-300 leading-relaxed text-[11px]">
@@ -881,7 +880,7 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
         <div className="pt-2 text-center">
           <button
             onClick={onNavigateHome}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-stone-200/70 dark:bg-[#122e23] hover:bg-stone-300 dark:hover:bg-[#16382b] text-stone-800 dark:text-stone-200 text-xs font-bold transition active:scale-95"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-stone-200/70 dark:bg-[#141414] hover:bg-stone-300 dark:hover:bg-[#1f1d19] text-stone-800 dark:text-stone-200 text-xs font-bold transition active:scale-95"
           >
             <ArrowRight className="w-3.5 h-3.5" />
             <span>العودة للشاشة الرئيسية</span>

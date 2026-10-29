@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Copy, Check, Share2, Sparkles, RefreshCw } from 'lucide-react';
+import { Search, Copy, Check, Share2, Heart, RefreshCw } from 'lucide-react';
 import { DUAS_LIST } from '../../data/duasData';
 import { DuaItem } from '../../types';
 
@@ -66,13 +66,13 @@ export const DuasSection: React.FC = () => {
   return (
     <div className="space-y-4">
       {/* Header intro */}
-      <div className="p-4 rounded-3xl bg-emerald-950 text-white border border-emerald-800 shadow-sm flex items-center justify-between">
+      <div className="p-4 rounded-3xl bg-gradient-to-r from-[#1a1814] to-[#141414] text-white border border-[#d4af37]/30 shadow-sm flex items-center justify-between">
         <div className="space-y-1">
-          <h3 className="text-sm font-bold text-amber-300 flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4" />
+          <h3 className="text-sm font-bold text-[#d4af37] flex items-center gap-1.5">
+            <Heart className="w-4 h-4 text-[#d4af37]" />
             <span>الأدعية المأثورة الجامعة</span>
           </h3>
-          <p className="text-[11px] text-emerald-200 leading-relaxed">
+          <p className="text-[11px] text-stone-300 leading-relaxed">
             أدعية صحيحة ثابتة من القرآن الكريم وصحيح السنة النبوية مع عداد التكرار
           </p>
         </div>
@@ -85,7 +85,7 @@ export const DuasSection: React.FC = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="ابحث في الأدعية (مثال: الكرب، الرزق، الشفاء، ربنا)..."
-          className="w-full pr-9 pl-4 py-2.5 rounded-xl bg-white dark:bg-stone-900 text-stone-900 dark:text-white placeholder-stone-400 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-600 border border-stone-200/80 dark:border-stone-800 shadow-xs"
+          className="w-full pr-9 pl-4 py-2.5 rounded-xl bg-white dark:bg-[#141414] text-stone-900 dark:text-white placeholder-stone-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#d4af37] border border-stone-200/80 dark:border-[#d4af37]/25 shadow-xs"
         />
         <Search className="w-4 h-4 text-stone-400 absolute right-3 top-3 pointer-events-none" />
       </div>
@@ -98,8 +98,8 @@ export const DuasSection: React.FC = () => {
             onClick={() => setActiveCategory(cat.id)}
             className={`whitespace-nowrap px-3 py-1.5 rounded-xl font-semibold transition shrink-0 ${
               activeCategory === cat.id
-                ? 'bg-emerald-800 text-white shadow-xs'
-                : 'bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-100'
+                ? 'bg-[#d4af37] text-stone-950 font-bold shadow-xs'
+                : 'bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-[#1a1814]'
             }`}
           >
             {cat.label}
@@ -116,11 +116,11 @@ export const DuasSection: React.FC = () => {
           return (
             <div
               key={dua.id}
-              className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-sm space-y-3 transition"
+              className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 shadow-sm space-y-3 transition"
             >
               {/* Dua Category and Title */}
               <div className="flex items-center justify-between border-b border-stone-100 dark:border-stone-800/80 pb-2">
-                <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full">
+                <span className="text-[11px] font-bold text-stone-900 dark:text-[#d4af37] bg-[#d4af37]/15 px-2.5 py-0.5 rounded-full border border-[#d4af37]/20">
                   {dua.categoryTitle}
                 </span>
 
@@ -140,7 +140,7 @@ export const DuasSection: React.FC = () => {
               </div>
 
               {/* Source & Reward */}
-              <div className="text-[11px] space-y-1 bg-stone-50 dark:bg-stone-800/50 p-2.5 rounded-xl border border-stone-100 dark:border-stone-800">
+              <div className="text-[11px] space-y-1 bg-stone-50 dark:bg-[#1a1814] p-2.5 rounded-xl border border-stone-100 dark:border-stone-800">
                 <div className="font-semibold text-stone-700 dark:text-stone-300">
                   المصدر: <span className="font-normal text-stone-500 dark:text-stone-400">{dua.source}</span>
                 </div>
@@ -158,25 +158,25 @@ export const DuasSection: React.FC = () => {
                   onClick={() => handleIncrement(dua.id, dua.targetCount)}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 ${
                     isFinished
-                      ? 'bg-emerald-800 text-white'
-                      : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 hover:bg-emerald-100'
+                      ? 'bg-[#d4af37] text-stone-950 font-bold'
+                      : 'bg-stone-100 dark:bg-[#1a1814] text-stone-800 dark:text-[#d4af37] hover:bg-stone-200 border border-transparent dark:border-[#d4af37]/20'
                   }`}
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
                   <span>
                     التكرار: {currentCount} / {dua.targetCount}
                   </span>
-                  {isFinished && <Check className="w-3.5 h-3.5 text-amber-300 stroke-[3]" />}
+                  {isFinished && <Check className="w-3.5 h-3.5 text-stone-950 stroke-[3]" />}
                 </button>
 
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => handleCopy(dua)}
                     title="نسخ الدعاء"
-                    className="p-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-600 dark:text-stone-300 transition"
+                    className="p-2 rounded-xl bg-stone-100 dark:bg-[#1a1814] hover:bg-stone-200 text-stone-600 dark:text-stone-300 transition"
                   >
                     {copiedId === dua.id ? (
-                      <Check className="w-4 h-4 text-emerald-600" />
+                      <Check className="w-4 h-4 text-[#d4af37]" />
                     ) : (
                       <Copy className="w-4 h-4" />
                     )}
@@ -185,7 +185,7 @@ export const DuasSection: React.FC = () => {
                   <button
                     onClick={() => handleShare(dua)}
                     title="مشاركة الدعاء"
-                    className="p-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-600 dark:text-stone-300 transition"
+                    className="p-2 rounded-xl bg-stone-100 dark:bg-[#1a1814] hover:bg-stone-200 text-stone-600 dark:text-stone-300 transition"
                   >
                     <Share2 className="w-4 h-4" />
                   </button>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ShieldCheck, Heart, Sparkles, Copy, Check } from 'lucide-react';
+import { X, ShieldCheck, Copy, Check } from 'lucide-react';
 import { HisnMuslimSvg } from './ServicesSvgIcons';
 
 interface Props {
@@ -70,13 +70,13 @@ export const HisnMuslimModal: React.FC<Props> = ({ isOpen, onClose, inline = fal
       {HISN_ITEMS.map((item) => (
         <div
           key={item.id}
-          className="p-4 rounded-3xl bg-white dark:bg-[#122e23] border border-stone-200/80 dark:border-stone-800 space-y-2 shadow-xs transition hover:border-[#dfb76c]/40"
+          className="p-4 rounded-3xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 space-y-2 shadow-xs transition hover:border-[#d4af37]/50"
         >
           <div className="flex items-center justify-between text-xs">
-            <span className="font-bold text-[#0d3b2e] dark:text-[#dfb76c]">
+            <span className="font-bold text-stone-900 dark:text-[#d4af37]">
               {item.category}
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#dfb76c]/15 text-[#926a27] dark:text-[#dfb76c] font-bold">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#d4af37]/15 text-[#926a27] dark:text-[#d4af37] font-bold">
               {item.count > 1 ? `${item.count} مرات` : 'مرة واحدة'}
             </span>
           </div>
@@ -96,10 +96,10 @@ export const HisnMuslimModal: React.FC<Props> = ({ isOpen, onClose, inline = fal
             <button
               onClick={() => handleCopy(item)}
               title="نسخ الدعاء"
-              className="p-1.5 rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800 text-[#0d3b2e] dark:text-[#dfb76c] transition active:scale-90"
+              className="p-1.5 rounded-xl hover:bg-stone-100 dark:hover:bg-[#1a1814] text-stone-700 dark:text-[#d4af37] transition active:scale-90"
             >
               {copiedId === item.id ? (
-                <Check className="w-4 h-4 text-emerald-600" />
+                <Check className="w-4 h-4 text-[#d4af37]" />
               ) : (
                 <Copy className="w-4 h-4" />
               )}
@@ -113,15 +113,15 @@ export const HisnMuslimModal: React.FC<Props> = ({ isOpen, onClose, inline = fal
   if (inline) {
     return (
       <div className="space-y-4 pb-12 animate-in fade-in duration-200">
-        <div className="p-4 rounded-3xl bg-gradient-to-r from-[#0d3b2e] to-[#09231b] text-white border border-[#dfb76c]/30 shadow-md flex items-center justify-between">
+        <div className="p-4 rounded-3xl bg-gradient-to-r from-[#1a1814] to-[#141414] text-white border border-[#d4af37]/30 shadow-md flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-[#dfb76c]/20 border border-[#dfb76c]/30 flex items-center justify-center text-[#dfb76c]">
+            <div className="w-10 h-10 rounded-2xl bg-[#d4af37]/20 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37]">
               <HisnMuslimSvg className="w-6 h-6" />
             </div>
             <div>
               <h2 className="text-sm font-bold text-white flex items-center gap-1.5">
                 <span>حصن المسلم المعتمد</span>
-                <ShieldCheck className="w-3.5 h-3.5 text-[#dfb76c]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#d4af37]" />
               </h2>
               <p className="text-[10px] text-stone-300">
                 أدعية الحفظ والتحصين والوقاية اليومية
@@ -135,18 +135,18 @@ export const HisnMuslimModal: React.FC<Props> = ({ isOpen, onClose, inline = fal
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="w-full max-w-sm max-h-[90vh] bg-[#fcfbf7] dark:bg-[#0b241c] text-stone-900 dark:text-stone-100 rounded-3xl p-5 shadow-2xl space-y-4 border border-[#dfb76c]/40 animate-in zoom-in-95 duration-200 overflow-hidden flex flex-col justify-between">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="w-full max-w-sm max-h-[90vh] bg-[#faf8f5] dark:bg-[#141414] text-stone-900 dark:text-stone-100 rounded-3xl p-5 shadow-2xl space-y-4 border border-[#d4af37]/40 animate-in zoom-in-95 duration-200 overflow-hidden flex flex-col justify-between">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-stone-200/80 dark:border-stone-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-[#0d3b2e] dark:bg-[#122e23] border border-[#dfb76c]/30 flex items-center justify-center text-[#dfb76c]">
+            <div className="w-10 h-10 rounded-2xl bg-[#1a1814] border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37]">
               <HisnMuslimSvg className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[#0d3b2e] dark:text-[#dfb76c] flex items-center gap-1.5">
+              <h3 className="text-sm font-bold text-stone-900 dark:text-[#d4af37] flex items-center gap-1.5">
                 <span>حصن المسلم المعتمد</span>
-                <ShieldCheck className="w-3.5 h-3.5 text-[#dfb76c]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#d4af37]" />
               </h3>
               <p className="text-[10px] text-stone-500 dark:text-stone-400">
                 أدعية الحفظ والتحصين والوقاية اليومية

@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavigationTab, PrayerTimesResponse } from './types';
 import { useTheme } from './hooks/useTheme';
 import { useSettings } from './hooks/useSettings';
 import { fetchPrayerTimes } from './services/aladhanApi';
-import { TopHeader } from './components/layout/TopHeader';
 import { HomeTab } from './components/home/HomeTab';
 import { PrayersTab } from './components/prayers/PrayersTab';
 import { QuranTab } from './components/quran/QuranTab';
@@ -18,13 +17,14 @@ import { MoreTab } from './components/more/MoreTab';
 import { PrayerReviewTab } from './components/review_prayer/PrayerReviewTab';
 import { Hadith100Tab } from './components/hadith/Hadith100Tab';
 import { LocationModal } from './components/common/LocationModal';
-import { OfflineIndicator } from './components/common/OfflineIndicator';
 import { ServicesGridModal } from './components/home/ServicesGridModal';
 import { ShareForRewardModal } from './components/home/ShareForRewardModal';
 import { IslamicHistoryModal } from './components/home/IslamicHistoryModal';
 import { RamadanSectionModal } from './components/home/RamadanSectionModal';
 import { HisnMuslimModal } from './components/home/HisnMuslimModal';
 import { QiblaCompassModal } from './components/home/QiblaCompassModal';
+import { IslamicQuizModal } from './components/quiz/IslamicQuizModal';
+import { ExitConfirmModal } from './components/common/ExitConfirmModal';
 import { cleanTimeString } from './utils/prayerUtils';
 
 export default function App() {
@@ -38,15 +38,120 @@ export default function App() {
   const [isGlobalRamadanOpen, setIsGlobalRamadanOpen] = useState(false);
   const [isGlobalHisnOpen, setIsGlobalHisnOpen] = useState(false);
   const [isGlobalQiblaOpen, setIsGlobalQiblaOpen] = useState(false);
+  const [isGlobalQuizOpen, setIsGlobalQuizOpen] = useState(false);
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+
+  // References for popstate back button handler
+  const stateRef = useRef({
+    activeTab,
+    isLocationModalOpen,
+    isGlobalServicesModalOpen,
+    isGlobalShareOpen,
+    isGlobalHistoryOpen,
+    isGlobalRamadanOpen,
+    isGlobalHisnOpen,
+    isGlobalQiblaOpen,
+    isGlobalQuizOpen,
+    isExitModalOpen,
+  });
+
+  useEffect(() => {
+    stateRef.current = {
+      activeTab,
+      isLocationModalOpen,
+      isGlobalServicesModalOpen,
+      isGlobalShareOpen,
+      isGlobalHistoryOpen,
+      isGlobalRamadanOpen,
+      isGlobalHisnOpen,
+      isGlobalQiblaOpen,
+      isGlobalQuizOpen,
+      isExitModalOpen,
+    };
+  }, [
+    activeTab,
+    isLocationModalOpen,
+    isGlobalServicesModalOpen,
+    isGlobalShareOpen,
+    isGlobalHistoryOpen,
+    isGlobalRamadanOpen,
+    isGlobalHisnOpen,
+    isGlobalQiblaOpen,
+    isGlobalQuizOpen,
+    isExitModalOpen,
+  ]);
+
+  // Mobile Back Button interception
+  useEffect(() => {
+    // Seed initial history entry
+    window.history.replaceState({ appState: 'root' }, '');
+    window.history.pushState({ appState: 'active' }, '');
+
+    const handlePopState = (event: PopStateEvent) => {
+      const current = stateRef.current;
+
+      // 1. If Exit Modal is open, close it
+      if (current.isExitModalOpen) {
+        setIsExitModalOpen(false);
+        window.history.pushState({ appState: 'active' }, '');
+        return;
+      }
+
+      // 2. If any other modal is open, close it instead of leaving
+      if (
+        current.isGlobalServicesModalOpen ||
+        current.isGlobalShareOpen ||
+        current.isGlobalHistoryOpen ||
+        current.isGlobalRamadanOpen ||
+        current.isGlobalHisnOpen ||
+        current.isGlobalQiblaOpen ||
+        current.isGlobalQuizOpen ||
+        current.isLocationModalOpen
+      ) {
+        setIsGlobalServicesModalOpen(false);
+        setIsGlobalShareOpen(false);
+        setIsGlobalHistoryOpen(false);
+        setIsGlobalRamadanOpen(false);
+        setIsGlobalHisnOpen(false);
+        setIsGlobalQiblaOpen(false);
+        setIsGlobalQuizOpen(false);
+        setIsLocationModalOpen(false);
+        window.history.pushState({ appState: 'active' }, '');
+        return;
+      }
+
+      // 3. If currently in a secondary tab, return to HomeTab
+      if (current.activeTab !== 'home') {
+        setActiveTab('home');
+        window.history.pushState({ appState: 'active' }, '');
+        return;
+      }
+
+      // 4. If in HomeTab, ask for confirmation to exit
+      setIsExitModalOpen(true);
+      window.history.pushState({ appState: 'active' }, '');
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleConfirmExit = () => {
+    setIsExitModalOpen(false);
+    // Allow browser / webview to exit by going back to the root state
+    window.history.go(-2);
+  };
 
   const handleOpenTracker = (subView: TrackerSubView = 'daily') => {
     setTrackerInitialSubView(subView);
     setActiveTab('tracker');
+    window.history.pushState({ appState: 'tracker' }, '');
   };
 
   const handleOpenAthkar = (subTab: 'daily' | 'tahseen' | 'all' | 'sebha' | 'athkar' = 'daily') => {
     setAthkarInitialSubTab(subTab);
     setActiveTab('athkar');
+    window.history.pushState({ appState: 'athkar' }, '');
   };
 
   const { theme, isDark, toggleTheme, updateTheme } = useTheme();
@@ -104,29 +209,18 @@ export default function App() {
     <div className="min-h-screen bg-stone-200/60 dark:bg-[#0a0a0a] flex flex-col justify-between antialiased selection:bg-[#d4af37] selection:text-black transition-colors duration-200">
       {/* Mobile-first centered frame on desktop, full-width responsive on mobile */}
       <div className="w-full max-w-md mx-auto min-h-screen bg-[#fcfbf7] dark:bg-[#0f0f0f] flex flex-col relative shadow-xl sm:border-x sm:border-stone-300/40 dark:sm:border-[rgba(212,175,55,0.2)]">
-        {/* Top App Header (Shown on other tabs, while Home has its dedicated HomeTopBar) */}
-        {activeTab !== 'home' && (
-          <TopHeader
-            isDark={isDark}
-            onToggleTheme={toggleTheme}
-            location={settings.selectedLocation}
-            hijriDate={prayerData?.date.hijri}
-            onOpenLocationPicker={() => setIsLocationModalOpen(true)}
-            onNavigateHome={() => setActiveTab('home')}
-            onOpenServices={() => setIsGlobalServicesModalOpen(true)}
-            activeTab={activeTab}
-          />
-        )}
-
-        {/* Main Content Area */}
-        <main className={`flex-1 px-4 ${activeTab === 'home' ? 'pt-1.5' : 'pt-3'} pb-8 overflow-y-auto`}>
+        {/* Main Content Area - Note: TopHeader on secondary tabs removed per user request */}
+        <main className={`flex-1 px-4 ${activeTab === 'home' ? 'pt-1.5' : 'pt-2'} pb-8 overflow-y-auto`}>
           {activeTab === 'home' && (
             <HomeTab
               prayerData={prayerData}
               isLoadingPrayers={isLoadingPrayers}
               prayerError={prayerError}
               location={settings.selectedLocation}
-              onNavigateTab={(tab) => setActiveTab(tab)}
+              onNavigateTab={(tab) => {
+                setActiveTab(tab);
+                window.history.pushState({ appState: tab }, '');
+              }}
               onOpenLocationModal={() => setIsLocationModalOpen(true)}
               is24h={settings.timeFormat24}
               onOpenTracker={handleOpenTracker}
@@ -147,24 +241,34 @@ export default function App() {
               onUpdateAsrSchool={updateAsrSchool}
               onUpdateTimeFormat={updateTimeFormat}
               onOpenLocationModal={() => setIsLocationModalOpen(true)}
+              onNavigateHome={() => setActiveTab('home')}
             />
           )}
 
           {activeTab === 'tracker' && (
             <TrackerTab
               hijriDate={prayerData?.date.hijri}
-              onNavigateTab={(tab) => setActiveTab(tab)}
+              onNavigateTab={(tab) => {
+                setActiveTab(tab);
+                window.history.pushState({ appState: tab }, '');
+              }}
+              onNavigateHome={() => setActiveTab('home')}
               initialSubView={trackerInitialSubView}
             />
           )}
 
-          {activeTab === 'quran' && <QuranTab />}
+          {activeTab === 'quran' && (
+            <QuranTab onNavigateHome={() => setActiveTab('home')} />
+          )}
 
           {(activeTab === 'athkar' || (activeTab as string) === 'hisn') && (
             <HisnMuslimTab
               initialSubTab={athkarInitialSubTab === 'sebha' ? 'sebha' : athkarInitialSubTab === 'tahseen' ? 'tahseen' : athkarInitialSubTab === 'all' ? 'all' : 'daily'}
               onNavigateHome={() => setActiveTab('home')}
-              onNavigateTab={(tab) => setActiveTab(tab)}
+              onNavigateTab={(tab) => {
+                setActiveTab(tab);
+                window.history.pushState({ appState: tab }, '');
+              }}
             />
           )}
 
@@ -179,31 +283,39 @@ export default function App() {
               onUpdateAsrSchool={updateAsrSchool}
               onUpdateTimeFormat={updateTimeFormat}
               onOpenTracker={handleOpenTracker}
+              onNavigateHome={() => setActiveTab('home')}
             />
           )}
 
           {activeTab === 'review_prayer' && (
             <PrayerReviewTab
               onNavigateHome={() => setActiveTab('home')}
-              onNavigateTab={(tab) => setActiveTab(tab)}
+              onNavigateTab={(tab) => {
+                setActiveTab(tab);
+                window.history.pushState({ appState: tab }, '');
+              }}
             />
           )}
 
           {activeTab === 'hadith' && (
             <Hadith100Tab
               onNavigateHome={() => setActiveTab('home')}
-              onNavigateTab={(tab) => setActiveTab(tab)}
+              onNavigateTab={(tab) => {
+                setActiveTab(tab);
+                window.history.pushState({ appState: tab }, '');
+              }}
             />
           )}
         </main>
 
-        {/* Global Services Modal accessible from any tab */}
+        {/* Global Services Modal */}
         <ServicesGridModal
           isOpen={isGlobalServicesModalOpen}
           onClose={() => setIsGlobalServicesModalOpen(false)}
           onNavigateTab={(tab) => {
             setActiveTab(tab);
             setIsGlobalServicesModalOpen(false);
+            window.history.pushState({ appState: tab }, '');
           }}
           onOpenAthkar={(sub) => {
             handleOpenAthkar(sub);
@@ -234,6 +346,16 @@ export default function App() {
             setActiveTab('athkar');
             setAthkarInitialSubTab('daily');
           }}
+          onOpenQuiz={() => {
+            setIsGlobalServicesModalOpen(false);
+            setIsGlobalQuizOpen(true);
+          }}
+        />
+
+        <IslamicQuizModal
+          isOpen={isGlobalQuizOpen}
+          onClose={() => setIsGlobalQuizOpen(false)}
+          isDark={isDark}
         />
 
         <ShareForRewardModal
@@ -275,6 +397,13 @@ export default function App() {
           onRequestGPS={requestGPSLocation}
           isLocating={isLocating}
           locationError={locationError}
+        />
+
+        {/* Exit Confirmation Dialog when pressing Back on Home Tab */}
+        <ExitConfirmModal
+          isOpen={isExitModalOpen}
+          onClose={() => setIsExitModalOpen(false)}
+          onConfirmExit={handleConfirmExit}
         />
       </div>
     </div>

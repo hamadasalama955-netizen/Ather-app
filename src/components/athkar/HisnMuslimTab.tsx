@@ -1,92 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import {
-  BookOpen,
   Search,
   ChevronLeft,
-  Sun,
-  Moon,
-  Clock,
+  ArrowRight,
   ShieldCheck,
-  Heart,
-  Copy,
   Check,
-  Share2,
   RotateCcw,
-  Compass,
-  Bookmark,
+  Copy,
 } from 'lucide-react';
 import { AthkarItem, NavigationTab } from '../../types';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 import { fetchAllAthkar, getAthkarCategories } from '../../services/athkarService';
 import { AthkarCategoryView } from './AthkarCategoryView';
 import { AthkarSpiritualSplash } from './AthkarSpiritualSplash';
 import { SebhaSection } from './SebhaSection';
+import { KUNUZ_ATHKAR_ITEMS } from '../../data/kunuzAthkarData';
+import {
+  MorningAthkarIcon,
+  EveningAthkarIcon,
+  SleepAthkarIcon,
+  WakingAthkarIcon,
+  AfterPrayerAthkarIcon,
+  KunuzAthkarIcon,
+  TasbeehAthkarIcon,
+  HisnMuslimIcon,
+} from './AthkarGridIcons';
 
 interface Props {
   initialCategory?: string | null;
-  initialSubTab?: 'daily' | 'tahseen' | 'all' | 'sebha';
+  initialSubTab?: 'grid' | 'daily' | 'tahseen' | 'all' | 'sebha';
   onNavigateHome?: () => void;
   onNavigateTab?: (tab: NavigationTab) => void;
 }
 
-interface TahseenDuaItem {
-  id: string;
-  category: string;
-  thikr: string;
-  benefit: string;
-  dalil: string;
-  count: number;
-}
-
-const TAHSEEN_ITEMS: TahseenDuaItem[] = [
-  {
-    id: 'tahseen_1',
-    category: 'التحصين التام الصباحي والمسائي',
-    thikr: '«بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ»',
-    benefit: 'حفظ ووقاية تامة من كل فجأة بلاء وضر وسم وسحر',
-    dalil: 'رواه أبو داود والترمذي (من قالها ثلاثاً إذا أصبح وثلاثاً إذا أمسى لم يضره شيء)',
-    count: 3,
-  },
-  {
-    id: 'tahseen_2',
-    category: 'الاستعاذة بكلمات الله التامات',
-    thikr: '«أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ»',
-    benefit: 'حصن منيع من الهوام والدواب وكل ذي شر ومكروه',
-    dalil: 'رواه مسلم (من نزل منزلاً ثم قالها لم يضره شيء حتى يرتحل من منزله ذلك)',
-    count: 3,
-  },
-  {
-    id: 'tahseen_3',
-    category: 'دعاء الخروج من المنزل والحماية',
-    thikr: '«بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ»',
-    benefit: 'كفاية ووقاية وهداية وتنحي الشيطان عن العبد',
-    dalil: 'رواه الترمذي وأبو داود (يُقال له: هُديتَ وكُفيتَ ووُقيتَ، وتنحّى عنه الشيطان)',
-    count: 1,
-  },
-  {
-    id: 'tahseen_4',
-    category: 'تفريج الهم والحزن وقضاء الديون',
-    thikr: '«اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ»',
-    benefit: 'دعاء نبوي جامع لانشراح الصدر والنجاة من كرب الدنيا والآخرة',
-    dalil: 'رواه البخاري عن أنس بن مالك رضي الله عنه',
-    count: 1,
-  },
-  {
-    id: 'tahseen_5',
-    category: 'سيد الاستغفار وموجب المغفرة',
-    thikr: '«اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ»',
-    benefit: 'أعظم صيغ التوبة والمغفرة وموجبة للجنة',
-    dalil: 'رواه البخاري (من قالها موقناً بها حين يمسي فمات من ليلته دخل الجنة)',
-    count: 1,
-  },
-];
+const normalizeSubTab = (t?: string): 'grid' | 'all' | 'sebha' =>
+  t === 'all' ? 'all' : t === 'sebha' ? 'sebha' : 'grid';
 
 export const HisnMuslimTab: React.FC<Props> = ({
   initialCategory = null,
-  initialSubTab = 'daily',
+  initialSubTab = 'grid',
   onNavigateHome,
   onNavigateTab,
 }) => {
-  const [subTab, setSubTab] = useState<'daily' | 'tahseen' | 'all' | 'sebha'>(initialSubTab);
+  const [subTab, setSubTab] = useState<'grid' | 'all' | 'sebha'>(() => normalizeSubTab(initialSubTab));
   const [showSpiritualSplash, setShowSpiritualSplash] = useState(true);
   const [athkarList, setAthkarList] = useState<AthkarItem[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
@@ -97,20 +53,12 @@ export const HisnMuslimTab: React.FC<Props> = ({
   const [activeCategory, setActiveCategory] = useState<string | null>(initialCategory);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Tahseen repetition counter state
-  const [tahseenCounts, setTahseenCounts] = useState<Record<string, number>>(() => {
-    const initial: Record<string, number> = {};
-    TAHSEEN_ITEMS.forEach((item) => {
-      initial[item.id] = 0;
-    });
-    return initial;
-  });
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
 
   // Sync initialSubTab when parent changes it
   useEffect(() => {
     if (initialSubTab) {
-      setSubTab(initialSubTab);
+      setSubTab(normalizeSubTab(initialSubTab));
     }
   }, [initialSubTab]);
 
@@ -141,330 +89,183 @@ export const HisnMuslimTab: React.FC<Props> = ({
     };
   }, []);
 
-  const handleTahseenIncrement = (item: TahseenDuaItem) => {
-    if (typeof navigator !== 'undefined' && navigator.vibrate) {
-      navigator.vibrate(25);
-    }
-    setTahseenCounts((prev) => {
-      const current = prev[item.id] || 0;
-      if (current < item.count) {
-        const next = current + 1;
-        if (next === item.count && typeof navigator !== 'undefined' && navigator.vibrate) {
-          navigator.vibrate([40, 50, 40]);
-        }
-        return { ...prev, [item.id]: next };
-      }
-      return prev;
-    });
-  };
+  // Filtered categories for complete 135 doors
+  const filteredCategories = categories.filter((c) =>
+    c.toLowerCase().includes(searchQuery.trim().toLowerCase())
+  );
 
-  const handleResetTahseen = (id: string) => {
-    setTahseenCounts((prev) => ({ ...prev, [id]: 0 }));
-  };
-
-  const handleCopyTahseen = (item: TahseenDuaItem) => {
-    const text = `${item.thikr}\n[الفضل: ${item.benefit}]\n[المصدر: ${item.dalil}]\n— من حصن المسلم · أثَر`;
-    navigator.clipboard.writeText(text);
-    setCopiedId(item.id);
-    setTimeout(() => setCopiedId(null), 2000);
-  };
-
-  // Category view active
+  // Category view active: Render AthkarCategoryView matching image 3 (image_e17c58f9.png)
   if (activeCategory) {
-    const itemsForCategory = athkarList.filter((item) => item.category === activeCategory);
+    const itemsForCategory =
+      activeCategory === 'كنوز'
+        ? KUNUZ_ATHKAR_ITEMS
+        : athkarList.filter((item) => item.category === activeCategory);
+
     return (
       <AthkarCategoryView
         category={activeCategory}
-        items={itemsForCategory}
+        items={itemsForCategory.length > 0 ? itemsForCategory : KUNUZ_ATHKAR_ITEMS}
         onBack={() => setActiveCategory(null)}
       />
     );
   }
 
-  // Top core daily athkar categories
-  const topDailyCategories = [
-    { title: 'أذكار الصباح', icon: Sun, color: 'text-amber-500 bg-amber-50 dark:bg-amber-950/60' },
-    { title: 'أذكار المساء', icon: Moon, color: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/60' },
-    { title: 'الأذكار بعد السلام من الصلاة', icon: Clock, color: 'text-[#d4af37] bg-[#d4af37]/15 dark:bg-[#d4af37]/10' },
-    { title: 'أذكار النوم', icon: Moon, color: 'text-purple-500 bg-purple-50 dark:bg-purple-950/60' },
-    { title: 'أذكار الاستيقاظ من النوم', icon: Sun, color: 'text-yellow-600 bg-yellow-50 dark:bg-yellow-950/60' },
+  // 8 Main Cards matching image 2 (image_b31003b4.png)
+  const mainAthkarCategories = [
+    {
+      id: 'morning',
+      title: 'أذكار الصباح',
+      targetCategory: 'أذكار الصباح',
+      icon: <MorningAthkarIcon className="w-16 h-16 sm:w-20 sm:h-20" />,
+      onClick: () => setActiveCategory('أذكار الصباح'),
+    },
+    {
+      id: 'evening',
+      title: 'أذكار المساء',
+      targetCategory: 'أذكار المساء',
+      icon: <EveningAthkarIcon className="w-16 h-16 sm:w-20 sm:h-20" />,
+      onClick: () => setActiveCategory('أذكار المساء'),
+    },
+    {
+      id: 'sleep',
+      title: 'أذكار النوم',
+      targetCategory: 'أذكار النوم',
+      icon: <SleepAthkarIcon className="w-16 h-16 sm:w-20 sm:h-20" />,
+      onClick: () => setActiveCategory('أذكار النوم'),
+    },
+    {
+      id: 'waking',
+      title: 'أذكار الاستيقاظ',
+      targetCategory: 'أذكار الاستيقاظ من النوم',
+      icon: <WakingAthkarIcon className="w-16 h-16 sm:w-20 sm:h-20" />,
+      onClick: () => setActiveCategory('أذكار الاستيقاظ من النوم'),
+    },
+    {
+      id: 'after_prayer',
+      title: 'أذكار بعد الصلاه',
+      targetCategory: 'الأذكار بعد السلام من الصلاة',
+      icon: <AfterPrayerAthkarIcon className="w-16 h-16 sm:w-20 sm:h-20" />,
+      onClick: () => setActiveCategory('الأذكار بعد السلام من الصلاة'),
+    },
+    {
+      id: 'kunuz',
+      title: 'كنوز',
+      targetCategory: 'كنوز',
+      icon: <KunuzAthkarIcon className="w-16 h-16 sm:w-20 sm:h-20" />,
+      onClick: () => setActiveCategory('كنوز'),
+    },
+    {
+      id: 'tasbeeh',
+      title: 'تسبيح',
+      targetCategory: null,
+      icon: <TasbeehAthkarIcon className="w-16 h-16 sm:w-20 sm:h-20" />,
+      onClick: () => setSubTab('sebha'),
+    },
+    {
+      id: 'hisn',
+      title: 'حصن المسلم',
+      targetCategory: null,
+      icon: <HisnMuslimIcon className="w-16 h-16 sm:w-20 sm:h-20" />,
+      onClick: () => setSubTab('all'),
+    },
   ];
 
-  const filteredCategories = categories.filter((cat) =>
-    cat.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
-    <div className="space-y-4 pb-24 animate-in fade-in duration-300">
-      {/* Spiritual Transition Splash on Opening */}
+    <div className="space-y-4 pb-24 animate-in fade-in duration-300" dir="rtl">
+      {/* 1. Welcoming Spiritual Splash Screen (image_b23d028a.png) with theme support */}
       {showSpiritualSplash && (
-        <AthkarSpiritualSplash onDismiss={() => setShowSpiritualSplash(false)} />
+        <AthkarSpiritualSplash
+          onDismiss={() => setShowSpiritualSplash(false)}
+          isDark={isDark}
+        />
       )}
 
-      {/* Main Header Banner for Hisn Muslim */}
-      <div className="rounded-3xl bg-[#faf8f5] dark:bg-[#141414] text-stone-900 dark:text-white p-5 border border-[#d4af37]/35 shadow-md space-y-3 relative overflow-hidden">
+      {/* 2. Main Header for Ward Al-Athkar */}
+      <div className="rounded-3xl bg-[#faf8f5] dark:bg-[#141414] text-stone-900 dark:text-white p-5 border border-[#d4af37]/35 shadow-md space-y-1 relative overflow-hidden text-center sm:text-right">
         <div className="absolute top-0 left-0 w-32 h-32 bg-[#d4af37]/10 rounded-full blur-2xl pointer-events-none" />
 
         <div className="flex items-center justify-between relative z-10">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#aa7c11] text-stone-950 flex items-center justify-center font-bold shadow-md">
-              <ShieldCheck className="w-6 h-6 text-stone-950" />
-            </div>
-            <div>
-              <h2 className="text-lg sm:text-xl font-black text-stone-900 dark:text-[#f5e6b8]" style={{ fontFamily: "'Amiri', 'Traditional Arabic', serif" }}>
-                حصن المسلم
+            <ScreenBackButton
+              onClick={() => {
+                if (subTab !== 'grid') {
+                  setSubTab('grid');
+                } else if (onNavigateHome) {
+                  onNavigateHome();
+                }
+              }}
+              ariaLabel="رجوع"
+            />
+            <div className="space-y-0.5 text-right">
+              <h2
+                className="text-xl sm:text-2xl font-black text-stone-900 dark:text-[#f5e6b8]"
+                style={{ fontFamily: "'Amiri', 'Traditional Arabic', serif" }}
+              >
+                ورد الأذكار
               </h2>
               <p className="text-xs text-[#8c6b2d] dark:text-[#d4af37]">
-                جامع الأذكار اليومية وأوراد التحصين النبوية الشريفة
+                الأوراد اليومية والمأثورات النبوية الشريفة
               </p>
             </div>
           </div>
-
-          <span className="text-[11px] font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-[#1a1814] text-[#8c6b2d] dark:text-[#d4af37] border border-[#d4af37]/30 shrink-0 font-mono">
-            {categories.length > 0 ? `${categories.length} باباً` : '١٣٥ باباً'}
-          </span>
-        </div>
-
-        <div className="text-[11px] text-stone-500 dark:text-[#a39e93] pt-2 border-t border-[#d4af37]/20 flex items-center justify-between flex-wrap gap-1">
-          <span>المصدر: كتاب «حصن المسلم من أذكار الكتاب والسنة»</span>
-          <span className="text-[#8c6b2d] dark:text-[#d4af37] font-semibold">٣٤٥ ذكراً مأثوراً</span>
         </div>
       </div>
 
-      {/* 4 Clean Sub-Tab Switches: الأوراد اليومية | أوراد التحصين | أبواب الحصن | المسبحة */}
-      <div className="grid grid-cols-4 gap-1 p-1 bg-[#faf8f5] dark:bg-[#141414] rounded-2xl border border-[#d4af37]/25 text-[11px] font-bold shadow-2xs">
-        <button
-          onClick={() => setSubTab('daily')}
-          className={`py-2 px-1 text-center rounded-xl transition ${
-            subTab === 'daily'
-              ? 'bg-[#d4af37] text-stone-950 shadow-xs font-black'
-              : 'text-stone-600 dark:text-[#a39e93] hover:text-[#d4af37]'
-          }`}
-        >
-          أذكار اليوم
-        </button>
-        <button
-          onClick={() => setSubTab('tahseen')}
-          className={`py-2 px-1 text-center rounded-xl transition ${
-            subTab === 'tahseen'
-              ? 'bg-[#d4af37] text-stone-950 shadow-xs font-black'
-              : 'text-stone-600 dark:text-[#a39e93] hover:text-[#d4af37]'
-          }`}
-        >
-          أوراد التحصين
-        </button>
-        <button
-          onClick={() => setSubTab('all')}
-          className={`py-2 px-1 text-center rounded-xl transition ${
-            subTab === 'all'
-              ? 'bg-[#d4af37] text-stone-950 shadow-xs font-black'
-              : 'text-stone-600 dark:text-[#a39e93] hover:text-[#d4af37]'
-          }`}
-        >
-          أبواب الحصن
-        </button>
-        <button
-          onClick={() => setSubTab('sebha')}
-          className={`py-2 px-1 text-center rounded-xl transition ${
-            subTab === 'sebha'
-              ? 'bg-[#d4af37] text-stone-950 shadow-xs font-black'
-              : 'text-stone-600 dark:text-[#a39e93] hover:text-[#d4af37]'
-          }`}
-        >
-          المسبحة
-        </button>
-      </div>
-
-      {/* VIEW 1: DAILY CORE ATHKAR */}
-      {subTab === 'daily' && (
+      {/* ========================================================
+          3. MAIN VIEW: 8 ATHKAR CARDS (MATCHING IMAGE_B31003B4.PNG)
+         ======================================================== */}
+      {subTab === 'grid' && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-xs font-bold text-stone-800 dark:text-stone-200 flex items-center gap-1.5">
-              <Sun className="w-4 h-4 text-amber-500" />
-              <span>الأوراد اليومية المأثورة</span>
-            </h3>
-            <span className="text-[11px] text-stone-500 dark:text-stone-400">
-              اضغط على الورد للقراءة والعد
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            {topDailyCategories.map((top) => {
-              const count = athkarList.filter((i) => i.category === top.title).length;
-              const IconComponent = top.icon;
-
-              return (
-                <button
-                  key={top.title}
-                  onClick={() => setActiveCategory(top.title)}
-                  className="p-4 rounded-3xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 hover:border-[#d4af37]/60 text-right transition shadow-xs group active:scale-[0.98] flex items-center justify-between gap-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${top.color} shadow-2xs`}>
-                      <IconComponent className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-stone-900 dark:text-white group-hover:text-[#d4af37] transition-colors">
-                        {top.title}
-                      </h4>
-                      <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-0.5">
-                        {count > 0 ? `${count} ذكراً مأثوراً` : 'أذكار موثقة'}
-                      </p>
-                    </div>
-                  </div>
-
-                  <ChevronLeft className="w-5 h-5 text-stone-400 group-hover:text-[#d4af37] transition-transform group-hover:-translate-x-1 shrink-0" />
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Quick Banner to Explore All Doors */}
-          <div className="p-4 rounded-3xl bg-gradient-to-r from-[#d4af37]/20 to-[#141414] border border-[#d4af37]/30 flex items-center justify-between gap-2">
-            <div>
-              <h4 className="text-xs font-bold text-[#d4af37]">
-                تريد أذكاراً لأوقات وأحوال أخرى؟
-              </h4>
-              <p className="text-[11px] text-stone-600 dark:text-stone-300 mt-0.5">
-                تصفح فهرس أبواب حصن المسلم الكامل (١٣٥ باباً)
-              </p>
-            </div>
-            <button
-              onClick={() => setSubTab('all')}
-              className="px-3 py-1.5 rounded-xl bg-[#d4af37] text-stone-950 text-xs font-bold hover:bg-[#c5a059] transition shrink-0"
-            >
-              عرض الأبواب
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* VIEW 2: PROPHETIC TAHSEEN & PROTECTION DUAS */}
-      {subTab === 'tahseen' && (
-        <div className="space-y-4">
-          <div className="p-3.5 rounded-2xl bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/25 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2 text-stone-800 dark:text-stone-200">
-              <ShieldCheck className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-              <span>أدعية التحصين الكبرى: اضغط على البطاقة لتسجيل التكرار</span>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {TAHSEEN_ITEMS.map((item) => {
-              const current = tahseenCounts[item.id] || 0;
-              const isCompleted = current >= item.count;
-
-              return (
-                <div
-                  key={item.id}
-                  className={`p-4 sm:p-5 rounded-3xl border transition-all shadow-xs space-y-3 ${
-                    isCompleted
-                      ? 'bg-[#d4af37]/10 dark:bg-[#141414] border-[#d4af37]/40'
-                      : 'bg-white dark:bg-[#141414] border-stone-200/80 dark:border-[#d4af37]/25 hover:border-[#d4af37]/50'
-                  }`}
-                >
-                  {/* Card Header: Category & Counter */}
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-[#d4af37] flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#d4af37]" />
-                      <span>{item.category}</span>
-                    </span>
-
-                    <div className="flex items-center gap-2">
-                      {isCompleted && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-[#d4af37] text-stone-950 flex items-center gap-1">
-                          <Check className="w-3 h-3" />
-                          <span>اكتمل الورد</span>
-                        </span>
-                      )}
-
-                      <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-lg bg-[#d4af37]/20 text-[#855e1b] dark:text-[#d4af37]">
-                        {current} / {item.count}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Sacred Thikr Text */}
-                  <div
-                    onClick={() => handleTahseenIncrement(item)}
-                    className="cursor-pointer active:scale-[0.99] p-2 rounded-2xl transition hover:bg-stone-50/60 dark:hover:bg-white/5"
-                  >
-                    <p
-                      style={{ fontFamily: 'var(--font-quran), Amiri, serif' }}
-                      className="text-lg sm:text-xl leading-loose text-stone-900 dark:text-stone-100 font-semibold select-text text-center sm:text-right"
-                    >
-                      {item.thikr}
-                    </p>
-                  </div>
-
-                  {/* Benefit & Evidence */}
-                  <div className="p-3 rounded-2xl bg-stone-50 dark:bg-[#1a1814] border border-stone-200/60 dark:border-[#d4af37]/20 space-y-1 text-xs">
-                    <div className="text-[#8c6b2d] dark:text-[#d4af37] font-semibold">
-                      <span>{item.benefit}</span>
-                    </div>
-                    <div className="text-[11px] text-stone-500 dark:text-stone-400">
-                      {item.dalil}
-                    </div>
-                  </div>
-
-                  {/* Card Actions */}
-                  <div className="flex items-center justify-between pt-1 border-t border-stone-100 dark:border-stone-800/80 text-xs">
-                    <button
-                      onClick={() => handleResetTahseen(item.id)}
-                      title="إعادة التكرار"
-                      className="flex items-center gap-1 text-[11px] text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-200 transition"
-                    >
-                      <RotateCcw className="w-3 h-3" />
-                      <span>إعادة</span>
-                    </button>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleCopyTahseen(item)}
-                        className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-stone-100 dark:bg-[#1a1814] text-stone-700 dark:text-stone-200 hover:text-[#d4af37] text-[11px] font-bold transition active:scale-95 border border-transparent dark:border-[#d4af37]/20"
-                      >
-                        {copiedId === item.id ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-[#d4af37]" />
-                            <span>تم النسخ</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>نسخ</span>
-                          </>
-                        )}
-                      </button>
-
-                      <button
-                        onClick={() => handleTahseenIncrement(item)}
-                        disabled={isCompleted}
-                        className={`px-4 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 ${
-                          isCompleted
-                            ? 'bg-stone-200 dark:bg-stone-800 text-stone-400 cursor-default'
-                            : 'bg-gradient-to-r from-[#d4af37] to-[#c5a059] text-stone-950 border border-[#d4af37]/40 shadow-xs'
-                        }`}
-                      >
-                        {isCompleted ? 'تم' : 'كرر الذكر +1'}
-                      </button>
-                    </div>
-                  </div>
+          <div className="grid grid-cols-3 sm:grid-cols-3 gap-2.5 sm:gap-3.5">
+            {mainAthkarCategories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={cat.onClick}
+                className="group relative flex flex-col items-center justify-between p-2.5 sm:p-3 rounded-3xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 hover:border-[#d4af37]/60 transition-all duration-200 active:scale-95 shadow-xs hover:shadow-md"
+              >
+                {/* Visual Icon Illustration */}
+                <div className="flex items-center justify-center my-1 transition-transform group-hover:scale-105">
+                  {cat.icon}
                 </div>
-              );
-            })}
+
+                {/* Bold Category Title */}
+                <span
+                  className="text-xs sm:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-[#d4af37] transition-colors text-center mt-1 leading-snug"
+                  style={{ fontFamily: "'Traditional Arabic', 'Amiri', serif" }}
+                >
+                  {cat.title}
+                </span>
+              </button>
+            ))}
           </div>
         </div>
       )}
 
-      {/* VIEW 3: COMPLETE 135 CHAPTERS INDEX WITH SEARCH */}
+      {/* ========================================================
+          4. VIEW: COMPLETE 135 CHAPTERS INDEX (WHEN CLICKING HISN AL-MUSLIM)
+         ======================================================== */}
       {subTab === 'all' && (
         <div className="space-y-3">
-          {/* Search All Categories */}
+          {/* Header & Back to 8 cards */}
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-xs font-bold text-stone-800 dark:text-stone-200">
+              أبواب حصن المسلم الكاملة (١٣٥ باباً):
+            </h3>
+            <button
+              onClick={() => setSubTab('grid')}
+              className="text-xs font-bold text-[#d4af37] hover:underline flex items-center gap-1"
+            >
+              <ArrowRight className="w-3.5 h-3.5" />
+              <span>العودة للأذكار</span>
+            </button>
+          </div>
+
+          {/* Search Box */}
           <div className="relative">
             <Search className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
             <input
               type="text"
-              placeholder="ابحث في ١٣٥ باباً من حصن المسلم..."
+              placeholder="ابحث في أبواب حصن المسلم..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-4 pr-10 py-3 rounded-2xl bg-white dark:bg-[#141414] border border-stone-200/80 dark:border-[#d4af37]/25 text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#d4af37] shadow-2xs"
@@ -521,9 +322,23 @@ export const HisnMuslimTab: React.FC<Props> = ({
         </div>
       )}
 
-      {/* VIEW 4: SEBHA SECTION */}
+      {/* ========================================================
+          5. VIEW: SEBHA SECTION (WHEN CLICKING TASBEEH)
+         ======================================================== */}
       {subTab === 'sebha' && (
         <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-xs font-bold text-stone-800 dark:text-stone-200">
+              المسبحة الإلكترونية والتسبيح:
+            </h3>
+            <button
+              onClick={() => setSubTab('grid')}
+              className="text-xs font-bold text-[#d4af37] hover:underline flex items-center gap-1"
+            >
+              <ArrowRight className="w-3.5 h-3.5" />
+              <span>العودة للأذكار</span>
+            </button>
+          </div>
           <SebhaSection />
         </div>
       )}

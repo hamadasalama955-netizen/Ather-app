@@ -16,6 +16,7 @@ import {
 import { DUAS_LIST } from '../../data/duasData';
 import { EMOTIONAL_DUAS } from '../../data/emotionalDuasData';
 import { EmotionalCategory, DuaItem, EmotionalDuaItem } from '../../types';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 
 interface Props {
   isOpen: boolean;

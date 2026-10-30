@@ -58,39 +58,41 @@ export const PrayerTimelineStrip: React.FC<Props> = ({
     }
   }
 
-  // Find daily prayer timings map
+  // Find daily prayer timings map (support both PascalCase and lowercase keys)
   const prayerMap: Record<string, PrayerInfo | undefined> = {};
   dailyPrayers.forEach((p) => {
     prayerMap[p.key] = p;
+    prayerMap[p.key.toLowerCase()] = p;
   });
 
-  // Construct 2-Row Timeline items with 6 prayer times (2 rows of 3 capsules):
-  // Row 1 (RTL, right-to-left): الفجر, الشروق, الظهر
-  // Row 2 (RTL, right-to-left): العشاء, المغرب, العصر
-  // This forms a continuous chronological loop: Fajr -> Sunrise -> Dhuhr -> (curve down) -> Asr -> Maghrib -> Isha
-  const fajr = prayerMap['fajr'];
-  const sunrise = prayerMap['sunrise'];
-  const dhuhr = prayerMap['dhuhr'];
-  const asr = prayerMap['asr'];
-  const maghrib = prayerMap['maghrib'];
-  const isha = prayerMap['isha'];
+  const fajr = prayerMap['Fajr'] || prayerMap['fajr'];
+  const sunrise = prayerMap['Sunrise'] || prayerMap['sunrise'];
+  const dhuhr = prayerMap['Dhuhr'] || prayerMap['dhuhr'];
+  const asr = prayerMap['Asr'] || prayerMap['asr'];
+  const maghrib = prayerMap['Maghrib'] || prayerMap['maghrib'];
+  const isha = prayerMap['Isha'] || prayerMap['isha'];
+
+  // Ensure at least one prayer is marked as next if timings are available
+  const hasAnyNext = [fajr, sunrise, dhuhr, asr, maghrib, isha].some((p) => p?.isNext);
+
+  const isFriday = new Date().getDay() === 5;
+  const dhuhrName = isFriday ? 'الجمعة' : 'الظهر';
 
   const row1 = [
-    { key: 'fajr', name: 'الفجر', time: fajr ? formatArabicTime(fajr.time, is24h) : '4:39 ص', isNext: fajr?.isNext },
-    { key: 'sunrise', name: 'الشروق', time: sunrise ? formatArabicTime(sunrise.time, is24h) : '6:07 ص', isNext: sunrise?.isNext },
-    { key: 'dhuhr', name: 'الظهر', time: dhuhr ? formatArabicTime(dhuhr.time, is24h) : '11:39 ص', isNext: dhuhr?.isNext },
+    { key: 'fajr', name: 'الفجر', time: fajr ? formatArabicTime(fajr.time, is24h) : '4:39 ص', isNext: !!fajr?.isNext },
+    { key: 'sunrise', name: 'الشروق', time: sunrise ? formatArabicTime(sunrise.time, is24h) : '6:07 ص', isNext: !!sunrise?.isNext },
+    { key: 'dhuhr', name: dhuhrName, time: dhuhr ? formatArabicTime(dhuhr.time, is24h) : '11:39 ص', isNext: !!dhuhr?.isNext },
   ];
 
   const row2 = [
-    { key: 'isha', name: 'العشاء', time: isha ? formatArabicTime(isha.time, is24h) : '6:28 م', isNext: isha?.isNext },
+    { key: 'isha', name: 'العشاء', time: isha ? formatArabicTime(isha.time, is24h) : '6:28 م', isNext: !!isha?.isNext },
     {
       key: 'maghrib',
       name: 'المغرب',
       time: maghrib ? formatArabicTime(maghrib.time, is24h) : '5:10 م',
-      // If no prayer marked isNext, highlight Maghrib to match design
-      isNext: maghrib?.isNext || (!dailyPrayers.some((p) => p.isNext) ? true : false),
+      isNext: !!maghrib?.isNext || (!hasAnyNext && true),
     },
-    { key: 'asr', name: 'العصر', time: asr ? formatArabicTime(asr.time, is24h) : '2:46 م', isNext: asr?.isNext },
+    { key: 'asr', name: 'العصر', time: asr ? formatArabicTime(asr.time, is24h) : '2:46 م', isNext: !!asr?.isNext },
   ];
 
   const renderCapsule = (item: { key: string; name: string; time: string; isNext?: boolean }) => {
@@ -102,21 +104,22 @@ export const PrayerTimelineStrip: React.FC<Props> = ({
         return (
           <div
             key={item.key}
-            className="relative flex flex-col items-center justify-center py-3 px-2 rounded-[22px] bg-[#1a1814] border-2 border-[#d4af37] shadow-[0_0_22px_rgba(212,175,55,0.7)] text-center transition-all scale-105 z-20"
+            className="relative flex flex-col items-center justify-center py-2.5 px-2 rounded-[22px] bg-gradient-to-b from-[#2a2416] via-[#1f1a0e] to-[#14120a] border-2 border-[#d4af37] shadow-[0_0_22px_rgba(212,175,55,0.45)] ring-2 ring-[#d4af37]/30 text-center transition-all scale-[1.04] z-20"
           >
-            {/* Golden glowing crescent icon */}
-            <div className="w-5 h-5 rounded-full bg-[#d4af37] flex items-center justify-center mb-0.5 shadow-sm">
-              <Moon className="w-3 h-3 text-stone-950 fill-stone-950" />
-            </div>
-            <span className="text-xs sm:text-sm font-black text-[#d4af37] leading-tight">{item.name}</span>
-            <span className="text-[12px] sm:text-xs font-mono font-black text-white mt-0.5 tracking-tight">{item.time}</span>
+            {/* Subtle top indicator dot */}
+            <span className="w-2 h-2 rounded-full bg-[#facc15] shadow-[0_0_8px_#facc15] mb-0.5 animate-pulse" />
+            <span className="text-xs sm:text-sm font-black text-[#fef08a] leading-tight">{item.name}</span>
+            <span className="text-[12px] sm:text-xs font-mono font-bold text-white mt-0.5 tracking-tight">{item.time}</span>
+            <span className="text-[9px] font-bold text-[#facc15] bg-[#d4af37]/25 px-2 py-0.5 rounded-full mt-0.5 border border-[#d4af37]/40">
+              القادمة
+            </span>
           </div>
         );
       }
       return (
         <div
           key={item.key}
-          className="relative flex flex-col items-center justify-center py-2.5 px-2 rounded-[20px] bg-[#141414] border border-[#d4af37]/20 text-center transition-all hover:border-[#d4af37]/40 shadow-xs"
+          className="relative flex flex-col items-center justify-center py-2.5 px-2 rounded-[22px] bg-[#141414] border border-[#d4af37]/20 text-center transition-all hover:border-[#d4af37]/40 shadow-xs"
         >
           <span className="text-xs font-bold text-stone-300">{item.name}</span>
           <span className="text-[11px] sm:text-xs font-mono font-medium text-[#a39e93] mt-0.5">{item.time}</span>
@@ -124,18 +127,20 @@ export const PrayerTimelineStrip: React.FC<Props> = ({
       );
     }
 
-    // Light Mode Styling
+    // Light Mode Styling (تظليل خفيف واضح وفاخر على الصلاة المقتربة)
     if (isNext) {
       return (
         <div
           key={item.key}
-          className="relative flex flex-col items-center justify-center py-3 px-2 rounded-[22px] bg-[#2e4426] text-white shadow-[0_4px_16px_rgba(46,68,38,0.3)] text-center transition-all scale-105 z-20 border border-[#d4af37]/50"
+          className="relative flex flex-col items-center justify-center py-2.5 px-2 rounded-[22px] bg-gradient-to-b from-[#fdf7e2] via-[#faefce] to-[#f6e4b4] text-stone-900 shadow-md shadow-amber-500/25 text-center transition-all scale-[1.04] z-20 border-2 border-[#ca8a04] ring-2 ring-[#eab308]/30"
         >
-          <div className="w-5 h-5 rounded-full bg-[#d4af37] flex items-center justify-center mb-0.5 shadow-xs">
-            <Moon className="w-3 h-3 text-stone-950 fill-stone-950" />
-          </div>
-          <span className="text-xs sm:text-sm font-black text-[#fef9c3] leading-tight">{item.name}</span>
-          <span className="text-[12px] sm:text-xs font-mono font-bold text-white mt-0.5 tracking-tight">{item.time}</span>
+          {/* Subtle top indicator dot */}
+          <span className="w-2 h-2 rounded-full bg-[#ca8a04] mb-0.5 shadow-sm animate-pulse" />
+          <span className="text-xs sm:text-sm font-black text-[#78350f] leading-tight">{item.name}</span>
+          <span className="text-[12px] sm:text-xs font-mono font-black text-[#854d0e] mt-0.5 tracking-tight">{item.time}</span>
+          <span className="text-[9px] font-bold text-[#b45309] bg-white/85 px-2 py-0.5 rounded-full mt-0.5 border border-amber-300/80 shadow-2xs">
+            القادمة
+          </span>
         </div>
       );
     }
@@ -143,7 +148,7 @@ export const PrayerTimelineStrip: React.FC<Props> = ({
     return (
       <div
         key={item.key}
-        className="relative flex flex-col items-center justify-center py-2.5 px-2 rounded-[20px] bg-[#ffffff] border border-stone-200/90 text-center shadow-2xs hover:border-[#2e4426]/30 transition-all"
+        className="relative flex flex-col items-center justify-center py-2.5 px-2 rounded-[22px] bg-[#ffffff] border border-stone-200/90 text-center shadow-2xs hover:border-[#ca8a04]/30 transition-all"
       >
         <span className="text-xs font-bold text-stone-800">{item.name}</span>
         <span className="text-[11px] sm:text-xs font-mono font-medium text-stone-500 mt-0.5">{item.time}</span>

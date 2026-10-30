@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { X, Compass, MapPin, CheckCircle2, Smartphone } from 'lucide-react';
+import { X, Compass, MapPin, CheckCircle2, Smartphone, ShieldCheck, Navigation } from 'lucide-react';
 import { LocationConfig } from '../../types';
 import { calculateQiblaDegree } from '../../utils/prayerUtils';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 
 interface Props {
   isOpen: boolean;
@@ -11,11 +12,11 @@ interface Props {
   isDark?: boolean;
 }
 
-// Haversine formula to compute great-circle distance to Makkah in KM
+// Haversine formula to compute distance to Makkah in KM
 function getDistanceToMakkahKm(lat: number, lng: number): number {
   const makkahLat = 21.4225;
   const makkahLng = 39.8262;
-  const R = 6371; // Earth radius in km
+  const R = 6371;
   const dLat = ((makkahLat - lat) * Math.PI) / 180;
   const dLng = ((makkahLng - lng) * Math.PI) / 180;
   const a =
@@ -33,11 +34,11 @@ export const QiblaCompassModal: React.FC<Props> = ({
   onClose,
   location,
   inline = false,
-  isDark = false,
+  isDark: propIsDark,
 }) => {
   const lat = location.latitude ?? 21.4225;
   const lng = location.longitude ?? 39.8262;
-  const qiblaAngle = calculateQiblaDegree(lat, lng);
+  const qiblaAngle = Math.round(calculateQiblaDegree(lat, lng));
   const distanceToMakkah = getDistanceToMakkahKm(lat, lng);
 
   // Compass state
@@ -47,12 +48,31 @@ export const QiblaCompassModal: React.FC<Props> = ({
   const [hasSensors, setHasSensors] = useState<boolean>(false);
   const lastVibrateTime = useRef<number>(0);
 
-  // Effective phone heading (either from hardware sensors or manual test offset)
-  const currentHeading = deviceHeading !== null ? deviceHeading : manualOffset;
+  // Check dark mode
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (propIsDark !== undefined) return propIsDark;
+    if (typeof document !== 'undefined') {
+      return document.documentElement.classList.contains('dark');
+    }
+    return true;
+  });
 
-  // Relative deviation between device top and Qibla direction (0 = aligned)
+  useEffect(() => {
+    if (propIsDark !== undefined) {
+      setIsDark(propIsDark);
+    } else if (typeof document !== 'undefined') {
+      const observer = new MutationObserver(() => {
+        setIsDark(document.documentElement.classList.contains('dark'));
+      });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      return () => observer.disconnect();
+    }
+  }, [propIsDark]);
+
+  // Heading calculation
+  const currentHeading = deviceHeading !== null ? deviceHeading : manualOffset;
   const angleDiff = ((qiblaAngle - currentHeading + 540) % 360) - 180;
-  const isAligned = Math.abs(angleDiff) <= 4;
+  const isAligned = Math.abs(angleDiff) <= 3;
 
   // Haptic feedback when aligned
   useEffect(() => {
@@ -138,36 +158,41 @@ export const QiblaCompassModal: React.FC<Props> = ({
 
   if (!isOpen) return null;
 
+  // Degrees list for astrolabe graduated rim (every 30 degrees)
+  const majorDegrees = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+
   const modalBody = (
     <div
-      className={`w-full rounded-3xl p-5 shadow-2xl border space-y-4 ${
+      className={`w-full max-w-sm sm:max-w-md rounded-3xl p-5 shadow-2xl border space-y-4 select-none ${
         isDark
-          ? 'bg-[#141414] text-[#fcfbf7] border-[#d4af37]/40'
-          : 'bg-[#faf8f5] text-stone-900 border-[#d4af37]/35 shadow-xl'
+          ? 'bg-[#121212] text-[#fcfbf7] border-[#d4af37]/40 shadow-[0_12px_45px_rgba(0,0,0,0.85)]'
+          : 'bg-[#faf8f5] text-stone-900 border-[#c5a059] shadow-[0_12px_40px_rgba(212,175,55,0.2)]'
       }`}
+      dir="rtl"
     >
       {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-[#d4af37]/20">
+      <div className="flex items-center justify-between pb-3 border-b border-[#d4af37]/25">
         <div className="flex items-center gap-2.5">
           <div
             className={`w-10 h-10 rounded-2xl border flex items-center justify-center shadow-xs ${
               isDark
-                ? 'bg-[#1a1814] border-[#d4af37]/40 text-[#d4af37]'
-                : 'bg-white border-[#2e4426]/20 text-[#2e4426]'
+                ? 'bg-[#1f1b14] border-[#d4af37]/50 text-[#facc15]'
+                : 'bg-white border-[#ca8a04]/30 text-amber-700'
             }`}
           >
-            <Compass className="w-5 h-5 animate-pulse" />
+            <Compass className="w-6 h-6 animate-pulse" />
           </div>
+
           <div>
             <h3
               className={`text-base font-black ${
-                isDark ? 'text-white' : 'text-[#2e4426]'
+                isDark ? 'text-[#f5e6b8]' : 'text-stone-900'
               }`}
             >
-              بوصلة القبلة الحية
+              بوصلة القبلة الاحترافية
             </h3>
-            <p className="text-[11px] text-stone-500 dark:text-[#d4af37]/80 flex items-center gap-1">
-              <MapPin className="w-3 h-3" />
+            <p className="text-[11px] text-stone-500 dark:text-amber-200/80 flex items-center gap-1 font-semibold">
+              <MapPin className="w-3 h-3 text-[#d4af37]" />
               <span>{location.label.split('(')[0].trim()}</span>
               <span>•</span>
               <span>{distanceToMakkah.toLocaleString('ar-EG')} كم إلى مكة</span>
@@ -176,17 +201,7 @@ export const QiblaCompassModal: React.FC<Props> = ({
         </div>
 
         {!inline && (
-          <button
-            onClick={onClose}
-            className={`p-1.5 rounded-xl transition active:scale-95 ${
-              isDark
-                ? 'hover:bg-white/10 text-stone-300'
-                : 'hover:bg-stone-200 text-stone-600'
-            }`}
-            title="إغلاق"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <ScreenBackButton onClick={onClose} ariaLabel="خروج" />
         )}
       </div>
 
@@ -195,229 +210,276 @@ export const QiblaCompassModal: React.FC<Props> = ({
         <div
           className={`p-3 rounded-2xl border flex items-center justify-between gap-3 shadow-xs ${
             isDark
-              ? 'bg-[#1a1814] border-[#d4af37]/40 text-white'
-              : 'bg-white border-stone-200 text-stone-900 shadow-2xs'
+              ? 'bg-[#1c1811] border-[#d4af37]/50 text-white'
+              : 'bg-white border-amber-300 text-stone-900'
           }`}
         >
           <div className="flex items-center gap-2 text-xs">
-            <Smartphone className="w-5 h-5 text-[#d4af37] shrink-0" />
+            <Smartphone className="w-5 h-5 text-[#facc15] shrink-0" />
             <div>
               <p className="font-bold">تفعيل مستشعر الاتجاه بالهاتف</p>
-              <p className="text-[10px] text-stone-500 dark:text-stone-300">
-                انقر لتفعيل البوصلة ومستشعر الجيروسكوب تلقائياً
+              <p className="text-[10px] text-stone-400 dark:text-stone-300">
+                انقر لتفعيل الجيروسكوب وتحديد القبلة بدقة
               </p>
             </div>
           </div>
           <button
             onClick={requestCompassPermission}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold shadow-md active:scale-95 shrink-0 ${
-              isDark
-                ? 'bg-gradient-to-r from-[#d4af37] to-[#c5a059] text-stone-950'
-                : 'bg-[#2e4426] text-white'
-            }`}
+            className="px-3 py-1.5 rounded-xl text-xs font-bold shadow-md active:scale-95 shrink-0 bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-stone-950"
           >
             تفعيل
           </button>
         </div>
       )}
 
-      {/* Alignment Banner Status */}
+      {/* Alignment Status Banner */}
       <div
-        className={`p-3 rounded-2xl transition-all duration-300 text-center flex items-center justify-center gap-2 border ${
+        className={`p-3 rounded-2xl transition-all duration-300 text-center flex items-center justify-center gap-2 border-2 ${
           isAligned
             ? isDark
-              ? 'bg-[#1a1814] border-[#d4af37] text-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.3)] animate-pulse'
-              : 'bg-[#eef2e6] border-[#2e4426] text-[#2e4426] shadow-sm font-bold'
+              ? 'bg-[#1f2714] border-[#84cc16] text-[#bef264] shadow-[0_0_25px_rgba(132,204,22,0.4)] animate-pulse'
+              : 'bg-[#ecfccb] border-[#65a30d] text-[#365314] shadow-sm font-bold'
             : isDark
-            ? 'bg-[#0a0a0a] border-[#d4af37]/20 text-stone-300'
-            : 'bg-white border-stone-200 text-stone-600 shadow-2xs'
+            ? 'bg-[#181818] border-[#d4af37]/30 text-stone-200'
+            : 'bg-white border-stone-200 text-stone-700 shadow-2xs'
         }`}
       >
         {isAligned ? (
           <>
-            <CheckCircle2 className="w-5 h-5 text-[#d4af37]" />
-            <span className="text-xs sm:text-sm font-bold">
+            <CheckCircle2 className="w-5 h-5 text-lime-400 shrink-0" />
+            <span className="text-xs sm:text-sm font-extrabold">
               أنت الآن باتجاه الكعبة المشرفة مباشرة 🕋
             </span>
           </>
         ) : (
-          <span className="text-xs font-medium">
-            ضع هاتفك أفقياً ودوّره حتى تتطابق الإبرة الذهبية مع مؤشر الكعبة
+          <span className="text-xs font-bold">
+            وجّه هاتفك أفقياً حتى تتطابق الإبرة مع مؤشر الكعبة ({Math.abs(angleDiff)}° متبقية)
           </span>
         )}
       </div>
 
-      {/* Rotating Compass Dial */}
-      <div className="relative w-64 h-64 sm:w-72 sm:h-72 mx-auto flex items-center justify-center my-2 select-none">
-        {/* Outer Compass Housing Rings */}
+      {/* Luxury Professional Marine/Astrolabe Compass Dial */}
+      <div className="relative w-72 h-72 sm:w-80 sm:h-80 mx-auto flex items-center justify-center my-1 select-none">
+        {/* Outer Heavy Brass/Gold Nautical Bezel */}
         <div
-          className={`absolute inset-0 rounded-full border-4 shadow-md transition-colors ${
+          className={`absolute inset-0 rounded-full border-4 shadow-xl transition-colors ${
             isDark
-              ? 'border-[#d4af37]/30 bg-gradient-to-b from-[#141414] to-[#0a0a0a]'
-              : 'border-[#d4af37]/35 bg-white shadow-sm'
+              ? 'border-[#ca8a04] bg-radial from-[#1e1b15] via-[#111111] to-[#070707] shadow-[0_0_35px_rgba(202,138,4,0.35)]'
+              : 'border-[#ca8a04] bg-radial from-[#ffffff] via-[#fbf9f4] to-[#ede6d4] shadow-md'
           }`}
         />
-        <div className="absolute inset-2 rounded-full border border-dashed border-[#d4af37]/25 pointer-events-none" />
 
-        {/* 1. ROTATING COMPASS DIAL */}
+        {/* Outer Fine Millimeter Graduation Ring */}
+        <div className="absolute inset-2 rounded-full border border-[#ca8a04]/40 pointer-events-none" />
+        <div className="absolute inset-3 rounded-full border border-dashed border-[#ca8a04]/25 pointer-events-none" />
+
+        {/* 1. ROTATING COMPASS ROSE & DEGREE GRADUATIONS */}
         <div
           className="absolute inset-4 rounded-full transition-transform duration-200 ease-out"
           style={{ transform: `rotate(${-currentHeading}deg)` }}
         >
-          {/* Cardinal Markers */}
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 flex flex-col items-center">
-            <span className="text-sm font-black text-[#d4af37] font-mono">N</span>
-            <span className="text-[9px] font-bold text-[#d4af37]">شمال</span>
-          </div>
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center">
-            <span className="text-[10px] font-bold text-stone-400">جنوب</span>
-            <span className="text-sm font-black font-mono text-stone-500">S</span>
-          </div>
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col items-center">
-            <span className="text-sm font-black font-mono text-stone-500">E</span>
-            <span className="text-[9px] font-bold text-stone-400">شرق</span>
-          </div>
-          <div className="absolute left-2 top-1/2 -translate-y-1/2 flex flex-col items-center">
-            <span className="text-sm font-black font-mono text-stone-500">W</span>
-            <span className="text-[9px] font-bold text-stone-400">غرب</span>
-          </div>
+          {/* Astrolabe Fine Tick Marks (360 degrees) */}
+          {Array.from({ length: 72 }).map((_, i) => {
+            const deg = i * 5;
+            const isMajor = deg % 30 === 0;
+            const isMedium = deg % 15 === 0;
+            return (
+              <div
+                key={deg}
+                className="absolute inset-0 flex items-start justify-center pointer-events-none"
+                style={{ transform: `rotate(${deg}deg)` }}
+              >
+                <div
+                  className={`${
+                    isMajor
+                      ? 'w-1 h-3 bg-[#eab308]'
+                      : isMedium
+                      ? 'w-0.5 h-2 bg-[#ca8a04]/70'
+                      : 'w-px h-1.5 bg-[#ca8a04]/40'
+                  } mt-0.5`}
+                />
+              </div>
+            );
+          })}
 
-          {/* Intermediate Ticks Every 30 degrees */}
-          {[30, 60, 120, 150, 210, 240, 300, 330].map((deg) => (
+          {/* Major Degree Numbers around dial */}
+          {majorDegrees.map((deg) => (
             <div
-              key={deg}
-              className="absolute inset-0 flex items-start justify-center"
+              key={`num-${deg}`}
+              className="absolute inset-0 flex items-start justify-center pointer-events-none"
               style={{ transform: `rotate(${deg}deg)` }}
             >
-              <div className="w-0.5 h-2 bg-[#d4af37]/40 mt-1" />
+              <span
+                className="text-[9px] font-mono font-bold mt-4 text-[#ca8a04] dark:text-[#fef08a]"
+                style={{ transform: `rotate(${-deg + currentHeading}deg)` }}
+              >
+                {deg}°
+              </span>
             </div>
           ))}
 
-          {/* KAABA BADGE MARKER AT EXACT QIBLA ANGLE */}
+          {/* Cardinal Directions */}
+          {/* North */}
+          <div className="absolute top-8 left-1/2 -translate-x-1/2 flex flex-col items-center">
+            <span className="text-base font-black text-red-500 font-mono tracking-wider">N</span>
+            <span className="text-[10px] font-extrabold text-red-500">شمال</span>
+          </div>
+
+          {/* South */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center">
+            <span className="text-[10px] font-bold text-stone-400">جنوب</span>
+            <span className="text-sm font-black font-mono text-stone-400">S</span>
+          </div>
+
+          {/* East */}
+          <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col items-center">
+            <span className="text-sm font-black font-mono text-stone-400">E</span>
+            <span className="text-[9px] font-bold text-stone-400">شرق</span>
+          </div>
+
+          {/* West */}
+          <div className="absolute left-8 top-1/2 -translate-y-1/2 flex flex-col items-center">
+            <span className="text-sm font-black font-mono text-stone-400">W</span>
+            <span className="text-[9px] font-bold text-stone-400">غرب</span>
+          </div>
+
+          {/* Sacred Astrolabe Geometric Octagram in Background */}
+          <div className="absolute inset-16 flex items-center justify-center opacity-20 pointer-events-none">
+            <div className="w-full h-full border border-[#ca8a04] rotate-0" />
+            <div className="absolute w-full h-full border border-[#ca8a04] rotate-45" />
+          </div>
+
+          {/* 3. KAABA DIRECTION BEACON AT EXACT QIBLA ANGLE */}
           <div
             className="absolute inset-0 flex items-start justify-center pointer-events-none"
             style={{ transform: `rotate(${qiblaAngle}deg)` }}
           >
-            <div className="flex flex-col items-center -mt-3.5 animate-bounce">
-              <div className="w-7 h-7 rounded-lg bg-stone-950 border-2 border-[#d4af37] flex items-center justify-center shadow-[0_0_15px_rgba(212,175,55,0.7)] text-[11px] font-bold text-[#d4af37]">
-                🕋
+            {/* Golden Radiating Trajectory towards Kaaba */}
+            <div className="flex flex-col items-center -mt-5">
+              <div
+                className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-lg transition-transform ${
+                  isAligned
+                    ? 'scale-110 bg-black border-2 border-lime-400 shadow-[0_0_20px_rgba(132,204,22,0.8)]'
+                    : 'bg-black border-2 border-[#ca8a04] shadow-[0_0_15px_rgba(202,138,4,0.6)]'
+                }`}
+              >
+                <span className="text-lg">🕋</span>
               </div>
-              <div className="w-1.5 h-1.5 rounded-full bg-[#d4af37] mt-0.5" />
+              <div className="w-2 h-2 rounded-full bg-[#facc15] mt-1 shadow-sm shadow-[#facc15]" />
             </div>
           </div>
         </div>
 
-        {/* 2. REAL-TIME QIBLA NEEDLE */}
+        {/* 2. LIVE STEERING NEEDLE (Points directly to Qibla relative to phone top) */}
         <div
-          className="absolute inset-0 flex items-center justify-center transition-transform duration-200 ease-out pointer-events-none"
+          className="absolute inset-0 flex items-center justify-center transition-transform duration-150 ease-out pointer-events-none"
           style={{ transform: `rotate(${qiblaAngle - currentHeading}deg)` }}
         >
-          {/* Top North/Qibla Pointer Half */}
-          <div className="relative flex flex-col items-center h-28 -translate-y-14">
-            <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[24px] border-b-[#d4af37] filter drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]" />
-            <div className="w-2.5 h-20 bg-gradient-to-b from-[#d4af37] via-[#c5a059] to-[#141414] rounded-t-sm" />
+          {/* Top Arrow: Precision Gold-Tipped Needle pointing to Kaaba */}
+          <div className="relative flex flex-col items-center h-32 -translate-y-16">
+            <div
+              className={`w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[28px] ${
+                isAligned
+                  ? 'border-b-[#84cc16] filter drop-shadow-[0_0_12px_rgba(132,204,22,0.9)]'
+                  : 'border-b-[#ca8a04] filter drop-shadow-[0_0_10px_rgba(202,138,4,0.7)]'
+              }`}
+            />
+            <div className="w-2.5 h-20 bg-gradient-to-b from-[#eab308] via-[#ca8a04] to-[#78350f] rounded-t-sm" />
           </div>
 
-          {/* Bottom Counter-weight Pointer Half */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 h-20 flex flex-col items-center">
-            <div className="w-2 h-14 bg-gradient-to-b from-[#141414] to-stone-700/60 rounded-b-sm" />
-            <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[14px] border-t-stone-700" />
-          </div>
-
-          {/* Central Pivot Jewel */}
-          <div
-            className={`w-7 h-7 rounded-full border-2 border-[#d4af37] shadow-md flex items-center justify-center z-20 ${
-              isDark ? 'bg-[#141414]' : 'bg-white'
-            }`}
-          >
-            <div className="w-2.5 h-2.5 rounded-full bg-[#d4af37]" />
+          {/* Bottom Needle Counter-Weight */}
+          <div className="relative flex flex-col items-center h-28 translate-y-14">
+            <div className="w-2 h-16 bg-gradient-to-b from-[#78350f] to-stone-500 rounded-b-sm" />
+            <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[16px] border-t-stone-500" />
           </div>
         </div>
 
-        {/* Fixed Phone Reference Top Indicator */}
-        <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 flex flex-col items-center z-30">
-          <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-[#d4af37]" />
-          <span className="text-[8px] font-bold text-stone-950 bg-[#d4af37] px-1 rounded-sm mt-0.5">
-            مقدمة الهاتف
-          </span>
+        {/* Center Astrolabe Golden Pivot Cap */}
+        <div className="relative w-8 h-8 rounded-full bg-gradient-to-br from-[#fef08a] via-[#ca8a04] to-[#78350f] border-2 border-white/60 shadow-lg flex items-center justify-center pointer-events-none z-10">
+          <div className="w-2.5 h-2.5 rounded-full bg-stone-900 shadow-inner" />
+        </div>
+
+        {/* Top Fixed Aiming Notch / Reticle at 12 o'clock */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 z-20 flex flex-col items-center">
+          <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-red-500 filter drop-shadow-md" />
         </div>
       </div>
 
-      {/* Readouts & Metrics */}
-      <div className="grid grid-cols-2 gap-2 text-center text-xs">
+      {/* Telemetry Readouts (Live Heading, Target Qibla, Difference) */}
+      <div className="grid grid-cols-3 gap-2 pt-2 text-center" dir="rtl">
+        {/* Current Heading */}
         <div
-          className={`p-3 rounded-2xl border space-y-1 ${
-            isDark
-              ? 'bg-[#0a0a0a] border-[#d4af37]/20 text-white'
-              : 'bg-white border-stone-200 text-stone-800 shadow-2xs'
+          className={`p-2.5 rounded-2xl border ${
+            isDark ? 'bg-[#181818] border-stone-800' : 'bg-white border-stone-200'
           }`}
         >
-          <div className="text-[10px] text-stone-400">زاوية القبلة لموقعك</div>
-          <div className="text-xl font-black text-[#d4af37] font-mono tabular-nums">
-            {qiblaAngle}°
-          </div>
-          <div className="text-[10px] text-stone-500">من اتجاه الشمال الحقيقي</div>
-        </div>
-
-        <div
-          className={`p-3 rounded-2xl border space-y-1 ${
-            isDark
-              ? 'bg-[#0a0a0a] border-[#d4af37]/20 text-white'
-              : 'bg-white border-stone-200 text-stone-800 shadow-2xs'
-          }`}
-        >
-          <div className="text-[10px] text-stone-400">اتجاه هاتفك الحالي</div>
-          <div
-            className={`text-xl font-black font-mono tabular-nums ${
-              isDark ? 'text-white' : 'text-[#2e4426]'
-            }`}
-          >
+          <p className="text-[10px] font-bold text-stone-500 dark:text-stone-400">
+            اتجاه هاتفك
+          </p>
+          <p className="text-sm font-black font-mono text-[#d4af37] mt-0.5">
             {currentHeading}°
-          </div>
-          <div className="text-[10px] text-[#d4af37] font-semibold">
-            {hasSensors ? 'المستشعر نشط' : 'محاكاة باللمس'}
-          </div>
+          </p>
+        </div>
+
+        {/* Exact Qibla Target */}
+        <div
+          className={`p-2.5 rounded-2xl border ${
+            isDark ? 'bg-[#1f1b14] border-[#ca8a04]/40' : 'bg-amber-50 border-amber-300'
+          }`}
+        >
+          <p className="text-[10px] font-bold text-[#ca8a04]">
+            زاوية القبلة
+          </p>
+          <p className="text-sm font-black font-mono text-[#ca8a04] dark:text-[#fef08a] mt-0.5">
+            {qiblaAngle}°
+          </p>
+        </div>
+
+        {/* Distance to Makkah */}
+        <div
+          className={`p-2.5 rounded-2xl border ${
+            isDark ? 'bg-[#181818] border-stone-800' : 'bg-white border-stone-200'
+          }`}
+        >
+          <p className="text-[10px] font-bold text-stone-500 dark:text-stone-400">
+            المسافة لمكة
+          </p>
+          <p className="text-sm font-black font-mono text-emerald-600 dark:text-emerald-400 mt-0.5">
+            {distanceToMakkah} كم
+          </p>
         </div>
       </div>
 
-      {/* Desktop / Manual Slider fallback if sensors unavailable */}
+      {/* Manual Compass Calibration / Simulator slider for desktop users without gyroscope */}
       {!hasSensors && (
-        <div
-          className={`p-3 rounded-2xl border space-y-2 ${
-            isDark
-              ? 'bg-[#1a1814] border-white/10 text-stone-300'
-              : 'bg-white border-stone-200 text-stone-700 shadow-2xs'
-          }`}
-        >
-          <div className="flex items-center justify-between text-xs">
-            <span>تدوير الهاتف تجريبياً (محاكاة):</span>
-            <span className="font-mono text-[#d4af37] font-bold">{manualOffset}°</span>
+        <div className="pt-1 space-y-1.5">
+          <div className="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400">
+            <span>تجربة محاكاة التدوير:</span>
+            <span className="font-mono font-bold text-[#d4af37]">{manualOffset}°</span>
           </div>
           <input
             type="range"
             min="0"
             max="359"
             value={manualOffset}
-            onChange={(e) => setManualOffset(parseInt(e.target.value, 10))}
-            className="w-full accent-[#d4af37] cursor-pointer"
+            onChange={(e) => setManualOffset(Number(e.target.value))}
+            className="w-full h-1.5 bg-stone-300 dark:bg-stone-800 rounded-lg appearance-none cursor-pointer accent-[#d4af37]"
           />
-          <p className="text-[10px] text-stone-400 text-center">
-            💡 على هاتفك الذكي: البوصلة تدور تلقائياً في الوقت الحقيقي بمستشعر الجهاز
-          </p>
         </div>
       )}
     </div>
   );
 
   if (inline) {
-    return <div className="space-y-4 pb-12 animate-in fade-in duration-200">{modalBody}</div>;
+    return modalBody;
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-md max-h-[92vh] overflow-y-auto no-scrollbar">
-        {modalBody}
-      </div>
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-xs animate-in fade-in duration-200"
+    >
+      <div onClick={(e) => e.stopPropagation()}>{modalBody}</div>
     </div>
   );
 };

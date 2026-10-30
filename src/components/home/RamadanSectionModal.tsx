@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { RamadanFanousSvg } from './ServicesSvgIcons';
 import { LocationConfig, PrayerTimesResponse } from '../../types';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 
 interface Props {
   isOpen: boolean;
@@ -141,19 +142,11 @@ export const RamadanSectionModal: React.FC<Props> = ({
             : 'bg-gradient-to-b from-white via-[#faf8f5] to-[#f4f1ea] border-[#d4af37]/25 text-stone-900'
         }`}
       >
-        {/* Close button */}
+        {/* Back / Exit button */}
         {!inline && (
-          <button
-            onClick={onClose}
-            className={`absolute top-3.5 left-3.5 z-20 p-2 rounded-2xl transition active:scale-95 ${
-              isDark
-                ? 'bg-[#141414]/90 hover:bg-white/10 text-stone-300 border border-white/10'
-                : 'bg-white hover:bg-stone-100 text-stone-600 border border-stone-200 shadow-2xs'
-            }`}
-            title="إغلاق"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="absolute top-3.5 left-3.5 z-20">
+            <ScreenBackButton onClick={onClose} ariaLabel="خروج" />
+          </div>
         )}
 
         {/* Header Content */}

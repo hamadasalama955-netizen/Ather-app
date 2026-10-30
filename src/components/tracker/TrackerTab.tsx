@@ -27,6 +27,7 @@ import { DuasSection } from './DuasSection';
 import { ZakatCalculatorSection } from './ZakatCalculatorSection';
 import { KhatmaTrackerCard } from './KhatmaTrackerCard';
 import { EmotionalDuasSection } from './EmotionalDuasSection';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 
 export type TrackerSubView =
   | 'daily'
@@ -42,6 +43,7 @@ export type TrackerSubView =
 interface Props {
   hijriDate?: HijriDateInfo;
   onNavigateTab?: (tab: NavigationTab) => void;
+  onNavigateHome?: () => void;
   initialSubView?: TrackerSubView;
   hideNavigation?: boolean;
 }
@@ -49,6 +51,7 @@ interface Props {
 export const TrackerTab: React.FC<Props> = ({
   hijriDate,
   onNavigateTab,
+  onNavigateHome,
   initialSubView = 'daily',
   hideNavigation = true,
 }) => {
@@ -95,6 +98,16 @@ export const TrackerTab: React.FC<Props> = ({
 
   return (
     <div className="space-y-4 pb-24 animate-in fade-in duration-300">
+      {/* Top Header with Back Button */}
+      {onNavigateHome && (
+        <div className="flex items-center gap-3">
+          <ScreenBackButton onClick={onNavigateHome} ariaLabel="الرجوع إلى الرئيسية" />
+          <h2 className="text-base font-bold text-stone-900 dark:text-[#f5e6b8]">
+            متابعة العبادات
+          </h2>
+        </div>
+      )}
+
       {/* Top Segmented Horizontal Navigation (Hidden on independent service pages) */}
       {!hideNavigation && (
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar pt-1">

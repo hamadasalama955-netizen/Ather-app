@@ -1,24 +1,23 @@
 import React from 'react';
 import { X, BookOpen } from 'lucide-react';
 import {
-  QuranRehalSvg,
-  KhatmaProgressSvg,
-  DailyAthkarSvg,
-  HisnMuslimSvg,
-  DigitalSebhaSvg,
-  MihrabNawafilSvg,
-  SupplicationHandsSvg,
-  AjrSharingSvg,
-  QiblaCompassSvg,
-  ZakatCharitySvg,
-  AllahNamesCalligraphySvg,
-  IslamicHistoryScrollSvg,
-  RamadanFanousSvg,
-  IslamicCalendarSvg,
-  PropheticHadithSvg,
-  SettingsIslamicGearSvg,
-  ReviewPrayerSvg,
-} from './ServicesSvgIcons';
+  SunanServiceIcon,
+  AthkarServiceIcon,
+  KhatmaServiceIcon,
+  QuranServiceIcon,
+  RamadanServiceIcon,
+  HistoryServiceIcon,
+  AllahNamesServiceIcon,
+  ZakatServiceIcon,
+  DuaServiceIcon,
+  QiblaServiceIcon,
+  ReviewPrayerServiceIcon,
+  ShareRewardServiceIcon,
+  CalendarServiceIcon,
+  HadithServiceIcon,
+  QuizServiceIcon,
+  SettingsServiceIcon,
+} from './ServicesGridIcons';
 import { NavigationTab } from '../../types';
 
 export interface ServiceGridActionProps {
@@ -30,6 +29,7 @@ export interface ServiceGridActionProps {
   onOpenIslamicHistory?: () => void;
   onOpenRamadan?: () => void;
   onOpenHisnMuslim?: () => void;
+  onOpenQuiz?: () => void;
 }
 
 interface Props extends ServiceGridActionProps {
@@ -42,8 +42,7 @@ export interface ServiceGridItem {
   title: string;
   subtitle: string;
   badge?: string;
-  renderSvg: () => React.ReactNode;
-  bgGradient: string;
+  renderIcon: () => React.ReactNode;
   action: () => void;
 }
 
@@ -58,128 +57,113 @@ export const useServicesList = (props: ServiceGridActionProps, onClose?: () => v
       id: 'quran',
       title: 'المصحف الشريف',
       subtitle: 'صفحات المصحف المعتمد',
-      badge: '٦٠٤ ص',
-      bgGradient: 'from-[#d4af37]/20 to-[#141414]',
-      renderSvg: () => <QuranRehalSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <QuranServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => props.onNavigateTab('quran')),
     },
     {
       id: 'khatma',
       title: 'رحلة الختمة',
       subtitle: 'خطة وإنجاز القراءة',
-      badge: 'متابعة',
-      bgGradient: 'from-amber-500/15 to-[#141414]',
-      renderSvg: () => <KhatmaProgressSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <KhatmaServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => (props.onOpenTracker ? props.onOpenTracker('khatma') : props.onNavigateTab('tracker'))),
     },
     {
-      id: 'hisn',
-      title: 'حصن المسلم',
-      subtitle: 'الأذكار اليومية وأوراد التحصين والمسبحة',
-      badge: 'جامع',
-      bgGradient: 'from-[#d4af37]/20 to-[#141414]',
-      renderSvg: () => <HisnMuslimSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
-      action: () => trigger(() => (props.onOpenHisnMuslim ? props.onOpenHisnMuslim() : props.onNavigateTab('athkar'))),
+      id: 'athkar',
+      title: 'الأذكار',
+      subtitle: 'الأذكار اليومية وأوراد التحصين',
+      renderIcon: () => <AthkarServiceIcon className="w-10 h-10" />,
+      action: () => trigger(() => (props.onOpenAthkar ? props.onOpenAthkar('athkar') : props.onNavigateTab('athkar'))),
     },
     {
       id: 'sunan',
       title: 'طاعاتك',
       subtitle: 'السنن والنوافل والرواتب',
-      bgGradient: 'from-[#d4af37]/15 to-[#141414]',
-      renderSvg: () => <MihrabNawafilSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <SunanServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => (props.onOpenTracker ? props.onOpenTracker('daily') : props.onNavigateTab('tracker'))),
     },
     {
       id: 'review_prayer',
       title: 'راجع صلاتك',
       subtitle: 'فحص الأركان وسجود السهو',
-      badge: 'جديد',
-      bgGradient: 'from-[#d4af37]/20 to-[#141414]',
-      renderSvg: () => <ReviewPrayerSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <ReviewPrayerServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => props.onNavigateTab('review_prayer')),
     },
     {
       id: 'duaa',
       title: 'الدعاء',
       subtitle: 'الذكر حسب حالتك النفسية',
-      bgGradient: 'from-amber-600/15 to-[#141414]',
-      renderSvg: () => <SupplicationHandsSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <DuaServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => (props.onOpenTracker ? props.onOpenTracker('emotional_duas') : props.onNavigateTab('tracker'))),
     },
     {
       id: 'share_reward',
       title: 'الأجر بالنشر',
       subtitle: 'الدال على الخير كفاعله',
-      badge: 'أجر',
-      bgGradient: 'from-[#d4af37]/25 to-[#141414]',
-      renderSvg: () => <AjrSharingSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <ShareRewardServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => (props.onOpenShareReward ? props.onOpenShareReward() : null)),
     },
     {
       id: 'qibla',
       title: 'اتجاه القبلة',
       subtitle: 'بوصلة الكعبة المشرفة',
-      bgGradient: 'from-[#d4af37]/15 to-[#141414]',
-      renderSvg: () => <QiblaCompassSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <QiblaServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => (props.onOpenQibla ? props.onOpenQibla() : props.onNavigateTab('prayers'))),
     },
     {
       id: 'zakat',
       title: 'حاسبة الزكاة',
       subtitle: 'الذهب والفضة والمدخرات',
-      bgGradient: 'from-amber-500/15 to-[#141414]',
-      renderSvg: () => <ZakatCharitySvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <ZakatServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => (props.onOpenTracker ? props.onOpenTracker('zakat') : props.onNavigateTab('tracker'))),
     },
     {
       id: 'names',
       title: 'أسماء الله الحسنى',
       subtitle: '٩٩ اسماً تدبراً ودعاءً',
-      bgGradient: 'from-[#d4af37]/20 to-[#141414]',
-      renderSvg: () => <AllahNamesCalligraphySvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <AllahNamesServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => (props.onOpenTracker ? props.onOpenTracker('names') : props.onNavigateTab('tracker'))),
     },
     {
       id: 'history',
       title: 'محطات إسلامية',
       subtitle: 'حدث في مثل هذا اليوم',
-      badge: 'تاريخ',
-      bgGradient: 'from-amber-600/15 to-[#141414]',
-      renderSvg: () => <IslamicHistoryScrollSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <HistoryServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => (props.onOpenIslamicHistory ? props.onOpenIslamicHistory() : null)),
     },
     {
       id: 'ramadan',
       title: 'رمضان',
       subtitle: 'الصيام والإمساك والإفطار',
-      badge: 'مبارك',
-      bgGradient: 'from-amber-500/20 to-[#141414]',
-      renderSvg: () => <RamadanFanousSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <RamadanServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => (props.onOpenRamadan ? props.onOpenRamadan() : null)),
     },
     {
       id: 'calendar',
       title: 'التقويم والمناسبات',
       subtitle: 'الهجري والأيام البيض',
-      bgGradient: 'from-[#d4af37]/15 to-[#141414]',
-      renderSvg: () => <IslamicCalendarSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <CalendarServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => (props.onOpenTracker ? props.onOpenTracker('calendar') : props.onNavigateTab('tracker'))),
     },
     {
       id: 'hadith',
       title: '١٠٠ حديث شريف',
       subtitle: 'صحيحي البخاري ومسلم بالشرح',
-      badge: 'نبوي',
-      bgGradient: 'from-amber-600/15 to-[#141414]',
-      renderSvg: () => <PropheticHadithSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <HadithServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => props.onNavigateTab('hadith')),
+    },
+    {
+      id: 'quiz',
+      title: 'المسابقة',
+      subtitle: 'أسئلة وتحدي ديني بالصوت',
+      badge: 'جديد',
+      renderIcon: () => <QuizServiceIcon className="w-10 h-10" />,
+      action: () => trigger(() => (props.onOpenQuiz ? props.onOpenQuiz() : null)),
     },
     {
       id: 'settings',
       title: 'الإعدادات والمزيد',
       subtitle: 'حساب المواقيت والوضع',
-      bgGradient: 'from-stone-700/20 to-[#141414]',
-      renderSvg: () => <SettingsIslamicGearSvg className="w-8 h-8 sm:w-9 sm:h-9" />,
+      renderIcon: () => <SettingsServiceIcon className="w-10 h-10" />,
       action: () => trigger(() => props.onNavigateTab('more')),
     },
   ];
@@ -202,7 +186,7 @@ export const ServicesGridModal: React.FC<Props> = (props) => {
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-black text-stone-900 dark:text-[#d4af37]">
-                شبكة خدمات أثَر | Athar - رفيق المسلم
+                شبكة خدمات أثَر | Athar
               </h3>
               <p className="text-[10px] text-stone-500 dark:text-stone-400">
                 ١٥ خدمة روحانية متكاملة · بدون إعلانات
@@ -218,7 +202,7 @@ export const ServicesGridModal: React.FC<Props> = (props) => {
           </button>
         </div>
 
-        {/* 4x4 Grid Matrix (16 Services in 4 Columns) */}
+        {/* 4x4 Grid Matrix */}
         <div className="overflow-y-auto flex-1 py-3 px-0.5 no-scrollbar">
           <div className="grid grid-cols-4 gap-2 sm:gap-2.5" dir="rtl">
             {services.map((item) => (
@@ -236,9 +220,9 @@ export const ServicesGridModal: React.FC<Props> = (props) => {
 
                 {/* Squircle container with custom vector SVG */}
                 <div
-                  className={`w-12 h-12 sm:w-13 sm:h-13 rounded-2xl bg-gradient-to-b ${item.bgGradient} border border-[#d4af37]/25 flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 shadow-2xs`}
+                  className="w-12 h-12 sm:w-13 sm:h-13 rounded-2xl bg-white dark:bg-[#121212] border border-stone-200 dark:border-[#d4af37]/30 flex items-center justify-center p-1 transition-transform group-hover:scale-105 shadow-2xs"
                 >
-                  {item.renderSvg()}
+                  {item.renderIcon()}
                 </div>
 
                 {/* Title */}

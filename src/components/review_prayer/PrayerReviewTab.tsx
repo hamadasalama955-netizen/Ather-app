@@ -26,6 +26,7 @@ import {
   SujudSahwCase,
 } from './prayerReviewData';
 import { NavigationTab } from '../../types';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 
 interface Props {
   onNavigateHome?: () => void;
@@ -108,22 +109,27 @@ export const PrayerReviewTab: React.FC<Props> = ({ onNavigateHome, onNavigateTab
 
   return (
     <div className="space-y-4 pb-20 animate-in fade-in duration-300">
-      {/* 1. Regal Hero Banner: «صلوا كما رأيتموني أصلي» */}
+      {/* 1. Regal Hero Banner: «صلوا كما رأيتموني أصلي» with Back Button */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#0a0a0a] via-[#d4af37] to-[#1a1814] text-[#fcfbf7] p-5 shadow-xl border border-[#dfb76c]/40">
         <div className="absolute top-0 left-0 w-36 h-36 bg-[#dfb76c]/10 rounded-full blur-2xl pointer-events-none" />
 
         <div className="flex items-start justify-between gap-3 relative z-10">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#dfb76c]/20 border border-[#dfb76c]/40 text-[#dfb76c] text-[11px] font-bold">
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>فقه الصلاة وتصحيحها</span>
+          <div className="flex items-start gap-3">
+            {onNavigateHome && (
+              <ScreenBackButton onClick={onNavigateHome} ariaLabel="الرجوع إلى الرئيسية" />
+            )}
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#dfb76c]/20 border border-[#dfb76c]/40 text-[#dfb76c] text-[11px] font-bold">
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>فقه الصلاة وتصحيحها</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+                راجع صلاتك
+              </h2>
+              <p className="text-xs text-stone-300 leading-relaxed max-w-sm">
+                «صلّوا كَما رأيتُمُوني أُصلِّي» · دليل فقهي وتطبيقي شامل لمراجعة الأركان والشروط وتفادي الأخطاء وسجود السهو.
+              </p>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-              راجع صلاتك
-            </h2>
-            <p className="text-xs text-stone-300 leading-relaxed max-w-sm">
-              «صلّوا كَما رأيتُمُوني أُصلِّي» · دليل فقهي وتطبيقي شامل لمراجعة الأركان والشروط وتفادي الأخطاء وسجود السهو.
-            </p>
           </div>
 
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#dfb76c]/25 to-[#d4af37] border border-[#dfb76c]/40 flex items-center justify-center text-[#dfb76c] shrink-0 shadow-xs">

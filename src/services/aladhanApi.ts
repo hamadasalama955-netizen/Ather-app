@@ -1,24 +1,64 @@
 import { LocationConfig, PrayerTimesResponse } from '../types';
 import { calculateOfflinePrayerTimes, isEgyptLocation } from '../utils/offlinePrayerCalculator';
 
-const CACHE_PREFIX = 'athar_prayer_times_v4_winter_';
+const CACHE_PREFIX = 'athar_prayer_times_v5_seasonal_';
 
 /**
- * Ensures Egypt Winter Time (UTC+2) is strictly applied
- * If the source returned UTC+3 daylight saving time, shifts prayer times back by 1 hour.
+ * Checks if a given date falls within Egypt's official Daylight Saving Time (Summer Time: UTC+3)
+ * or Standard Time (Winter Time: UTC+2).
+ * Egypt DST rule:
+ * - Begins: Last Friday of April at 00:00 (UTC+3)
+ * - Ends: Last Thursday of October at 24:00 / Last Friday of October at 00:00 (UTC+2)
  */
-function normalizeEgyptWinterTimes(result: PrayerTimesResponse, location: LocationConfig): PrayerTimesResponse {
+export function isEgyptSummerTime(date: Date = new Date()): boolean {
+  const year = date.getFullYear();
+
+  // Find last Friday of April
+  // April has 30 days (month index 3)
+  const apr30 = new Date(year, 3, 30);
+  const aprLastFridayDay = 30 - ((apr30.getDay() + 2) % 7);
+  const dstStart = new Date(year, 3, aprLastFridayDay, 0, 0, 0);
+
+  // Find last Thursday of October (month index 9, 31 days)
+  const oct31 = new Date(year, 9, 31);
+  const octLastThursdayDay = 31 - ((oct31.getDay() + 3) % 7);
+  const dstEnd = new Date(year, 9, octLastThursdayDay, 24, 0, 0);
+
+  return date.getTime() >= dstStart.getTime() && date.getTime() < dstEnd.getTime();
+}
+
+/**
+ * Synchronizes prayer times with Egypt's Winter / Summer Time and the user's device clock.
+ * Guarantees that in winter (UTC+2) times are exact winter times, and in summer (UTC+3) times
+ * are exact summer times, matching the device's clock dynamically.
+ */
+function normalizeSeasonalTimes(result: PrayerTimesResponse, location: LocationConfig, date: Date = new Date()): PrayerTimesResponse {
   if (!isEgyptLocation(location) || !result?.timings) {
     return result;
   }
 
-  // In Cairo during winter (UTC+2), Maghrib is between 16:55 and 17:25.
-  // If Maghrib hour is >= 18 (e.g. 18:05), daylight saving time (UTC+3) was returned.
+  const inSummer = isEgyptSummerTime(date);
   const maghribStr = result.timings.Maghrib || '';
   const [hStr] = maghribStr.split(':');
   const h = parseInt(hStr, 10);
 
-  if (!isNaN(h) && h >= 18) {
+  if (isNaN(h)) return result;
+
+  // Expected Maghrib in Cairo:
+  // In winter (UTC+2): Maghrib is ~17:00 (between 16:50 and 17:35).
+  // In summer (UTC+3): Maghrib is ~18:30 - 19:00 (between 18:20 and 19:10).
+  const isSummerFormatted = h >= 18;
+
+  let shiftHours = 0;
+  if (!inSummer && isSummerFormatted) {
+    // Current season is Winter, but API returned Summer time -> shift -1 hour
+    shiftHours = -1;
+  } else if (inSummer && !isSummerFormatted) {
+    // Current season is Summer, but API returned Winter time -> shift +1 hour
+    shiftHours = 1;
+  }
+
+  if (shiftHours !== 0) {
     const updatedTimings: Record<string, string> = {};
     for (const [k, v] of Object.entries(result.timings)) {
       if (typeof v === 'string' && v.includes(':')) {
@@ -26,7 +66,7 @@ function normalizeEgyptWinterTimes(result: PrayerTimesResponse, location: Locati
         let hour = parseInt(parts[0], 10);
         const mins = parts[1];
         if (!isNaN(hour)) {
-          hour = (hour - 1 + 24) % 24;
+          hour = (hour + shiftHours + 24) % 24;
           updatedTimings[k] = `${hour.toString().padStart(2, '0')}:${mins}`;
         } else {
           updatedTimings[k] = v;
@@ -54,23 +94,25 @@ export async function fetchPrayerTimes(
   const todayStr = today.toISOString().split('T')[0];
   const isEgypt = isEgyptLocation(location);
   const effectiveMethodId = (isEgypt && methodId === 4) ? 5 : methodId; // Egyptian Authority
-  const cacheKey = `${CACHE_PREFIX}${location.label}_${effectiveMethodId}_${schoolParam}_${todayStr}`;
+  const seasonTag = isEgyptSummerTime(today) ? 'summer' : 'winter';
+  const cacheKey = `${CACHE_PREFIX}${location.label}_${effectiveMethodId}_${schoolParam}_${todayStr}_${seasonTag}`;
 
   // 1. Check local cache first for instant speed & offline support
   try {
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
-      return normalizeEgyptWinterTimes(JSON.parse(cached), location);
+      return normalizeSeasonalTimes(JSON.parse(cached), location, today);
     }
   } catch (e) {
     console.warn('Failed to read prayer cache:', e);
   }
 
-  // 2. If browser is explicitly offline, compute instantly with astronomical offline engine
+  // 2. If browser is offline, compute instantly with astronomical offline engine
   if (typeof navigator !== 'undefined' && !navigator.onLine) {
-    const offlineTimes = normalizeEgyptWinterTimes(
+    const offlineTimes = normalizeSeasonalTimes(
       calculateOfflinePrayerTimes(location, effectiveMethodId, school, today),
-      location
+      location,
+      today
     );
     try {
       localStorage.setItem(cacheKey, JSON.stringify(offlineTimes));
@@ -80,7 +122,7 @@ export async function fetchPrayerTimes(
     return offlineTimes;
   }
 
-  // 3. If online, attempt to fetch from Aladhan API with timeout
+  // 3. If online, fetch from Aladhan API with timeout
   try {
     let url: string;
     if (location.type === 'coords' && location.latitude !== undefined && location.longitude !== undefined) {
@@ -93,36 +135,37 @@ export async function fetchPrayerTimes(
     }
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
 
     const response = await fetch(url, { signal: controller.signal });
     clearTimeout(timeoutId);
 
-    if (response.ok) {
-      const json = await response.json();
-      if (json.code === 200 && json.data) {
-        const result: PrayerTimesResponse = normalizeEgyptWinterTimes(json.data, location);
-        try {
-          localStorage.setItem(cacheKey, JSON.stringify(result));
-        } catch {
-          // ignore
-        }
-        return result;
-      }
+    if (!response.ok) {
+      throw new Error(`Aladhan API responded with status ${response.status}`);
     }
-  } catch (err) {
-    console.warn('Network prayer times fetch failed or timed out, switching to 100% offline astronomical calculator:', err);
-  }
 
-  // 4. Graceful 100% offline fallback - Never fails
-  const offlineResult = normalizeEgyptWinterTimes(
-    calculateOfflinePrayerTimes(location, effectiveMethodId, school, today),
-    location
-  );
-  try {
-    localStorage.setItem(cacheKey, JSON.stringify(offlineResult));
-  } catch {
-    // ignore
+    const data: { code: number; data: PrayerTimesResponse } = await response.json();
+    if (data.code !== 200 || !data.data) {
+      throw new Error('Invalid response structure from prayer times API');
+    }
+
+    const normalizedResult = normalizeSeasonalTimes(data.data, location, today);
+
+    try {
+      localStorage.setItem(cacheKey, JSON.stringify(normalizedResult));
+    } catch (e) {
+      console.warn('Failed to cache prayer times:', e);
+    }
+
+    return normalizedResult;
+  } catch (err: unknown) {
+    console.warn('Online fetch failed, switching to astronomical calculation:', err);
+    // Reliable offline mathematical fallback
+    const offlineTimes = normalizeSeasonalTimes(
+      calculateOfflinePrayerTimes(location, effectiveMethodId, school, today),
+      location,
+      today
+    );
+    return offlineTimes;
   }
-  return offlineResult;
 }

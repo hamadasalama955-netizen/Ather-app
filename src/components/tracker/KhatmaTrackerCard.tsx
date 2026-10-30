@@ -8,22 +8,28 @@ import {
   Plus,
   Minus,
   Trophy,
-  Save,
   RotateCcw,
   Milestone,
   Check,
   Compass,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 import { KhatmaTrackerData, getKhatmaState, saveKhatmaState } from '../../services/trackerService';
 
 interface Props {
   onOpenQuranTab: () => void;
+  isDark?: boolean;
 }
 
-export const KhatmaTrackerCard: React.FC<Props> = ({ onOpenQuranTab }) => {
+export const KhatmaTrackerCard: React.FC<Props> = ({ onOpenQuranTab, isDark: propIsDark }) => {
   const [khatma, setKhatma] = useState<KhatmaTrackerData>(getKhatmaState());
   const [inputPage, setInputPage] = useState<string>(String(khatma.currentPage));
   const [showSavedFeedback, setShowSavedFeedback] = useState(false);
+
+  const isDark = propIsDark !== undefined
+    ? propIsDark
+    : typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
 
   const TOTAL_PAGES = 604;
   const targetDays = khatma.targetDays || 30;
@@ -38,10 +44,10 @@ export const KhatmaTrackerCard: React.FC<Props> = ({ onOpenQuranTab }) => {
 
   // Target presets
   const presets = [
-    { days: 30, label: '30 يوماً (شهر)', pages: 20 },
-    { days: 60, label: '60 يوماً (شهران)', pages: 10 },
-    { days: 90, label: '90 يوماً (3 أشهر)', pages: 7 },
-    { days: 120, label: '120 يوماً (4 أشهر)', pages: 5 },
+    { days: 30, label: '٣٠ يوماً (شهر)', pages: 20 },
+    { days: 60, label: '٦٠ يوماً (شهران)', pages: 10 },
+    { days: 90, label: '٩٠ يوماً (٣ أشهر)', pages: 7 },
+    { days: 120, label: '١٢٠ يوماً (٤ أشهر)', pages: 5 },
   ];
 
   const handleUpdateTargetDays = (days: number) => {
@@ -59,23 +65,14 @@ export const KhatmaTrackerCard: React.FC<Props> = ({ onOpenQuranTab }) => {
     setInputPage(String(clamped));
 
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
-      navigator.vibrate(30);
+      navigator.vibrate(25);
     }
     setShowSavedFeedback(true);
     setTimeout(() => setShowSavedFeedback(false), 2000);
   };
 
-  const handleManualInputSave = () => {
-    const val = parseInt(inputPage, 10);
-    if (!isNaN(val)) {
-      handleSavePage(val);
-    }
-  };
-
-  const handleResetKhatma = () => {
-    if (confirm('هل تريد بدء ختمة جديدة والعودة للصفحة 1؟')) {
-      handleSavePage(1);
-    }
+  const handleAddPages = (delta: number) => {
+    handleSavePage(currentPage + delta);
   };
 
   // Ring calculations
@@ -95,59 +92,63 @@ export const KhatmaTrackerCard: React.FC<Props> = ({ onOpenQuranTab }) => {
   ];
 
   return (
-    <div className="rounded-3xl bg-[#fdfbf7] dark:bg-[#1c1611] border border-amber-900/20 dark:border-amber-700/40 p-4 sm:p-5 shadow-sm space-y-4">
-      {/* 1. Ancient Manuscript Inspired Header Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2a1d13] via-[#3d2a1b] to-[#1c120a] text-white p-5 shadow-lg border-2 border-amber-500/40">
-        {/* Subtle antique parchment texture grid */}
-        <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#fde68a_1px,transparent_1px)] [background-size:14px_14px]" />
-
+    <div
+      className={`rounded-3xl border p-4 sm:p-5 shadow-sm space-y-4 transition-colors select-none ${
+        isDark
+          ? 'bg-[#141414] border-[#d4af37]/35 text-white'
+          : 'bg-[#faf8f5] border-[#c5a059]/40 text-stone-900'
+      }`}
+      dir="rtl"
+    >
+      {/* 1. Header Banner */}
+      <div
+        className={`relative overflow-hidden rounded-3xl p-5 sm:p-6 border-2 transition-all ${
+          isDark
+            ? 'bg-gradient-to-br from-[#241e15] via-[#1a1711] to-[#0d0c0a] border-[#d4af37]/45 text-white shadow-xl'
+            : 'bg-gradient-to-br from-[#ffffff] via-[#fdfbf7] to-[#f5eedc] border-[#ca8a04] text-stone-900 shadow-md'
+        }`}
+      >
         <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1.5 text-center sm:text-right">
-            <div className="inline-flex items-center gap-1.5 text-xs text-amber-300 font-bold px-2.5 py-0.5 rounded-full bg-amber-950/60 border border-amber-500/40">
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-0.5 rounded-full border bg-amber-500/15 border-amber-500/40 text-amber-700 dark:text-[#facc15]">
               <BookOpen className="w-3.5 h-3.5" />
               <span>مصحف التلاوة والتدبر</span>
             </div>
 
             <h3
-              className="text-2xl sm:text-3xl font-extrabold text-amber-100 tracking-tight"
+              className={`text-2xl sm:text-3xl font-black tracking-tight ${
+                isDark ? 'text-[#f5e6b8]' : 'text-stone-950'
+              }`}
               style={{ fontFamily: "'Traditional Arabic', 'Amiri', serif" }}
             >
-              {progressPercent === 100 ? 'تمت الختمة المباركة بفضل الله! 🎉' : `رحلة ختم القرآن العظيم`}
+              {progressPercent === 100 ? 'تمت الختمة المباركة بفضل الله! 🎉' : 'رحلة ختم القرآن العظيم'}
             </h3>
 
-            <p className="text-xs text-amber-200/90 leading-relaxed max-w-sm">
+            <p className={`text-xs leading-relaxed max-w-sm ${isDark ? 'text-amber-200/90' : 'text-stone-700'}`}>
               {progressPercent === 100
-                ? 'تقبل الله ختمتكم وجعل القرآن العظيم حجة لكم وشفيعاً ونوراً في قلوبكم'
-                : `هدفك: إتمام الختمة في ${targetDays} يوماً بمعدل قراءة ${pagesPerDay} صفحة يومياً`}
+                ? 'تقبل الله ختمتكم وجعل القرآن الكريم شفيعاً ونوراً في قلوبكم'
+                : `هدفك المبارك: إتمام الختمة في ${targetDays} يوماً بمعدل قراءة ${pagesPerDay} صفحة يومياً`}
             </p>
           </div>
 
-          {/* Attractive Circular Manuscript Progress Ring */}
+          {/* Radial Progress Gauge */}
           <div className="relative w-28 h-28 shrink-0 flex items-center justify-center">
             <svg className="w-full h-full -rotate-90 drop-shadow-md" viewBox="0 0 110 110">
-              <defs>
-                <linearGradient id="manuscriptGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#fef08a" />
-                  <stop offset="40%" stopColor="#f59e0b" />
-                  <stop offset="100%" stopColor="#b45309" />
-                </linearGradient>
-              </defs>
               <circle
                 cx="55"
                 cy="55"
                 r={ringRadius}
                 fill="none"
-                stroke="#451a03"
-                strokeWidth="7"
-                opacity="0.6"
+                stroke={isDark ? '#2a241b' : '#e7e0cf'}
+                strokeWidth="8"
               />
               <circle
                 cx="55"
                 cy="55"
                 r={ringRadius}
                 fill="none"
-                stroke="url(#manuscriptGold)"
-                strokeWidth="7"
+                stroke={isDark ? '#facc15' : '#ca8a04'}
+                strokeWidth="8"
                 strokeDasharray={ringCircumference}
                 strokeDashoffset={strokeOffset}
                 strokeLinecap="round"
@@ -156,61 +157,61 @@ export const KhatmaTrackerCard: React.FC<Props> = ({ onOpenQuranTab }) => {
             </svg>
 
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span className="text-xl font-black font-mono tabular-nums text-amber-200 leading-none">
+              <span className={`text-xl font-black font-mono ${isDark ? 'text-[#fef08a]' : 'text-stone-950'}`}>
                 {progressPercent}%
               </span>
-              <span className="text-[10px] text-amber-300/80 font-serif mt-0.5">
+              <span className="text-[10px] font-bold text-stone-500 dark:text-stone-400">
                 مكتمل
               </span>
             </div>
           </div>
         </div>
 
-        {/* Highlights Row */}
-        <div className="relative z-10 mt-4 pt-3 border-t border-amber-600/30 grid grid-cols-3 gap-2 text-center text-xs">
-          <div className="bg-black/35 rounded-xl p-2 border border-amber-500/20">
-            <div className="text-[10px] text-amber-300">الجزء الحالي</div>
-            <div className="text-sm font-bold text-white font-mono mt-0.5">
+        {/* 3 Metric Cards */}
+        <div className="relative z-10 mt-4 pt-3 border-t border-[#d4af37]/25 grid grid-cols-3 gap-2 text-center text-xs">
+          <div className="bg-stone-100/90 dark:bg-black/40 rounded-2xl p-2.5 border border-stone-200 dark:border-amber-500/25">
+            <div className="text-[10px] font-bold text-stone-500 dark:text-amber-300">الجزء الحالي</div>
+            <div className="text-sm font-black font-mono text-stone-900 dark:text-white mt-0.5">
               {currentJuz} / 30
             </div>
           </div>
-          <div className="bg-black/35 rounded-xl p-2 border border-amber-500/20">
-            <div className="text-[10px] text-amber-300">المتبقي للختم</div>
-            <div className="text-sm font-bold text-amber-200 font-mono mt-0.5">
-              {remainingPages} صفحة
+
+          <div className="bg-stone-100/90 dark:bg-black/40 rounded-2xl p-2.5 border border-stone-200 dark:border-amber-500/25">
+            <div className="text-[10px] font-bold text-stone-500 dark:text-amber-300">المتبقي للختم</div>
+            <div className="text-sm font-black font-mono text-amber-700 dark:text-[#facc15] mt-0.5">
+              {remainingPages} ص
             </div>
           </div>
-          <div className="bg-black/35 rounded-xl p-2 border border-amber-500/20">
-            <div className="text-[10px] text-amber-300">الأيام المقدرة</div>
-            <div className="text-sm font-bold text-white font-mono mt-0.5">
+
+          <div className="bg-stone-100/90 dark:bg-black/40 rounded-2xl p-2.5 border border-stone-200 dark:border-amber-500/25">
+            <div className="text-[10px] font-bold text-stone-500 dark:text-amber-300">الأيام المقدرة</div>
+            <div className="text-sm font-black font-mono text-stone-900 dark:text-white mt-0.5">
               ~{remainingDays} يوماً
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. Graduated Quranic Roadmap (خريطة طريق متدرجة) */}
-      <div className="p-4 rounded-2xl bg-[#f7f2e7] dark:bg-[#251d16] border border-amber-700/20 dark:border-amber-700/40 space-y-2.5">
-        <div className="flex items-center justify-between text-xs font-bold text-amber-950 dark:text-amber-200">
-          <div className="flex items-center gap-1.5">
-            <Milestone className="w-4 h-4 text-amber-700 dark:text-amber-400" />
-            <span>خريطة طريق الختمة المباركة (30 جزءاً)</span>
+      {/* 2. Milestone Road Map (30 Juz) */}
+      <div className="p-4 rounded-3xl bg-white dark:bg-[#181818] border border-stone-200 dark:border-stone-800 space-y-3 shadow-2xs">
+        <div className="flex items-center justify-between text-xs font-bold">
+          <div className="flex items-center gap-1.5 text-stone-900 dark:text-[#f5e6b8]">
+            <Milestone className="w-4 h-4 text-[#ca8a04]" />
+            <span>خريطة طريق الختمة المباركة (٣٠ جزءاً)</span>
           </div>
-          <span className="text-[11px] font-mono text-amber-800 dark:text-amber-400">
-            الصفحة {currentPage} من 604
+          <span className="text-[11px] font-mono font-bold text-amber-700 dark:text-[#facc15]">
+            صفحة {currentPage} من ٦٠٤
           </span>
         </div>
 
         {/* Milestone Steps Bar */}
         <div className="relative pt-2 pb-1">
-          {/* Connecting track */}
-          <div className="absolute top-4 left-3 right-3 h-1.5 bg-stone-300 dark:bg-stone-700 rounded-full" />
+          <div className="absolute top-4 left-3 right-3 h-1.5 bg-stone-200 dark:bg-stone-800 rounded-full" />
           <div
-            className="absolute top-4 right-3 h-1.5 bg-gradient-to-l from-amber-500 to-amber-600 rounded-full transition-all duration-500"
+            className="absolute top-4 right-3 h-1.5 bg-gradient-to-l from-[#d4af37] to-[#ca8a04] rounded-full transition-all duration-300"
             style={{ width: `calc(${progressPercent}% * 0.94)` }}
           />
 
-          {/* Milestone nodes */}
           <div className="relative flex justify-between items-center text-center">
             {milestones.map((ms) => {
               const reached = currentPage >= ms.page;
@@ -221,13 +222,13 @@ export const KhatmaTrackerCard: React.FC<Props> = ({ onOpenQuranTab }) => {
                     title={`انتقال إلى صفحة ${ms.page}`}
                     className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
                       reached
-                        ? 'bg-amber-600 text-white shadow-sm ring-2 ring-amber-300 scale-105'
-                        : 'bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-300 dark:border-stone-700'
+                        ? 'bg-gradient-to-r from-[#d4af37] to-[#ca8a04] text-stone-950 shadow-xs scale-105'
+                        : 'bg-stone-100 dark:bg-stone-900 text-stone-500 border border-stone-300 dark:border-stone-700'
                     }`}
                   >
-                    {reached ? <Check className="w-3 h-3 stroke-[3]" /> : `ج${ms.juz}`}
+                    {reached ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : `ج${ms.juz}`}
                   </button>
-                  <span className="text-[9px] text-amber-900 dark:text-amber-300 font-semibold mt-1">
+                  <span className="text-[9px] font-bold text-stone-600 dark:text-stone-300 mt-1">
                     {ms.label}
                   </span>
                 </div>
@@ -237,136 +238,90 @@ export const KhatmaTrackerCard: React.FC<Props> = ({ onOpenQuranTab }) => {
         </div>
       </div>
 
-      {/* 3. Target Duration Presets */}
+      {/* 3. Duration Selector Presets */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs font-bold text-stone-800 dark:text-stone-200">
-          <label className="flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+        <div className="flex items-center justify-between text-xs font-bold">
+          <label className="flex items-center gap-1.5 text-stone-800 dark:text-stone-200">
+            <Calendar className="w-3.5 h-3.5 text-amber-700 dark:text-[#facc15]" />
             <span>حدد مدة الختمة المرغوبة:</span>
           </label>
-          <span className="text-[11px] text-amber-800 dark:text-amber-400 font-mono">
-            {pagesPerDay} صفحة / يومياً
+          <span className="text-[11px] font-mono font-bold text-amber-700 dark:text-[#facc15]">
+            {pagesPerDay} صفحة يومياً
           </span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {presets.map((preset) => {
-            const isSelected = targetDays === preset.days;
-            return (
-              <button
-                key={preset.days}
-                onClick={() => handleUpdateTargetDays(preset.days)}
-                className={`p-2.5 rounded-2xl border text-center transition active:scale-95 flex flex-col items-center justify-center min-h-[50px] ${
-                  isSelected
-                    ? 'bg-[#3d2a1b] border-amber-600 text-amber-100 shadow-sm'
-                    : 'bg-white dark:bg-[#251d16] border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:bg-amber-50/50'
-                }`}
-              >
-                <span className="text-xs font-bold">{preset.days} يوماً</span>
-                <span
-                  className={`text-[10px] mt-0.5 ${
-                    isSelected ? 'text-amber-300' : 'text-stone-500 dark:text-stone-400'
-                  }`}
-                >
-                  ~{preset.pages} صفحة يومياً
-                </span>
-              </button>
-            );
-          })}
+          {presets.map((preset) => (
+            <button
+              key={preset.days}
+              onClick={() => handleUpdateTargetDays(preset.days)}
+              className={`p-3 rounded-2xl border text-center transition active:scale-95 ${
+                targetDays === preset.days
+                  ? 'bg-gradient-to-r from-[#d4af37] to-[#ca8a04] text-stone-950 font-black border-[#d4af37] shadow-sm'
+                  : 'bg-white dark:bg-[#181818] border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-200 hover:border-[#d4af37]/50'
+              }`}
+            >
+              <div className="text-xs font-black">{preset.label}</div>
+              <div className="text-[10px] mt-0.5 opacity-80">
+                {preset.pages} صفحة / يوم
+              </div>
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* 4. Page Stepper & Manual Entry */}
-      <div className="p-3.5 rounded-2xl bg-white dark:bg-[#251d16] border border-amber-900/20 dark:border-amber-700/40 space-y-3">
+      {/* 4. Quick Page Progress Controller */}
+      <div className="p-4 rounded-3xl bg-white dark:bg-[#181818] border border-stone-200 dark:border-stone-800 space-y-3">
         <div className="flex items-center justify-between">
-          <div className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-amber-600" />
-            <span>تسجيل آخر صفحة تم إتمامها:</span>
-          </div>
-
+          <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
+            تسجيل تقدم القراءة:
+          </span>
           {showSavedFeedback && (
-            <span className="text-[11px] font-bold text-amber-800 dark:text-amber-200 bg-amber-100 dark:bg-amber-950/70 px-2.5 py-0.5 rounded-full animate-in fade-in">
-              تم تسجيل الصفحة بنجاح ✓
+            <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 animate-in fade-in">
+              <Check className="w-3.5 h-3.5" />
+              <span>تم الحفظ</span>
             </span>
           )}
         </div>
 
-        {/* Stepper Buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between gap-2">
           <button
-            onClick={() => handleSavePage(currentPage - 1)}
+            onClick={() => handleAddPages(-1)}
             disabled={currentPage <= 1}
-            className="flex-1 min-h-[44px] flex items-center justify-center gap-1 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-bold text-xs transition disabled:opacity-40 active:scale-95"
+            className="flex-1 py-2 px-3 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 font-bold text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-200 transition disabled:opacity-40"
           >
-            <Minus className="w-3.5 h-3.5" />
-            <span>-1 ص</span>
+            -١ صفحة
           </button>
 
-          <button
-            onClick={() => handleSavePage(currentPage + 1)}
-            disabled={currentPage >= TOTAL_PAGES}
-            className="flex-1 min-h-[44px] flex items-center justify-center gap-1 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition disabled:opacity-40 active:scale-95 shadow-xs"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>+1 ص</span>
-          </button>
-
-          <button
-            onClick={() => handleSavePage(currentPage + pagesPerDay)}
-            disabled={currentPage >= TOTAL_PAGES}
-            className="px-3 min-h-[44px] flex items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 text-amber-950 dark:text-amber-200 font-bold text-xs transition disabled:opacity-40 active:scale-95"
-            title="إتمام ورد اليوم"
-          >
-            <span>+{pagesPerDay} ص (ورد اليوم)</span>
-          </button>
-        </div>
-
-        {/* Manual Page Input */}
-        <div className="flex items-center gap-2 pt-1">
-          <div className="flex-1 flex items-center gap-2 bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-xl px-3 py-1.5">
-            <span className="text-xs text-stone-500 whitespace-nowrap">رقم الصفحة:</span>
-            <input
-              type="number"
-              min="1"
-              max="604"
-              value={inputPage}
-              onChange={(e) => setInputPage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') handleManualInputSave();
-              }}
-              className="w-full text-center font-mono font-bold text-stone-900 dark:text-white bg-transparent focus:outline-none text-sm"
-            />
-            <span className="text-[11px] text-stone-400">/ 604</span>
+          <div className="px-4 py-2 rounded-2xl bg-amber-500/10 border border-[#d4af37]/40 text-center font-mono font-black text-sm text-stone-950 dark:text-[#fef08a]">
+            صفحة {currentPage}
           </div>
 
           <button
-            onClick={handleManualInputSave}
-            className="px-4 py-2 min-h-[40px] rounded-xl bg-[#3d2a1b] text-amber-200 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 hover:bg-[#4a3523] shrink-0"
+            onClick={() => handleAddPages(1)}
+            disabled={currentPage >= TOTAL_PAGES}
+            className="flex-1 py-2 px-3 rounded-2xl bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-stone-950 font-bold text-xs hover:from-[#fef08a] hover:to-[#d4af37] transition shadow-xs disabled:opacity-40"
           >
-            <Save className="w-3.5 h-3.5" />
-            <span>حفظ</span>
+            +١ صفحة
+          </button>
+
+          <button
+            onClick={() => handleAddPages(5)}
+            disabled={currentPage >= TOTAL_PAGES}
+            className="py-2 px-3 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 font-bold text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-200 transition disabled:opacity-40"
+          >
+            +٥
           </button>
         </div>
-      </div>
 
-      {/* Footer Navigation */}
-      <div className="flex items-center justify-between pt-1">
+        {/* Direct CTA to open Mushaf */}
         <button
           onClick={onOpenQuranTab}
-          className="flex items-center gap-1.5 text-xs font-bold text-amber-800 dark:text-amber-300 hover:underline"
+          className="w-full py-3 px-4 rounded-2xl bg-stone-900 dark:bg-[#201d17] border border-[#d4af37]/40 text-white font-black text-xs sm:text-sm hover:border-[#d4af37] transition flex items-center justify-center gap-2 shadow-sm active:scale-98"
         >
-          <BookOpen className="w-4 h-4" />
-          <span>متابعة القراءة في المصحف الشريف</span>
-          <ChevronLeft className="w-3.5 h-3.5" />
-        </button>
-
-        <button
-          onClick={handleResetKhatma}
-          title="بدء ختمة جديدة"
-          className="flex items-center gap-1 text-[11px] text-stone-500 hover:text-stone-800 dark:hover:text-stone-300 transition"
-        >
-          <RotateCcw className="w-3 h-3" />
-          <span>بدء ختمة جديدة</span>
+          <BookOpen className="w-4 h-4 text-[#facc15]" />
+          <span>فتح المصحف الشريف والمتابعة من صفحة {currentPage}</span>
+          <ArrowRight className="w-4 h-4 text-[#facc15] rotate-180" />
         </button>
       </div>
     </div>

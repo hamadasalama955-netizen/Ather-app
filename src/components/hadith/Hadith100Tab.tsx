@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { HADITH_100_LIST } from '../../data/hadithData';
 import { HadithItem, NavigationTab } from '../../types';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 
 interface Props {
   onNavigateHome?: () => void;
@@ -125,17 +126,22 @@ export const Hadith100Tab: React.FC<Props> = ({ onNavigateHome }) => {
         <div className="absolute top-0 left-0 w-36 h-36 bg-[#dfb76c]/10 rounded-full blur-2xl pointer-events-none" />
 
         <div className="flex items-start justify-between gap-3 relative z-10">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#dfb76c]/20 border border-[#dfb76c]/40 text-[#dfb76c] text-[11px] font-bold">
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>جوامع الكلم النبوية</span>
+          <div className="flex items-start gap-3">
+            {onNavigateHome && (
+              <ScreenBackButton onClick={onNavigateHome} ariaLabel="الرجوع إلى الرئيسية" />
+            )}
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#dfb76c]/20 border border-[#dfb76c]/40 text-[#dfb76c] text-[11px] font-bold">
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>جوامع الكلم النبوية</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+                ١٠٠ حديث شريف
+              </h2>
+              <p className="text-xs text-stone-300 leading-relaxed max-w-sm">
+                مختارات من صحيحي البخاري ومسلم في أصول الإيمان، والعبادات، ومكارم الأخلاق، مع شرح ميسر وفائدة عملية لكل حديث.
+              </p>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-              ١٠٠ حديث شريف
-            </h2>
-            <p className="text-xs text-stone-300 leading-relaxed max-w-sm">
-              مختارات من صحيحي البخاري ومسلم في أصول الإيمان، والعبادات، ومكارم الأخلاق، مع شرح ميسر وفائدة عملية لكل حديث.
-            </p>
           </div>
 
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#dfb76c]/25 to-[#d4af37] border border-[#dfb76c]/40 flex items-center justify-center text-[#dfb76c] shrink-0 shadow-xs">

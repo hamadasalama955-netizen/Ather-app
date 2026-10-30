@@ -21,6 +21,7 @@ import {
   calculateQiblaDegree,
 } from '../../utils/prayerUtils';
 import { QiblaCompassModal } from '../home/QiblaCompassModal';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 
 interface Props {
   prayerData: PrayerTimesResponse | null;
@@ -32,6 +33,7 @@ interface Props {
   onUpdateAsrSchool: (school: 'standard' | 'hanafi') => void;
   onUpdateTimeFormat: (is24h: boolean) => void;
   onOpenLocationModal: () => void;
+  onNavigateHome?: () => void;
 }
 
 export const PrayersTab: React.FC<Props> = ({
@@ -44,6 +46,7 @@ export const PrayersTab: React.FC<Props> = ({
   onUpdateAsrSchool,
   onUpdateTimeFormat,
   onOpenLocationModal,
+  onNavigateHome,
 }) => {
   const [showMethodModal, setShowMethodModal] = useState(false);
   const [isQiblaModalOpen, setIsQiblaModalOpen] = useState(false);
@@ -93,14 +96,19 @@ export const PrayersTab: React.FC<Props> = ({
       {/* 1. Header Location & Date Bar */}
       <div className="rounded-3xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 p-4 shadow-sm">
         <div className="flex items-center justify-between gap-2">
-          <div>
-            <div className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
-              <MapPin className="w-3.5 h-3.5 text-[#d4af37]" />
-              <span>الموقع الحالي</span>
+          <div className="flex items-center gap-3">
+            {onNavigateHome && (
+              <ScreenBackButton onClick={onNavigateHome} ariaLabel="الرجوع إلى الرئيسية" />
+            )}
+            <div>
+              <div className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
+                <MapPin className="w-3.5 h-3.5 text-[#d4af37]" />
+                <span>الموقع الحالي</span>
+              </div>
+              <h2 className="text-base font-bold text-stone-900 dark:text-white mt-0.5">
+                {location.label}
+              </h2>
             </div>
-            <h2 className="text-base font-bold text-stone-900 dark:text-white mt-0.5">
-              {location.label}
-            </h2>
           </div>
 
           <button

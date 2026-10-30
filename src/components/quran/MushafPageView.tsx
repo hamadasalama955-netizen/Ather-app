@@ -22,6 +22,7 @@ import {
   BasmalahBanner,
   toArabicDigits,
 } from './MushafIlluminatedBorder';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 
 const LAST_PAGE_STORAGE_KEY = 'noor_last_mushaf_page';
 const FONT_SIZE_STORAGE_KEY = 'noor_quran_font_size';
@@ -379,14 +380,8 @@ export const MushafPageView: React.FC<Props> = ({
           </span>
         </div>
 
-        {/* Center: Home / Index Button matching image_14.png */}
-        <button
-          onClick={onOpenIndex}
-          className="w-9 h-9 rounded-full bg-white dark:bg-[#1a1814] border border-[#d4af37]/30 hover:border-[#d4af37] text-stone-700 dark:text-[#d4af37] flex items-center justify-center shadow-2xs transition active:scale-95"
-          title="فهرس سور القرآن الكريم"
-        >
-          <Home className="w-4 h-4 text-[#b89328] dark:text-[#d4af37]" />
-        </button>
+        {/* Center: Back to Index Button matching image_1d94b71d.png */}
+        <ScreenBackButton onClick={onOpenIndex} ariaLabel="الرجوع إلى الفهرس" />
 
         {/* Right in RTL: Bookmark Toggle matching image_14.png */}
         <div className="flex items-center gap-1">
@@ -412,25 +407,32 @@ export const MushafPageView: React.FC<Props> = ({
           SUB-BAR CONTROLS: Reciter, Font Size, Audio
          ======================================================== */}
       <div className="flex items-center justify-between gap-1.5 px-3 py-1.5 rounded-2xl bg-[#faf8f5]/90 dark:bg-[#141414]/90 border border-stone-200/60 dark:border-stone-800/60 text-xs">
-        {/* Reciter Selector */}
-        <div className="flex items-center gap-1.5">
-          <Volume2 className="w-3.5 h-3.5 text-[#d4af37]" />
-          <select
-            value={selectedReciter}
-            onChange={(e) => handleReciterChange(e.target.value)}
-            className="text-[11px] font-bold py-1 px-1.5 rounded-lg bg-stone-100 dark:bg-[#1a1814] text-stone-800 dark:text-[#d4af37] border border-stone-200/80 dark:border-[#d4af37]/20 outline-none"
-          >
-            {QURAN_RECITERS.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Quick Recitation Play/Pause Button - No reciter name written, plays immediately */}
+        <button
+          onClick={handlePlayFullPage}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 shadow-2xs ${
+            isPlayingFullPage
+              ? 'bg-[#d4af37] text-stone-950 font-black'
+              : 'bg-white dark:bg-[#1a1814] text-stone-800 dark:text-[#d4af37] border border-[#d4af37]/30 hover:border-[#d4af37]'
+          }`}
+          title="تلاوة الصفحة صوتياً"
+        >
+          {isPlayingFullPage ? (
+            <>
+              <Pause className="w-3.5 h-3.5 fill-current" />
+              <span>إيقاف التلاوة</span>
+            </>
+          ) : (
+            <>
+              <Play className="w-3.5 h-3.5 fill-current text-[#b89328] dark:text-[#d4af37]" />
+              <span>تلاوة</span>
+            </>
+          )}
+        </button>
 
-        {/* Font resize & Full Page Audio */}
+        {/* Font resize buttons */}
         <div className="flex items-center gap-1.5">
-          <div className="flex items-center bg-stone-200/60 dark:bg-stone-800/60 p-0.5 rounded-lg">
+          <div className="flex items-center bg-stone-200/60 dark:bg-stone-800/60 p-0.5 rounded-lg border border-stone-300/40 dark:border-stone-700/50">
             <button
               onClick={() => handleFontSizeChange(2)}
               disabled={fontSize >= 32}
@@ -448,28 +450,6 @@ export const MushafPageView: React.FC<Props> = ({
               A-
             </button>
           </div>
-
-          <button
-            onClick={handlePlayFullPage}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold transition active:scale-95 ${
-              isPlayingFullPage
-                ? 'bg-[#d4af37] text-stone-950 shadow-xs'
-                : 'bg-stone-200/80 dark:bg-stone-800/80 text-stone-700 dark:text-stone-300 hover:bg-stone-200'
-            }`}
-            title="تلاوة الصفحة كاملة"
-          >
-            {isPlayingFullPage ? (
-              <>
-                <Pause className="w-3 h-3" />
-                <span className="text-[11px]">إيقاف</span>
-              </>
-            ) : (
-              <>
-                <Play className="w-3 h-3 fill-current text-[#b89328] dark:text-[#d4af37]" />
-                <span className="text-[11px]">تلاوة</span>
-              </>
-            )}
-          </button>
         </div>
       </div>
 
@@ -480,7 +460,7 @@ export const MushafPageView: React.FC<Props> = ({
         ref={pageContainerRef}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
-        className={`relative rounded-3xl p-2.5 sm:p-4 shadow-xl select-text transition-all duration-200 overflow-hidden ${
+        className={`relative rounded-2xl sm:rounded-3xl p-1.5 sm:p-3.5 shadow-xl select-text transition-all duration-200 overflow-hidden -mx-2 sm:mx-0 ${
           pageAnimation === 'slide-right'
             ? 'animate-in slide-in-from-right-2 fade-in-50'
             : pageAnimation === 'slide-left'
@@ -498,7 +478,7 @@ export const MushafPageView: React.FC<Props> = ({
         }}
       >
         {/* Authentic Madinah Lapis Lazuli & Gold Arabesque Border (كما في image_14.png) */}
-        <div className="relative rounded-2xl p-2 sm:p-3 bg-[#0d233d] dark:bg-[#081525] border-2 border-[#d4af37] shadow-inner">
+        <div className="relative rounded-xl sm:rounded-2xl p-1.5 sm:p-2.5 bg-[#0d233d] dark:bg-[#081525] border-2 border-[#d4af37] shadow-inner">
           {/* Corner Ruby Red Rosette Jewels */}
           <div className="absolute top-1 left-1 w-3.5 h-3.5 rounded-full bg-[#991b1b] border border-[#d4af37] flex items-center justify-center shadow-xs">
             <div className="w-1.5 h-1.5 rounded-full bg-[#d4af37]" />
@@ -523,7 +503,7 @@ export const MushafPageView: React.FC<Props> = ({
 
           {/* Inner Golden Double Border Canvas */}
           <div
-            className={`rounded-xl p-3 sm:p-5 border-2 border-[#d4af37] transition-colors ${
+            className={`rounded-lg sm:rounded-xl p-2 sm:p-4 border-2 border-[#d4af37] transition-colors ${
               isDark ? 'bg-[#141414]' : 'bg-[#fffefb]'
             }`}
             style={{

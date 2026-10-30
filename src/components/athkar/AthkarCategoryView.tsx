@@ -14,6 +14,7 @@ import {
   CheckCheck,
 } from 'lucide-react';
 import { AthkarItem } from '../../types';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 import {
   getAthkarProgress,
   incrementAthkarProgress,
@@ -193,13 +194,7 @@ export const AthkarCategoryView: React.FC<Props> = ({ category, items, onBack })
     <div className="space-y-4 pb-28 animate-in fade-in duration-300" dir="rtl">
       {/* 1. Sticky Navigation Header */}
       <div className="sticky top-0 z-20 -mx-4 px-4 py-2.5 bg-[#fcfbf7]/95 dark:bg-[#0a0a0a]/95 backdrop-blur-md border-b border-stone-200/80 dark:border-[rgba(212,175,55,0.2)] flex items-center justify-between gap-2">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-stone-100 dark:bg-[#141414] hover:bg-stone-200 dark:hover:bg-[#1a1814] text-xs font-bold text-stone-700 dark:text-[#ffffff] border border-stone-300/60 dark:border-[rgba(212,175,55,0.2)] transition active:scale-95"
-        >
-          <ArrowRight className="w-4 h-4 text-[#d4af37]" />
-          <span>الأبواب</span>
-        </button>
+        <ScreenBackButton onClick={onBack} ariaLabel="رجوع إلى قائمة الأذكار" />
 
         <div className="text-center truncate px-2">
           <h2 className="text-sm font-extrabold text-stone-900 dark:text-[#ffffff] truncate">

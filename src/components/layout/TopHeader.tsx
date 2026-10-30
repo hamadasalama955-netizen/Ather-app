@@ -69,7 +69,8 @@ export const TopHeader: React.FC<Props> = ({
 
         {/* Center / Left actions: Services grid trigger + theme + location */}
         <div className="flex items-center gap-1.5 shrink-0">
-          {onOpenServices && (
+          {/* Services grid trigger (Hidden when on جدول المواقيت as requested) */}
+          {onOpenServices && activeTab !== 'prayers' && (
             <button
               onClick={onOpenServices}
               title="شبكة الخدمات الإسلامية"

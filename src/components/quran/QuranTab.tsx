@@ -5,6 +5,7 @@ import { fetchAllSurahs, getSurahStartPage } from '../../services/quranApi';
 import { getKhatmaState } from '../../services/trackerService';
 import { MushafPageView } from './MushafPageView';
 import { toArabicDigits } from './MushafIlluminatedBorder';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 
 const BOOKMARK_STORAGE_KEY = 'noor_quran_bookmark';
 const LAST_PAGE_STORAGE_KEY = 'noor_last_mushaf_page';
@@ -51,7 +52,11 @@ const QURAN_AJZA: JuzInfo[] = [
   { number: 30, name: 'الجزء الثلاثون (عمّ)', startSurah: 'النبأ', startAyah: 'عم يتساءلون', startPage: 582 },
 ];
 
-export const QuranTab: React.FC = () => {
+interface Props {
+  onNavigateHome?: () => void;
+}
+
+export const QuranTab: React.FC<Props> = ({ onNavigateHome }) => {
   const [surahs, setSurahs] = useState<SurahMeta[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -184,7 +189,10 @@ export const QuranTab: React.FC = () => {
       {/* Quran Header Card in Royal Theme */}
       <div className="rounded-3xl bg-[#faf8f5] dark:bg-[#141414] border border-[#d4af37]/30 shadow-md p-4 sm:p-5 space-y-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
+            {onNavigateHome && (
+              <ScreenBackButton onClick={onNavigateHome} ariaLabel="الرجوع إلى الرئيسية" />
+            )}
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-b from-[#d4af37] to-[#aa7c11] text-stone-950 flex items-center justify-center font-bold shadow-sm">
               <BookOpen className="w-5 h-5 text-stone-950" />
             </div>

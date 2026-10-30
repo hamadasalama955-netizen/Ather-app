@@ -17,6 +17,7 @@ import { PWAInstallButton } from '../common/PWAInstallButton';
 import { InstallAtharBanner } from '../common/InstallAtharBanner';
 import { CALCULATION_METHODS } from '../../utils/constants';
 import { CalendarCheck, Flame, BookHeart, Coins, ChevronLeft, BookOpen, Star } from 'lucide-react';
+import { ScreenBackButton } from '../common/ScreenBackButton';
 
 interface Props {
   theme: ThemeMode;
@@ -28,6 +29,7 @@ interface Props {
   onUpdateAsrSchool: (school: 'standard' | 'hanafi') => void;
   onUpdateTimeFormat: (is24h: boolean) => void;
   onOpenTracker?: (subView: TrackerSubView) => void;
+  onNavigateHome?: () => void;
 }
 
 export const MoreTab: React.FC<Props> = ({
@@ -40,14 +42,20 @@ export const MoreTab: React.FC<Props> = ({
   onUpdateAsrSchool,
   onUpdateTimeFormat,
   onOpenTracker,
+  onNavigateHome,
 }) => {
   const currentMethod =
     CALCULATION_METHODS.find((m) => m.id === settings.methodId) || CALCULATION_METHODS[0];
 
   return (
     <div className="space-y-4 pb-24 animate-in fade-in duration-300">
-      {/* 1. App Info Header */}
-      <div className="rounded-3xl bg-gradient-to-r from-[#1a1814] to-[#141414] text-white p-5 border border-[#d4af37]/40 shadow-lg text-center space-y-2">
+      {/* 1. App Info Header with Back Button */}
+      <div className="rounded-3xl bg-gradient-to-r from-[#1a1814] to-[#141414] text-white p-5 border border-[#d4af37]/40 shadow-lg text-center space-y-2 relative">
+        {onNavigateHome && (
+          <div className="absolute top-4 right-4">
+            <ScreenBackButton onClick={onNavigateHome} ariaLabel="الرجوع إلى الرئيسية" />
+          </div>
+        )}
         <div className="w-12 h-12 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-bold mx-auto shadow-md">
           <Heart className="w-6 h-6" />
         </div>

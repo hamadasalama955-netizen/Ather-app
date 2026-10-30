@@ -38,9 +38,10 @@ import { IslamicHistoryModal } from './IslamicHistoryModal';
 import { RamadanSectionModal } from './RamadanSectionModal';
 import { QiblaCompassModal } from './QiblaCompassModal';
 import { DuasComprehensiveModal } from './DuasComprehensiveModal';
-import { QuranIntroModal } from './QuranIntroModal';
+import { QuranSplashScreen } from '../quran/QuranSplashScreen';
 import { AllahNamesModal } from './AllahNamesModal';
 import { HisnMuslimModal } from './HisnMuslimModal';
+import { IslamicQuizModal } from '../quiz/IslamicQuizModal';
 import { InstallAtharBanner } from '../common/InstallAtharBanner';
 
 interface Props {
@@ -440,6 +441,7 @@ export const HomeTab: React.FC<Props> = ({
   const [isDuasModalOpen, setIsDuasModalOpen] = useState(false);
   const [isQuranIntroOpen, setIsQuranIntroOpen] = useState(false);
   const [isAllahNamesOpen, setIsAllahNamesOpen] = useState(false);
+  const [isQuizOpen, setIsQuizOpen] = useState(false);
 
   // Live second clock for countdown
   useEffect(() => {
@@ -523,8 +525,13 @@ export const HomeTab: React.FC<Props> = ({
     ? getDailyPrayerList(prayerData.timings, nextPrayerInfo?.nextPrayer, now)
     : [];
 
+  const isFriday = now.getDay() === 5;
   const currentOrNextKey = nextPrayerInfo?.nextPrayer || 'Fajr';
-  const currentOrNextArabic = nextPrayerInfo?.nextPrayerArabic || 'الفجر';
+  const rawArabicName = nextPrayerInfo?.nextPrayerArabic || 'الفجر';
+  const currentOrNextArabic =
+    isFriday && (currentOrNextKey === 'Dhuhr' || rawArabicName === 'الظهر')
+      ? 'الجمعة'
+      : rawArabicName;
 
   // Determine current atmospheric period for the Mosque vector scene
   const timePeriod = determineTimePeriod(prayerData, now);
@@ -760,6 +767,7 @@ export const HomeTab: React.FC<Props> = ({
         onOpenDuas={() => setIsDuasModalOpen(true)}
         onOpenQuranIntro={() => setIsQuranIntroOpen(true)}
         onOpenAllahNames={() => setIsAllahNamesOpen(true)}
+        onOpenQuiz={() => setIsQuizOpen(true)}
         isDark={isDark}
       />
 
@@ -902,6 +910,13 @@ export const HomeTab: React.FC<Props> = ({
         onOpenIslamicHistory={() => setIsIslamicHistoryOpen(true)}
         onOpenRamadan={() => setIsRamadanOpen(true)}
         onOpenHisnMuslim={() => onNavigateTab('athkar')}
+        onOpenQuiz={() => setIsQuizOpen(true)}
+      />
+
+      <IslamicQuizModal
+        isOpen={isQuizOpen}
+        onClose={() => setIsQuizOpen(false)}
+        isDark={isDark}
       />
 
       <ShareForRewardModal
@@ -942,18 +957,16 @@ export const HomeTab: React.FC<Props> = ({
         isDark={isDark}
       />
 
-      <QuranIntroModal
-        isOpen={isQuranIntroOpen}
-        onClose={() => setIsQuranIntroOpen(false)}
-        onOpenQuranIndex={() => onNavigateTab('quran')}
-        onOpenMushafPage={(page) => {
-          try {
-            localStorage.setItem('noor_last_mushaf_page', page.toString());
-          } catch {}
-          onNavigateTab('quran');
-        }}
-        isDark={isDark}
-      />
+      {/* 5. Holy Quran Royal Splash Screen (image_2e52607f.png) leading to Index */}
+      {isQuranIntroOpen && (
+        <QuranSplashScreen
+          onContinue={() => {
+            setIsQuranIntroOpen(false);
+            onNavigateTab('quran');
+          }}
+          isDark={isDark}
+        />
+      )}
 
       <AllahNamesModal
         isOpen={isAllahNamesOpen}

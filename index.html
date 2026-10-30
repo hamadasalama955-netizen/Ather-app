@@ -27,8 +27,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-    <!-- Service Worker Registration for Instant Offline-First PWA -->
+    <!-- Early BeforeInstallPrompt Capture -->
     <script>
+      window.__athar_deferredPrompt = null;
+      window.addEventListener('beforeinstallprompt', function(e) {
+        e.preventDefault();
+        window.__athar_deferredPrompt = e;
+        window.dispatchEvent(new CustomEvent('athar_prompt_available'));
+      });
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('/sw.js')

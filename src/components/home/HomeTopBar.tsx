@@ -89,9 +89,12 @@ export const HomeTopBar: React.FC<Props> = ({
     if ('Notification' in window) {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
-        new Notification('أثَر | Athar - رفيق المسلم', {
-          body: 'تم تفعيل التنبيهات والأذان بنجاح',
-          icon: '/icon.svg',
+        new Notification('أثَر | رفيق المسلم', {
+          body: 'تم تفعيل تنبيهات مواقيت الصلاة والأذان بنجاح 🕌',
+          icon: '/assets/aistudio/image_fdb94482.png',
+          badge: '/icon-192.png',
+          dir: 'rtl',
+          lang: 'ar',
         });
       }
     }
@@ -104,21 +107,25 @@ export const HomeTopBar: React.FC<Props> = ({
         {/* Right: App Name in the empty right space */}
         <div className="flex flex-col text-right select-none min-w-[100px]">
           <span className="text-sm sm:text-base font-extrabold text-[#2e4426] dark:text-[#d4af37] tracking-tight leading-tight">
-            أثر رفيق المسلم
+            أثَر | رفيق المسلم
           </span>
           <span className="text-[10px] font-semibold text-[#8c6b2d] dark:text-[#a39e93] mt-0.5">
             تطبيق المسلم الجامع
           </span>
         </div>
 
-        {/* Center: Larger Prominent Circular Gold Logo Emblem */}
+        {/* Center: Exact Royal Athar Logo Emblem matching new logo (image_fdb94482.png) */}
         <div className="flex items-center justify-center">
           <div
             onClick={() => setIsMenuOpen(true)}
-            className="w-13 h-13 sm:w-14 sm:h-14 rounded-full p-1 bg-gradient-to-b from-[#1a1814] to-[#0a0a0a] border-2 border-[#d4af37] shadow-[0_2px_16px_rgba(212,175,55,0.55)] flex items-center justify-center cursor-pointer active:scale-95 transition-transform"
+            className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden bg-black border-2 border-[#d4af37] shadow-[0_2px_16px_rgba(212,175,55,0.6)] flex items-center justify-center cursor-pointer active:scale-95 transition-transform select-none"
             title="أثر - انقر لفتح القائمة"
           >
-            <img src="/icon-192.png" alt="أثر" className="w-full h-full object-contain" />
+            <img
+              src="/assets/aistudio/image_fdb94482.png"
+              alt="أثر"
+              className="w-full h-full object-cover rounded-full"
+            />
           </div>
         </div>
 
@@ -150,7 +157,7 @@ export const HomeTopBar: React.FC<Props> = ({
                     <BookOpen className="w-4 h-4 text-stone-950" />
                   </div>
                   <div>
-                    <h2 className="text-sm font-bold text-stone-900 dark:text-[#d4af37]">أثَر - رفيق المسلم</h2>
+                    <h2 className="text-sm font-bold text-stone-900 dark:text-[#d4af37]">أثَر | رفيق المسلم</h2>
                     <p className="text-[10px] text-stone-500 dark:text-stone-400">تطبيق إسلامي شامل بدون إعلانات</p>
                   </div>
                 </div>

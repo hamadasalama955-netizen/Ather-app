@@ -16,6 +16,8 @@ const PRECACHE_ASSETS = [
   '/pwa-maskable-512x512.png',
   '/icon-192.png',
   '/icon-512.png',
+  '/audio/ahsant.mp3',
+  '/audio/try_again.mp3',
   '/data/hisn_azkar.json',
   'https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600;700;800;900&display=swap'
 ];
@@ -88,6 +90,8 @@ self.addEventListener('fetch', (event) => {
     url.pathname.match(/\.(js|css|woff2?|ttf|eot|svg|png|jpg|jpeg|webp|ico|json|mp3|ogg)$/i) ||
     url.hostname.includes('fonts.googleapis.com') ||
     url.hostname.includes('fonts.gstatic.com') ||
+    url.hostname.includes('islamic.network') ||
+    url.hostname.includes('everyayah.com') ||
     url.pathname.startsWith('/assets/') ||
     url.pathname.startsWith('/data/');
 
